@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cirilo.cirilofood.domain.model.Permissao;
-import com.cirilo.cirilofood.domain.model.repository.PermissaoRepository;
+import com.cirilo.cirilofood.domain.repository.PermissaoRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

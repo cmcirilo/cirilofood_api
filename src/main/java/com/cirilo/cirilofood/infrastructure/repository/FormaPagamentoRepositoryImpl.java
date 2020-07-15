@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cirilo.cirilofood.domain.model.FormaPagamento;
-import com.cirilo.cirilofood.domain.model.repository.FormaPagamentoRepository;
+import com.cirilo.cirilofood.domain.repository.FormaPagamentoRepository;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
