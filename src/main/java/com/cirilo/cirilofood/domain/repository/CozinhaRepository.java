@@ -1,17 +1,20 @@
 package com.cirilo.cirilofood.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.cirilo.cirilofood.domain.model.Cozinha;
 
-public interface CozinhaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-    List<Cozinha> listar();
+@Repository
+public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
-    Cozinha buscar(long id);
+    List<Cozinha> findTodasByNomeContaining(String nome);
 
-    Cozinha salvar(Cozinha cozinha);
+    Optional<Cozinha> findByNome(String nome);
 
-    void remover(Long id);
+    boolean existsByNome(String nome);
 
 }

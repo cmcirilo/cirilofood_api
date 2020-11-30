@@ -1,17 +1,26 @@
 package com.cirilo.cirilofood.domain.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import com.cirilo.cirilofood.domain.model.Restaurante;
 
-public interface RestauranteRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-    List<Restaurante> listar();
+@Repository
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 
-    Restaurante buscar(Long id);
+    // prefixs - readBy, streamBy, getBy, findBy, queryBy
+    List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
-    Restaurante salvar(Restaurante restaurante);
+    List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinha);
 
-    void remover(Long id);
+    Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
+
+    List<Restaurante> findTop2RestauranteByNomeContaining(String nome);
+
+    int countByCozinhaId(Long cozinhaId);
 
 }
