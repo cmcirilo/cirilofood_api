@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import com.cirilo.cirilofood.domain.model.Cozinha;
 import com.cirilo.cirilofood.domain.model.Restaurante;
 import com.cirilo.cirilofood.domain.repository.CozinhaRepository;
 import com.cirilo.cirilofood.domain.repository.RestauranteRepository;
@@ -60,4 +61,19 @@ public class TesteController {
 		return restauranteRepository.find(nome, taxaInicial, taxaFinal);
 	}
 
+	@GetMapping("/restaurantes/com-frete-gratis")
+	public List<Restaurante> restaurantesComFreteGratis(String nome) {
+
+		return restauranteRepository.findComFreteGratis(nome);
+	}
+
+	@GetMapping("/restaurantes/primeiro")
+	public Optional<Restaurante> restaurantePrimeiro() {
+		return restauranteRepository.buscarPrimeiro();
+	}
+
+	@GetMapping("/cozinhas/primeira")
+	public Optional<Cozinha> cozinhaPrimeiro() {
+		return cozinhaRepository.buscarPrimeiro();
+	}
 }
