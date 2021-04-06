@@ -1,19 +1,21 @@
 package com.cirilo.cirilofood.domain.repository;
 
+import com.cirilo.cirilofood.domain.model.Restaurante;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
-import com.cirilo.cirilofood.domain.model.Restaurante;
-
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestauranteRepository
         extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
 
+    @Query("select distinct r from Restaurante r join r.cozinha left join fetch r.formasPagamento")
+    List<Restaurante> findAll();
     // prefixs - readBy, streamBy, getBy, findBy, queryBy
     List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
