@@ -29,7 +29,7 @@ public class ItemPedido {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private _Pedido pedido;
+    private Pedido pedido;
 
     @ManyToOne
     @JoinColumn(nullable = false)
