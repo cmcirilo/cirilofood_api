@@ -21,7 +21,7 @@ import com.cirilo.cirilofood.domain.exception.EntidadeEmUsoException;
 import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
 import com.cirilo.cirilofood.domain.model.Estado;
 import com.cirilo.cirilofood.domain.repository.EstadoRepository;
-import com.cirilo.cirilofood.domain.service.CadastroEstadoService;
+import com.cirilo.cirilofood.domain.service.EstadoService;
 
 @RestController
 @RequestMapping("/estados")
@@ -31,7 +31,7 @@ public class EstadoController {
 	private EstadoRepository estadoRepository;
 	
 	@Autowired
-	private CadastroEstadoService cadastroEstado;
+	private EstadoService estadoService;
 	
 	@GetMapping
 	public List<Estado> listar() {
@@ -39,50 +39,28 @@ public class EstadoController {
 	}
 	
 	@GetMapping("/{estadoId}")
-	public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-		Optional<Estado> estado = estadoRepository.findById(estadoId);
-		
-		if (estado.isPresent()) {
-			return ResponseEntity.ok(estado.get());
-		}
-		
-		return ResponseEntity.notFound().build();
+	public Estado buscar(@PathVariable Long estadoId) {
+		return estadoService.buscar(estadoId);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Estado adicionar(@RequestBody Estado estado) {
-		return cadastroEstado.salvar(estado);
+		return estadoService.salvar(estado);
 	}
 	
 	@PutMapping("/{estadoId}")
-	public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId,
+	public Estado atualizar(@PathVariable Long estadoId,
 			@RequestBody Estado estado) {
-		Estado estadoAtual = estadoRepository.findById(estadoId).orElse(null);
-		
-		if (estadoAtual != null) {
-			BeanUtils.copyProperties(estado, estadoAtual, "id");
-			
-			estadoAtual = cadastroEstado.salvar(estadoAtual);
-			return ResponseEntity.ok(estadoAtual);
-		}
-		
-		return ResponseEntity.notFound().build();
+
+		Estado estadoAtual = estadoService.buscar(estadoId);
+		BeanUtils.copyProperties(estado, estadoAtual, "id");
+		return estadoService.salvar(estadoAtual);
 	}
 	
 	@DeleteMapping("/{estadoId}")
-	public ResponseEntity<?> remover(@PathVariable Long estadoId) {
-		try {
-			cadastroEstado.excluir(estadoId);	
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT)
-					.body(e.getMessage());
-		}
+	public void remover(@PathVariable Long estadoId) {
+		estadoService.excluir(estadoId);
 	}
 	
 }
