@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.api.controller;
 
 import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
+import com.cirilo.cirilofood.domain.exception.NegocioException;
 import com.cirilo.cirilofood.domain.model.Restaurante;
 import com.cirilo.cirilofood.domain.repository.RestauranteRepository;
 import com.cirilo.cirilofood.domain.service.RestauranteService;
@@ -39,16 +40,25 @@ public class RestauranteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurante adicionar(@RequestBody Restaurante restaurante) {
-        return restauranteService.salvar(restaurante);
+        try {
+            return restauranteService.salvar(restaurante);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PutMapping("/{restauranteId}")
     public Restaurante atualizar(@PathVariable Long restauranteId,
-                                       @RequestBody Restaurante restaurante) {
+                                 @RequestBody Restaurante restaurante) {
 
         Restaurante restauranteAtual = restauranteService.buscar(restauranteId);
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-        return restauranteService.salvar(restauranteAtual);
+
+        try {
+            return restauranteService.salvar(restauranteAtual);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PatchMapping("/{restauranteId}")
