@@ -1,18 +1,13 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import com.cirilo.cirilofood.api.exceptionhandler.Problema;
 import com.cirilo.cirilofood.domain.exception.NegocioException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.cirilo.cirilofood.domain.exception.EntidadeEmUsoException;
 import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
 import com.cirilo.cirilofood.domain.model.Cidade;
 import com.cirilo.cirilofood.domain.repository.CidadeRepository;
