@@ -1,10 +1,9 @@
 package com.cirilo.cirilofood.api.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -19,4 +18,5 @@ public class Problem {
 
     private String detail;
 
+    private String userMessage;
 }
