@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -51,6 +52,8 @@ public class Restaurante {
     private BigDecimal taxaFrete;
 
     // @JsonIgnoreProperties("hibernateLazyInitializer")
+    @Valid //validate properties inside Cozinha with annotations usin Bean Validation
+    @NotNull // validate null in Cozinha but not properties inside Cozinha (not cascade)
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
