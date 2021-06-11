@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -42,18 +44,19 @@ public class Restaurante {
 
     // @NotNull
     // @NotEmpty
-    @NotBlank(groups = Groups.Restaurante.class)
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
     // @DecimalMin("1")
-    @PositiveOrZero(groups = Groups.Restaurante.class)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     // @JsonIgnoreProperties("hibernateLazyInitializer")
     @Valid // validate properties inside Cozinha with annotations usin Bean Validation
-    @NotNull(groups = Groups.Restaurante.class) // validate null in Cozinha but not properties inside Cozinha (not cascade)
+    @NotNull // validate null in Cozinha but not properties inside Cozinha (not cascade)
+    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
