@@ -23,6 +23,7 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
+import com.cirilo.cirilofood.core.validation.TaxaFrete;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -50,7 +51,8 @@ public class Restaurante {
 
     // @DecimalMin("1")
     // @PositiveOrZero(message = "{TaxaFrete.invalida}")
-    @PositiveOrZero
+    // @PositiveOrZero
+    @TaxaFrete
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
