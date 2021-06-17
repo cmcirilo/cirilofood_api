@@ -1,4 +1,4 @@
-package com.cirilo.cirilofood;
+package com.cirilo.cirilofood.core.validation;
 
 public interface Groups {
 

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.cirilo.cirilofood.Groups;
+import com.cirilo.cirilofood.core.validation.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
