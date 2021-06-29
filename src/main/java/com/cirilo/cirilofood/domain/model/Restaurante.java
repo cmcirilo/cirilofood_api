@@ -19,10 +19,11 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.cirilo.cirilofood.core.validation.Multiple;
+import com.cirilo.cirilofood.core.validation.ZeroValueIncludeDescription;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -32,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+// if shipping fee is zero check if description field contains the mandatory description
+@ZeroValueIncludeDescription(valueField = "taxaFrete", descriptionField = "nome", descriptionMandatory="Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -50,9 +53,9 @@ public class Restaurante {
 
     // @DecimalMin("1")
     // @PositiveOrZero(message = "{TaxaFrete.invalida}")
-    // @PositiveOrZero
-    // @TaxaFrete
-    @Multiple(number = 5)
+    @PositiveOrZero
+    // @TaxaFrete custom bean validation
+    // @Multiple(number = 5) custom contraint validator
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
