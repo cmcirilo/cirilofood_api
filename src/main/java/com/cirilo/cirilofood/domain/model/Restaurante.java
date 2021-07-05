@@ -60,12 +60,12 @@ public class Restaurante {
     private BigDecimal taxaFrete;
 
     // @JsonIgnoreProperties("hibernateLazyInitializer")
-    @Valid // validate properties inside Cozinha with annotations usin Bean Validation
-    @NotNull // validate null in Cozinha but not properties inside Cozinha (not cascade)
-    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+    @Valid // validate properties inside cuisine with annotations usin Bean Validation
+    @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
+    @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @ManyToOne // (fetch = FetchType.LAZY)
-    @JoinColumn(name = "cozinha_id", nullable = false)
-    private Cozinha cozinha;
+    @JoinColumn(name = "cuisine_id", nullable = false)
+    private Cuisine cuisine;
 
     @JsonIgnore
     @Embedded

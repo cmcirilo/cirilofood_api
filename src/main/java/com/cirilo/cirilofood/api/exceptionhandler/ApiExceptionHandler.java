@@ -24,7 +24,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.cirilo.cirilofood.core.validation.ValidationException;
-import com.cirilo.cirilofood.domain.exception.EntidadeEmUsoException;
+import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
 import com.cirilo.cirilofood.domain.exception.NegocioException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
@@ -56,8 +56,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
+    @ExceptionHandler(EntityInUseException.class)
+    public ResponseEntity<?> handleEntidadeEmUso(EntityInUseException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
         ProblemType problemType = ProblemType.ENTIDADE_EM_USO;

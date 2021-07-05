@@ -39,7 +39,7 @@ create table produto (
 
 create table restaurante (
 	id bigint not null auto_increment,
-	cozinha_id bigint not null,
+	cuisine_id bigint not null,
 	nome varchar(80) not null,
 	taxa_frete decimal(10,2) not null,
 	data_atualizacao datetime not null,
@@ -91,8 +91,8 @@ foreign key (grupo_id) references grupo (id);
 alter table produto add constraint fk_produto_restaurante
 foreign key (restaurante_id) references restaurante (id);
 
-alter table restaurante add constraint fk_restaurante_cozinha
-foreign key (cozinha_id) references cozinha (id);
+alter table restaurante add constraint fk_restaurante_cuisine
+foreign key (cuisine_id) references cuisine (id);
 
 alter table restaurante add constraint fk_restaurante_cidade
 foreign key (endereco_cidade_id) references cidade (id);

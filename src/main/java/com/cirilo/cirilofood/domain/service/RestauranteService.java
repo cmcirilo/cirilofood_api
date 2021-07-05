@@ -1,10 +1,10 @@
 package com.cirilo.cirilofood.domain.service;
 
 import com.cirilo.cirilofood.domain.exception.RestauranteNaoEncontradoException;
+import com.cirilo.cirilofood.domain.model.Cuisine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cirilo.cirilofood.domain.model.Cozinha;
 import com.cirilo.cirilofood.domain.model.Restaurante;
 import com.cirilo.cirilofood.domain.repository.RestauranteRepository;
 
@@ -15,14 +15,14 @@ public class RestauranteService {
 	private RestauranteRepository restauranteRepository;
 
 	@Autowired
-	private CozinhaService cozinhaService;
+	private CuisineService cuisineService;
 
 	public Restaurante salvar(Restaurante restaurante) {
-		Long cozinhaId = restaurante.getCozinha().getId();
+		Long cuisineId = restaurante.getCuisine().getId();
 
-		Cozinha cozinha = cozinhaService.buscar(cozinhaId);
+		Cuisine cuisine = cuisineService.find(cuisineId);
 
-		restaurante.setCozinha(cozinha);
+		restaurante.setCuisine(cuisine);
 
 		return restauranteRepository.save(restaurante);
 	}

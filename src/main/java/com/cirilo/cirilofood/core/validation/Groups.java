@@ -2,7 +2,7 @@ package com.cirilo.cirilofood.core.validation;
 
 public interface Groups {
 
-    public interface CozinhaId {
+    public interface CuisineId {
     }
 
     public interface EstadoId {

@@ -14,23 +14,23 @@ import java.util.Optional;
 public interface RestauranteRepository
         extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
 
-//    @Query("select distinct r from Restaurante r join r.cozinha left join fetch r.formasPagamento")
-    @Query("select distinct r from Restaurante r join r.cozinha")
+//    @Query("select distinct r from Restaurante r join r.cuisine left join fetch r.formasPagamento")
+    @Query("select distinct r from Restaurante r join r.cuisine")
     List<Restaurante> findAll();
 
     // prefixs - readBy, streamBy, getBy, findBy, queryBy
     List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
-    // @Query("from Restaurante where nome like %:nome% and cozinha.id= :id") usando
+    // @Query("from Restaurante where nome like %:nome% and cuisine.id= :id") usando
     // resource/meta-inf/orm.xml
-    List<Restaurante> consultarPorNomeECozinha(String nome, @Param("id") Long cozinha);
+    List<Restaurante> consultarPorNomeECuisine(String nome, @Param("id") Long cuisine);
 
-    List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinha);
+    List<Restaurante> findByNomeContainingAndCuisineId(String nome, Long cuisineId);
 
     Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
 
     List<Restaurante> findTop2RestauranteByNomeContaining(String nome);
 
-    int countByCozinhaId(Long cozinhaId);
+    int countByCuisineId(Long cuisineId);
 
 }

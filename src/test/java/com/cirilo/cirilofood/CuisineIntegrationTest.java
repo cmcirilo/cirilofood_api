@@ -1,7 +1,7 @@
 package com.cirilo.cirilofood;
 
-import com.cirilo.cirilofood.domain.model.Cozinha;
-import com.cirilo.cirilofood.domain.service.CozinhaService;
+import com.cirilo.cirilofood.domain.model.Cuisine;
+import com.cirilo.cirilofood.domain.service.CuisineService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CuisineIntegrationTest {
 
 	@Autowired
-	private CozinhaService cuisineService;
+	private CuisineService cuisineService;
 
 	@Test
 	public void testCreateCuisineWithSuccess() {
 		//scenario
-		Cozinha cuisine = new Cozinha();
-		cuisine.setNome("Chinese");
+		Cuisine cuisine = new Cuisine();
+		cuisine.setName("Chinese");
 
 		//action
-		cuisine = cuisineService.salvar(cuisine);
+		cuisine = cuisineService.save(cuisine);
 
 		//validation
 		assertThat(cuisine).isNotNull();
@@ -35,10 +35,10 @@ public class CuisineIntegrationTest {
 
 	@Test(expected = ConstraintViolationException.class)
 	public void testCreateCuisineWithoutName(){
-		Cozinha cuisine = new Cozinha();
-		cuisine.setNome(null);
+		Cuisine cuisine = new Cuisine();
+		cuisine.setName(null);
 
-		cuisine = cuisineService.salvar(cuisine);
+		cuisine = cuisineService.save(cuisine);
 	}
 
 }

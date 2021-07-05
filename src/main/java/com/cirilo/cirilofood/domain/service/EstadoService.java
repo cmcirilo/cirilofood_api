@@ -1,14 +1,12 @@
 package com.cirilo.cirilofood.domain.service;
 
 import com.cirilo.cirilofood.domain.exception.EstadoNaoEncontradoException;
-import com.cirilo.cirilofood.domain.model.Cidade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.cirilo.cirilofood.domain.exception.EntidadeEmUsoException;
-import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
+import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.model.Estado;
 import com.cirilo.cirilofood.domain.repository.EstadoRepository;
 
@@ -33,7 +31,7 @@ public class EstadoService {
 			throw new EstadoNaoEncontradoException(estadoId);
 
 		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(
+			throw new EntityInUseException(
 					String.format(MSG_ESTADO_EM_USO, estadoId));
 		}
 	}

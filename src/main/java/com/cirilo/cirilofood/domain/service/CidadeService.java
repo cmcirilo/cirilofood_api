@@ -6,7 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.cirilo.cirilofood.domain.exception.EntidadeEmUsoException;
+import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.model.Cidade;
 import com.cirilo.cirilofood.domain.model.Estado;
 import com.cirilo.cirilofood.domain.repository.CidadeRepository;
@@ -41,7 +41,7 @@ public class CidadeService {
 			throw new CidadeNaoEncontradaException(cidadeId);
 
 		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(
+			throw new EntityInUseException(
 					String.format(MSG_CIDADE_EM_USO, cidadeId));
 		}
 	}

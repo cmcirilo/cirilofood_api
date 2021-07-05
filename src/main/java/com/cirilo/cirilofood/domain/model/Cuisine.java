@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonRootName("cozinha")
+@JsonRootName("cuisine")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Cozinha {
+public class Cuisine {
 
-    @NotNull(groups = Groups.CozinhaId.class)
+    @NotNull(groups = Groups.CuisineId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +33,10 @@ public class Cozinha {
 
     @NotBlank
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "cozinha")
-    private List<Restaurante> restaurantes = new ArrayList<>();
+    @OneToMany(mappedBy = "cuisine")
+    private List<Restaurante> restaurants = new ArrayList<>();
 
 }

@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.cirilo.cirilofood.domain.model.Cozinha;
+import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.model.Restaurante;
-import com.cirilo.cirilofood.domain.repository.CozinhaRepository;
+import com.cirilo.cirilofood.domain.repository.CuisineRepository;
 import com.cirilo.cirilofood.domain.repository.RestauranteRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TesteController {
 
 	@Autowired
-	private CozinhaRepository cozinhaRepository;
+	private CuisineRepository cuisineRepository;
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -30,10 +30,10 @@ public class TesteController {
 	}
 
 	@GetMapping("/restaurantes/por-nome")
-	public List<Restaurante> restaurantesPorNome(String nome, Long cozinhaId) {
-		return restauranteRepository.consultarPorNomeECozinha(nome, cozinhaId);
-		// return restauranteRepository.findByNomeContainingAndCozinhaId(nome,
-		// cozinhaId);
+	public List<Restaurante> restaurantesPorNome(String nome, Long cuisineId) {
+		return restauranteRepository.consultarPorNomeECuisine(nome, cuisineId);
+		// return restauranteRepository.findByNomeContainingAndCuisineId(nome,
+		// cuisineId);
 	}
 
 	@GetMapping("/restaurantes/primeiro-por-nome")
@@ -46,14 +46,14 @@ public class TesteController {
 		return restauranteRepository.findTop2RestauranteByNomeContaining(nome);
 	}
 
-	@GetMapping("cozinhas/exists")
-	public boolean cozinhaExists(String nome) {
-		return cozinhaRepository.existsByNome(nome);
+	@GetMapping("cuisines/exists")
+	public boolean cuisineExists(String nome) {
+		return cuisineRepository.existsByName(nome);
 	}
 
-	@GetMapping("restaurantes/count-por-cozinha")
-	public int restaurantesCountPorCozinha(Long cozinhaId) {
-		return restauranteRepository.countByCozinhaId(cozinhaId);
+	@GetMapping("restaurantes/count-por-cuisine")
+	public int restaurantesCountPorcuisine(Long cuisineId) {
+		return restauranteRepository.countByCuisineId(cuisineId);
 	}
 
 	@GetMapping("/restaurantes/por-nome-e-frete")
@@ -72,8 +72,8 @@ public class TesteController {
 		return restauranteRepository.buscarPrimeiro();
 	}
 
-	@GetMapping("/cozinhas/primeira")
-	public Optional<Cozinha> cozinhaPrimeiro() {
-		return cozinhaRepository.buscarPrimeiro();
+	@GetMapping("/cuisines/primeira")
+	public Optional<Cuisine> cuisinePrimeiro() {
+		return cuisineRepository.buscarPrimeiro();
 	}
 }
