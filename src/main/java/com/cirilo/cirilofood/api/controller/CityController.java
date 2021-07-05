@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.domain.model.City;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,58 +20,57 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
-import com.cirilo.cirilofood.domain.model.Cidade;
-import com.cirilo.cirilofood.domain.repository.CidadeRepository;
-import com.cirilo.cirilofood.domain.service.CidadeService;
+import com.cirilo.cirilofood.domain.repository.CityRepository;
+import com.cirilo.cirilofood.domain.service.CityService;
 
 @RestController
-@RequestMapping(value = "/cidades")
-public class CidadeController {
+@RequestMapping(value = "/cities")
+public class CityController {
 
     @Autowired
-    private CidadeRepository cidadeRepository;
+    private CityRepository cityRepository;
 
     @Autowired
-    private CidadeService cidadeService;
+    private CityService cityService;
 
     @GetMapping
-    public List<Cidade> listar() {
-        return cidadeRepository.findAll();
+    public List<City> list() {
+        return cityRepository.findAll();
     }
 
-    @GetMapping("/{cidadeId}")
-    public Cidade buscar(@PathVariable Long cidadeId) {
-        return cidadeService.buscar(cidadeId);
+    @GetMapping("/{cityId}")
+    public City find(@PathVariable Long cityId) {
+        return cityService.find(cityId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
+    public City create(@RequestBody @Valid City city) {
         try {
-            return cidadeService.salvar(cidade);
+            return cityService.save(city);
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
-    @PutMapping("/{cidadeId}")
-    public Cidade atualizar(@PathVariable Long cidadeId,
-            @RequestBody @Valid Cidade cidade) {
+    @PutMapping("/{cityId}")
+    public City update(@PathVariable Long cityId,
+                       @RequestBody @Valid City city) {
 
-        Cidade cidadeAtual = cidadeService.buscar(cidadeId);
-        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+        City currentCity = cityService.find(cityId);
+        BeanUtils.copyProperties(city, currentCity, "id");
 
         try {
-            return cidadeService.salvar(cidadeAtual);
+            return cityService.save(currentCity);
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
-    @DeleteMapping("/{cidadeId}")
+    @DeleteMapping("/{cityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long cidadeId) {
-        cidadeService.excluir(cidadeId);
+    public void delete(@PathVariable Long cityId) {
+        cityService.delete(cityId);
     }
 
 }

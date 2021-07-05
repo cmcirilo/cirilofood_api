@@ -16,9 +16,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Estado {
+public class State {
 
-    @NotNull(groups = Groups.EstadoId.class)
+    @NotNull(groups = Groups.StateId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,6 @@ public class Estado {
 
     @NotBlank
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
 }

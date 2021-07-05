@@ -45,7 +45,7 @@ create table restaurant (
 	created_date datetime not null,
 	updated_date datetime not null,
 
-	endereco_cidade_id bigint,
+	endereco_city_id bigint,
 	endereco_cep varchar(9),
 	endereco_logradouro varchar(100),
 	endereco_numero varchar(20),
@@ -94,8 +94,8 @@ foreign key (restaurant_id) references restaurant (id);
 alter table restaurant add constraint fk_restaurant_cuisine
 foreign key (cuisine_id) references cuisine (id);
 
-alter table restaurant add constraint fk_restaurant_cidade
-foreign key (endereco_cidade_id) references cidade (id);
+alter table restaurant add constraint fk_restaurant_city
+foreign key (endereco_city_id) references city (id);
 
 alter table restaurant_forma_pagamento add constraint fk_rest_forma_pagto_forma_pagto
 foreign key (forma_pagamento_id) references forma_pagamento (id);

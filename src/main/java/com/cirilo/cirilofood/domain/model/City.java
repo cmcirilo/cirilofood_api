@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Cidade {
+public class City {
 
     @EqualsAndHashCode.Include
     @Id
@@ -30,13 +30,13 @@ public class Cidade {
 
     @NotBlank
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @Valid
-    @ConvertGroup(from = Default.class, to = Groups.EstadoId.class)
+    @ConvertGroup(from = Default.class, to = Groups.StateId.class)
     @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Estado estado;
+    private State state;
 
 }

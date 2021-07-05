@@ -5,6 +5,6 @@ public interface Groups {
     public interface CuisineId {
     }
 
-    public interface EstadoId {
+    public interface StateId {
     }
 }

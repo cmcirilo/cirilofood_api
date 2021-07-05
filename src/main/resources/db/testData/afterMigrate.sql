@@ -1,8 +1,8 @@
 set foreign_key_checks=0;
 
-DELETE FROM cidade;
+DELETE FROM city;
 DELETE FROM cuisine;
-DELETE FROM estado;
+DELETE FROM state;
 DELETE FROM forma_pagamento;
 DELETE FROM grupo;
 DELETE FROM grupo_permissao;
@@ -15,9 +15,9 @@ DELETE FROM usuario_grupo;
 
 set foreign_key_checks=1;
 
-ALTER TABLE cidade auto_increment=1;
+ALTER TABLE city auto_increment=1;
 ALTER TABLE cuisine auto_increment=1;
-ALTER TABLE estado auto_increment=1;
+ALTER TABLE state auto_increment=1;
 ALTER TABLE forma_pagamento auto_increment=1;
 ALTER TABLE grupo auto_increment=1;
 ALTER TABLE permissao auto_increment=1;
@@ -28,17 +28,17 @@ ALTER TABLE usuario auto_increment=1;
 insert into cuisine (id, name) values (1, 'Thay');
 insert into cuisine (id, name) values (2, 'Indian');
 
-insert into estado (id, nome) values (1, 'Minas Gerais');
-insert into estado (id, nome) values (2, 'São Paulo');
-insert into estado (id, nome) values (3, 'Ceará');
+insert into state (id, name) values (1, 'Minas Gerais');
+insert into state (id, name) values (2, 'São Paulo');
+insert into state (id, name) values (3, 'Ceará');
 
-insert into cidade (id, nome, estado_id) values (1, 'Uberlândia', 1);
-insert into cidade (id, nome, estado_id) values (2, 'Belo Horizonte', 1);
-insert into cidade (id, nome, estado_id) values (3, 'São Paulo', 2);
-insert into cidade (id, nome, estado_id) values (4, 'Campinas', 2);
-insert into cidade (id, nome, estado_id) values (5, 'Fortaleza', 3);
+insert into city (id, name, state_id) values (1, 'Uberlândia', 1);
+insert into city (id, name, state_id) values (2, 'Belo Horizonte', 1);
+insert into city (id, name, state_id) values (3, 'São Paulo', 2);
+insert into city (id, name, state_id) values (4, 'Campinas', 2);
+insert into city (id, name, state_id) values (5, 'Fortaleza', 3);
 
-insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, updated_date, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro) values (1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp,3,  "05374-080", "Rua Ana Aurora Lisboa","66","Jardim Esther Yolanda");
+insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, updated_date, endereco_city_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro) values (1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp,3,  "05374-080", "Rua Ana Aurora Lisboa","66","Jardim Esther Yolanda");
 insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, updated_date) values (2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp);
 insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, updated_date) values (3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp);
 
