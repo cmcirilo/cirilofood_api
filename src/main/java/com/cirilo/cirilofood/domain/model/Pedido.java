@@ -34,7 +34,7 @@ public class Pedido {
     private BigDecimal valorTotal;
 
     @Embedded
-    private Endereco enderecoEntrega;
+    private Address addressEntrega;
 
     private StatusPedido status;
 
@@ -47,7 +47,7 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private FormaPagamento formaPagamento;
+    private FormPayment formPayment;
 
     @ManyToOne
     @JoinColumn(nullable = false)

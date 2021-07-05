@@ -69,7 +69,7 @@ public class Restaurant {
 
     @JsonIgnore
     @Embedded
-    private Endereco endereco;
+    private Address address;
 
     @JsonIgnore
     @CreationTimestamp
@@ -83,10 +83,10 @@ public class Restaurant {
 
     @JsonIgnore
     @ManyToMany // (fetch = FetchType.EAGER)
-    @JoinTable(name = "restaurant_forma_pagamento",
+    @JoinTable(name = "restaurant_form_payment",
             joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-    private List<FormaPagamento> formasPagamento = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "form_payment_id"))
+    private List<FormPayment> formsPayment = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant")

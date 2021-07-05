@@ -20,10 +20,10 @@ import javax.validation.constraints.PositiveOrZero;
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
 @PositiveOrZero
-public @interface TaxaFrete {
+public @interface ShippingFee {
 
     @OverridesAttribute(constraint = PositiveOrZero.class, name = "message")
-    String message() default "{TaxaFrete.invalida}";
+    String message() default "{ShippingFee.invalid}";
 
     Class<?>[] groups() default {};
 

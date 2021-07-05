@@ -6,26 +6,26 @@ create table pedido (
 
   restaurant_id bigint not null,
   usuario_cliente_id bigint not null,
-  forma_pagamento_id bigint not null,
+  form_payment_id bigint not null,
 
-  endereco_city_id bigint(20) not null,
-  endereco_cep varchar(9) not null,
-  endereco_logradouro varchar(100) not null,
-  endereco_numero varchar(20) not null,
-  endereco_complemento varchar(60) null,
-  endereco_bairro varchar(60) not null,
+  address_city_id bigint(20) not null,
+  address_zipcode varchar(9) not null,
+  address_street varchar(100) not null,
+  address_number varchar(20) not null,
+  address_complement varchar(60) null,
+  address_district varchar(60) not null,
 
   status varchar(10) not null,
-  data_criacao datetime not null,
-  data_confirmacao datetime null,
-  data_cancelamento datetime null,
-  data_entrega datetime null,
+  created_date datetime not null,
+  confirmation_date datetime null,
+  cancel_date datetime null,
+  delivery_date datetime null,
 
   primary key (id),
 
   constraint fk_pedido_restaurant foreign key (restaurant_id) references restaurant (id),
   constraint fk_pedido_usuario_cliente foreign key (usuario_cliente_id) references usuario (id),
-  constraint fk_pedido_forma_pagamento foreign key (forma_pagamento_id) references forma_pagamento (id)
+  constraint fk_pedido_form_payment foreign key (form_payment_id) references form_payment (id)
 ) engine=InnoDB default charset=utf8;
 
 create table item_pedido (

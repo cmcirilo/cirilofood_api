@@ -73,7 +73,7 @@ public class RestaurantController {
                              @RequestBody @Valid Restaurant restaurant) {
 
         Restaurant currentRestaurant = restaurantService.find(restaurantId);
-        BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "formasPagamento", "endereco", "createdDate", "produtos");
+        BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "formsPayment", "address", "createdDate", "produtos");
 
         try {
             return restaurantService.save(currentRestaurant);

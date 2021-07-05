@@ -1,6 +1,6 @@
-create table forma_pagamento (
+create table form_payment (
 	id bigint not null auto_increment,
-	descricao varchar(60) not null,
+	description varchar(60) not null,
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
@@ -45,21 +45,21 @@ create table restaurant (
 	created_date datetime not null,
 	updated_date datetime not null,
 
-	endereco_city_id bigint,
-	endereco_cep varchar(9),
-	endereco_logradouro varchar(100),
-	endereco_numero varchar(20),
-	endereco_complemento varchar(60),
-	endereco_bairro varchar(60),
+	address_city_id bigint,
+	address_zipcode varchar(9),
+	address_street varchar(100),
+	address_number varchar(20),
+	address_complement varchar(60),
+	address_district varchar(60),
 
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table restaurant_forma_pagamento (
+create table restaurant_form_payment (
 	restaurant_id bigint not null,
-	forma_pagamento_id bigint not null,
+	form_payment_id bigint not null,
 
-	primary key (restaurant_id, forma_pagamento_id)
+	primary key (restaurant_id, form_payment_id)
 ) engine=InnoDB default charset=utf8;
 
 create table usuario (
@@ -95,12 +95,12 @@ alter table restaurant add constraint fk_restaurant_cuisine
 foreign key (cuisine_id) references cuisine (id);
 
 alter table restaurant add constraint fk_restaurant_city
-foreign key (endereco_city_id) references city (id);
+foreign key (address_city_id) references city (id);
 
-alter table restaurant_forma_pagamento add constraint fk_rest_forma_pagto_forma_pagto
-foreign key (forma_pagamento_id) references forma_pagamento (id);
+alter table restaurant_form_payment add constraint fk_rest_forma_pagto_forma_pagto
+foreign key (form_payment_id) references form_payment (id);
 
-alter table restaurant_forma_pagamento add constraint fk_rest_forma_pagto_restaurant
+alter table restaurant_form_payment add constraint fk_rest_forma_pagto_restaurant
 foreign key (restaurant_id) references restaurant (id);
 
 alter table usuario_grupo add constraint fk_usuario_grupo_grupo
