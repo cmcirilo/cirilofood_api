@@ -23,22 +23,22 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.cirilo.cirilofood.core.validation.ZeroValueIncludeDescription;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.cirilo.cirilofood.core.validation.Groups;
+import com.cirilo.cirilofood.core.validation.ZeroValueIncludeDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 // if shipping fee is zero check if description field contains the mandatory description
-@ZeroValueIncludeDescription(valueField = "taxaFrete", descriptionField = "nome", descriptionMandatory="Frete Grátis")
+@ZeroValueIncludeDescription(valueField = "shippingFee", descriptionField = "name", descriptionMandatory = "Free Tax Delivery")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Restaurante {
+public class Restaurant {
 
     @EqualsAndHashCode.Include
     @Id
@@ -49,15 +49,15 @@ public class Restaurante {
     // @NotEmpty
     @NotBlank
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     // @DecimalMin("1")
-    // @PositiveOrZero(message = "{TaxaFrete.invalida}")
+    // @PositiveOrZero(message = "{ShippingFee.invalida}")
     @PositiveOrZero
-    // @TaxaFrete custom bean validation
+    // @ShippingFee custom bean validation
     // @Multiple(number = 5) custom contraint validator
-    @Column(name = "taxa_frete", nullable = false)
-    private BigDecimal taxaFrete;
+    @Column(name = "shipping_fee", nullable = false)
+    private BigDecimal shippingFee;
 
     // @JsonIgnoreProperties("hibernateLazyInitializer")
     @Valid // validate properties inside cuisine with annotations usin Bean Validation
@@ -73,23 +73,23 @@ public class Restaurante {
 
     @JsonIgnore
     @CreationTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime dataCadastro;
+    @Column(name = "created_date", nullable = false, columnDefinition = "datetime")
+    private LocalDateTime createdDate;
 
     @JsonIgnore
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime dataAtualizacao;
+    @Column(name = "updated_date", nullable = false, columnDefinition = "datetime")
+    private LocalDateTime updatedDate;
 
     @JsonIgnore
     @ManyToMany // (fetch = FetchType.EAGER)
-    @JoinTable(name = "restaurante_forma_pagamento",
-            joinColumns = @JoinColumn(name = "restaurante_id"),
+    @JoinTable(name = "restaurant_forma_pagamento",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "restaurante")
+    @OneToMany(mappedBy = "restaurant")
     private List<Produto> produtos = new ArrayList<>();
 
 }

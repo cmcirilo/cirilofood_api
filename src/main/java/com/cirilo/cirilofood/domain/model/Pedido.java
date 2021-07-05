@@ -51,7 +51,7 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Restaurante restaurante;
+    private Restaurant restaurant;
 
     @ManyToOne
     @JoinColumn(name = "usuario_cliente_id", nullable = false)

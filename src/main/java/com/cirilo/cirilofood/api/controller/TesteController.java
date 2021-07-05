@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.cirilo.cirilofood.domain.model.Cuisine;
-import com.cirilo.cirilofood.domain.model.Restaurante;
+import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.repository.CuisineRepository;
-import com.cirilo.cirilofood.domain.repository.RestauranteRepository;
+import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,58 +22,58 @@ public class TesteController {
 	private CuisineRepository cuisineRepository;
 
 	@Autowired
-	private RestauranteRepository restauranteRepository;
+	private RestaurantRepository restaurantRepository;
 
-	@GetMapping("/restaurantes/por-taxa-frete")
-	public List<Restaurante> restaurantesPorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
-		return restauranteRepository.queryByTaxaFreteBetween(taxaInicial, taxaFinal);
+	@GetMapping("/restaurants/by-shipping-fee")
+	public List<Restaurant> restaurantsByShippingFee(BigDecimal initialShippingFee, BigDecimal finalShippingFee) {
+		return restaurantRepository.queryByShippingFeeBetween(initialShippingFee, finalShippingFee);
 	}
 
-	@GetMapping("/restaurantes/por-nome")
-	public List<Restaurante> restaurantesPorNome(String nome, Long cuisineId) {
-		return restauranteRepository.consultarPorNomeECuisine(nome, cuisineId);
-		// return restauranteRepository.findByNomeContainingAndCuisineId(nome,
+	@GetMapping("/restaurants/por-name")
+	public List<Restaurant> restaurantsByName(String name, Long cuisineId) {
+		return restaurantRepository.findByNameAndCuisine(name, cuisineId);
+		// return restaurantRepository.findByNameContainingAndCuisineId(name,
 		// cuisineId);
 	}
 
-	@GetMapping("/restaurantes/primeiro-por-nome")
-	public Optional<Restaurante> restaurantePrimeiroPorNome(String nome) {
-		return restauranteRepository.findFirstRestauranteByNomeContaining(nome);
+	@GetMapping("/restaurants/first-by-name")
+	public Optional<Restaurant> restaurantFirstByName(String name) {
+		return restaurantRepository.findFirstRestaurantByNameContaining(name);
 	}
 
-	@GetMapping("/restaurantes/top2-por-nome")
-	public List<Restaurante> restaurantesTop2PorNome(String nome) {
-		return restauranteRepository.findTop2RestauranteByNomeContaining(nome);
+	@GetMapping("/restaurants/top2-by-name")
+	public List<Restaurant> restaurantsTop2ByName(String name) {
+		return restaurantRepository.findTop2RestaurantByNameContaining(name);
 	}
 
 	@GetMapping("cuisines/exists")
-	public boolean cuisineExists(String nome) {
-		return cuisineRepository.existsByName(nome);
+	public boolean cuisineExists(String name) {
+		return cuisineRepository.existsByName(name);
 	}
 
-	@GetMapping("restaurantes/count-por-cuisine")
-	public int restaurantesCountPorcuisine(Long cuisineId) {
-		return restauranteRepository.countByCuisineId(cuisineId);
+	@GetMapping("restaurants/count-por-cuisine")
+	public int restaurantsCountByCuisine(Long cuisineId) {
+		return restaurantRepository.countByCuisineId(cuisineId);
 	}
 
-	@GetMapping("/restaurantes/por-nome-e-frete")
-	public List<Restaurante> restaurantesPorNomeFrete(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
-		return restauranteRepository.find(nome, taxaInicial, taxaFinal);
+	@GetMapping("/restaurants/by-name-and-shipping-fee")
+	public List<Restaurant> restaurantsByNameAndShippingFee(String name, BigDecimal intialShippingFee, BigDecimal finalShippingFee) {
+		return restaurantRepository.find(name, intialShippingFee, finalShippingFee);
 	}
 
-	@GetMapping("/restaurantes/com-frete-gratis")
-	public List<Restaurante> restaurantesComFreteGratis(String nome) {
+	@GetMapping("/restaurants/with-free-shipping")
+	public List<Restaurant> restaurantsWithFreeShipping(String name) {
 
-		return restauranteRepository.findComFreteGratis(nome);
+		return restaurantRepository.findFreeShipping(name);
 	}
 
-	@GetMapping("/restaurantes/primeiro")
-	public Optional<Restaurante> restaurantePrimeiro() {
-		return restauranteRepository.buscarPrimeiro();
+	@GetMapping("/restaurants/first")
+	public Optional<Restaurant> restaurantFirst() {
+		return restaurantRepository.findFirst();
 	}
 
-	@GetMapping("/cuisines/primeira")
-	public Optional<Cuisine> cuisinePrimeiro() {
-		return cuisineRepository.buscarPrimeiro();
+	@GetMapping("/cuisines/first")
+	public Optional<Cuisine> cuisineFirst() {
+		return cuisineRepository.findFirst();
 	}
 }

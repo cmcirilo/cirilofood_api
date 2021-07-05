@@ -21,7 +21,7 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
     }
 
     @Override
-    public Optional<T> buscarPrimeiro() {
+    public Optional<T> findFirst() {
 
         var jpql = "from " + getDomainClass().getName();
 

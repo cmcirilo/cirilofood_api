@@ -25,8 +25,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.cirilo.cirilofood.core.validation.ValidationException;
 import com.cirilo.cirilofood.domain.exception.EntityInUseException;
-import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
-import com.cirilo.cirilofood.domain.exception.NegocioException;
+import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
@@ -41,9 +41,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
-    @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex,
-            WebRequest request) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntidadeNaoEncontrada(EntityNotFoundException ex,
+                                                         WebRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
@@ -70,8 +70,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> handleNegocio(NegocioException ex, WebRequest request) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<?> handleNegocio(BusinessException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ProblemType problemType = ProblemType.ERRO_DE_NEGOCIO;

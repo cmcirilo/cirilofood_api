@@ -1,10 +1,10 @@
 create table pedido (
   id bigint not null auto_increment,
   subtotal decimal(10,2) not null,
-  taxa_frete decimal(10,2) not null,
+  shipping_fee decimal(10,2) not null,
   valor_total decimal(10,2) not null,
 
-  restaurante_id bigint not null,
+  restaurant_id bigint not null,
   usuario_cliente_id bigint not null,
   forma_pagamento_id bigint not null,
 
@@ -23,7 +23,7 @@ create table pedido (
 
   primary key (id),
 
-  constraint fk_pedido_restaurante foreign key (restaurante_id) references restaurante (id),
+  constraint fk_pedido_restaurant foreign key (restaurant_id) references restaurant (id),
   constraint fk_pedido_usuario_cliente foreign key (usuario_cliente_id) references usuario (id),
   constraint fk_pedido_forma_pagamento foreign key (forma_pagamento_id) references forma_pagamento (id)
 ) engine=InnoDB default charset=utf8;

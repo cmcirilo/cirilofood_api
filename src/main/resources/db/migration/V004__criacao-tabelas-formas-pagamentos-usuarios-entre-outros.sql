@@ -28,7 +28,7 @@ create table permissao (
 
 create table produto (
 	id bigint not null auto_increment,
-	restaurante_id bigint not null,
+	restaurant_id bigint not null,
 	nome varchar(80) not null,
 	descricao text not null,
 	preco decimal(10,2) not null,
@@ -37,13 +37,13 @@ create table produto (
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table restaurante (
+create table restaurant (
 	id bigint not null auto_increment,
 	cuisine_id bigint not null,
-	nome varchar(80) not null,
-	taxa_frete decimal(10,2) not null,
-	data_atualizacao datetime not null,
-	data_cadastro datetime not null,
+	name varchar(80) not null,
+	shipping_fee decimal(10,2) not null,
+	created_date datetime not null,
+	updated_date datetime not null,
 
 	endereco_cidade_id bigint,
 	endereco_cep varchar(9),
@@ -55,11 +55,11 @@ create table restaurante (
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table restaurante_forma_pagamento (
-	restaurante_id bigint not null,
+create table restaurant_forma_pagamento (
+	restaurant_id bigint not null,
 	forma_pagamento_id bigint not null,
 
-	primary key (restaurante_id, forma_pagamento_id)
+	primary key (restaurant_id, forma_pagamento_id)
 ) engine=InnoDB default charset=utf8;
 
 create table usuario (
@@ -88,20 +88,20 @@ foreign key (permissao_id) references permissao (id);
 alter table grupo_permissao add constraint fk_grupo_permissao_grupo
 foreign key (grupo_id) references grupo (id);
 
-alter table produto add constraint fk_produto_restaurante
-foreign key (restaurante_id) references restaurante (id);
+alter table produto add constraint fk_produto_restaurant
+foreign key (restaurant_id) references restaurant (id);
 
-alter table restaurante add constraint fk_restaurante_cuisine
+alter table restaurant add constraint fk_restaurant_cuisine
 foreign key (cuisine_id) references cuisine (id);
 
-alter table restaurante add constraint fk_restaurante_cidade
+alter table restaurant add constraint fk_restaurant_cidade
 foreign key (endereco_cidade_id) references cidade (id);
 
-alter table restaurante_forma_pagamento add constraint fk_rest_forma_pagto_forma_pagto
+alter table restaurant_forma_pagamento add constraint fk_rest_forma_pagto_forma_pagto
 foreign key (forma_pagamento_id) references forma_pagamento (id);
 
-alter table restaurante_forma_pagamento add constraint fk_rest_forma_pagto_restaurante
-foreign key (restaurante_id) references restaurante (id);
+alter table restaurant_forma_pagamento add constraint fk_rest_forma_pagto_restaurant
+foreign key (restaurant_id) references restaurant (id);
 
 alter table usuario_grupo add constraint fk_usuario_grupo_grupo
 foreign key (grupo_id) references grupo (id);

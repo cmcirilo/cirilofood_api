@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.domain.exception;
 
-public class CuisineNotFoundException extends EntidadeNaoEncontradaException {
+public class CuisineNotFoundException extends EntityNotFoundException {
 
     private static final long serialVersionUID = 1L;
 

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cirilo.cirilofood.domain.exception.EntidadeNaoEncontradaException;
-import com.cirilo.cirilofood.domain.exception.NegocioException;
+import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.model.Cidade;
 import com.cirilo.cirilofood.domain.repository.CidadeRepository;
 import com.cirilo.cirilofood.domain.service.CidadeService;
@@ -48,8 +48,8 @@ public class CidadeController {
     public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
         try {
             return cidadeService.salvar(cidade);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new BusinessException(e.getMessage());
         }
     }
 
@@ -62,8 +62,8 @@ public class CidadeController {
 
         try {
             return cidadeService.salvar(cidadeAtual);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new BusinessException(e.getMessage());
         }
     }
 
