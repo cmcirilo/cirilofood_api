@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Permissao {
+public class Permission {
 
 	@EqualsAndHashCode.Include
 	@Id
@@ -20,9 +20,9 @@ public class Permissao {
 	private Long id;
 	
 	@Column(nullable = false)
-	private String nome;
+	private String name;
 	
 	@Column(nullable = false)
-	private String descricao;
+	private String description;
 	
 }

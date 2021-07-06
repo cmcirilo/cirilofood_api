@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Usuario {
+public class User {
 
     @EqualsAndHashCode.Include
     @Id
@@ -19,18 +19,18 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @Column(nullable = false)
     private String email;
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime dataCadastro;
+    private LocalDateTime createdDate;
 
     @ManyToMany
-    @JoinTable(name = "usuario_grupo",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-    private List<Grupo> grupos;
+    @JoinTable(name = "user_group",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private List<Group> groups;
 }

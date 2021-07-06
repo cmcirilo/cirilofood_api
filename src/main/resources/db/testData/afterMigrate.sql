@@ -4,14 +4,14 @@ DELETE FROM city;
 DELETE FROM cuisine;
 DELETE FROM state;
 DELETE FROM form_payment;
-DELETE FROM grupo;
-DELETE FROM grupo_permissao;
-DELETE FROM permissao;
-DELETE FROM produto;
+DELETE FROM `group`;
+DELETE FROM group_permission;
+DELETE FROM permission;
+DELETE FROM product;
 DELETE FROM restaurant;
 DELETE FROM restaurant_form_payment;
-DELETE FROM usuario;
-DELETE FROM usuario_grupo;
+DELETE FROM `user`;
+DELETE FROM user_group;
 
 set foreign_key_checks=1;
 
@@ -19,11 +19,11 @@ ALTER TABLE city auto_increment=1;
 ALTER TABLE cuisine auto_increment=1;
 ALTER TABLE state auto_increment=1;
 ALTER TABLE form_payment auto_increment=1;
-ALTER TABLE grupo auto_increment=1;
-ALTER TABLE permissao auto_increment=1;
-ALTER TABLE produto auto_increment=1;
+ALTER TABLE `group` auto_increment=1;
+ALTER TABLE permission auto_increment=1;
+ALTER TABLE product auto_increment=1;
 ALTER TABLE restaurant auto_increment=1;
-ALTER TABLE usuario auto_increment=1;
+ALTER TABLE `user` auto_increment=1;
 
 insert into cuisine (id, name) values (1, 'Thay');
 insert into cuisine (id, name) values (2, 'Indian');
@@ -46,11 +46,11 @@ insert into form_payment (id, description) values (1, 'Cartão de crédito');
 insert into form_payment (id, description) values (2, 'Cartão de débito');
 insert into form_payment (id, description) values (3, 'Dinheiro');
 
-insert into permissao (id, nome, descricao) values (1, 'CONSULTAR_CUISINES', 'Permite consultar cuisines');
-insert into permissao (id, nome, descricao) values (2, 'EDITAR_CUISINES', 'Permite editar cuisines');
+insert into permission (id, name, description) values (1, 'CONSULTAR_CUISINES', 'Permite consultar cuisines');
+insert into permission (id, name, description) values (2, 'EDITAR_CUISINES', 'Permite editar cuisines');
 
 insert into restaurant_form_payment (restaurant_id, form_payment_id) values (1,1),(1,2),(1,3),(2,3),(3,2),(3,3);
 
-insert into produto (id, nome, descricao, preco, ativo , restaurant_id) values (1, "Arroz","Arroz Descricao", 10.0, true, 1);
-insert into produto (id, nome, descricao, preco, ativo , restaurant_id) values (2, "Feijão","Feijão Descricao", 15.0, true, 1);
-insert into produto (id, nome, descricao, preco, ativo , restaurant_id) values (3, "Carne","Carne Descricao", 20.0, true,2);
+insert into product (id, name, description, price, active , restaurant_id) values (1, "Arroz","Arroz description", 10.0, true, 1);
+insert into product (id, name, description, price, active , restaurant_id) values (2, "Feijão","Feijão description", 15.0, true, 1);
+insert into product (id, name, description, price, active , restaurant_id) values (3, "Carne","Carne description", 20.0, true,2);

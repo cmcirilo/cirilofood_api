@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Produto {
+public class Product {
 
     @EqualsAndHashCode.Include
     @Id
@@ -17,16 +17,16 @@ public class Produto {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @Column(nullable = false)
-    private String descricao;
+    private String description;
 
     @Column(nullable = false)
-    private BigDecimal preco;
+    private BigDecimal price;
 
     @Column(nullable = false)
-    private Boolean ativo;
+    private Boolean active;
 
     @ManyToOne
     @JoinColumn(nullable = false)

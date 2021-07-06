@@ -90,6 +90,6 @@ public class Restaurant {
 
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant")
-    private List<Produto> produtos = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
 }

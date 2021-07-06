@@ -4,35 +4,35 @@ create table form_payment (
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table grupo (
+create table `group` (
 	id bigint not null auto_increment,
-	nome varchar(60) not null,
+	name varchar(60) not null,
 
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table grupo_permissao (
-	grupo_id bigint not null,
-	permissao_id bigint not null,
+create table group_permission (
+	group_id bigint not null,
+	permission_id bigint not null,
 
-	primary key (grupo_id, permissao_id)
+	primary key (group_id, permission_id)
 ) engine=InnoDB default charset=utf8;
 
-create table permissao (
+create table permission (
 	id bigint not null auto_increment,
-	descricao varchar(60) not null,
-	nome varchar(100) not null,
+	description varchar(60) not null,
+	name varchar(100) not null,
 
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table produto (
+create table product (
 	id bigint not null auto_increment,
 	restaurant_id bigint not null,
-	nome varchar(80) not null,
-	descricao text not null,
-	preco decimal(10,2) not null,
-	ativo tinyint(1) not null,
+	name varchar(80) not null,
+	description text not null,
+	price decimal(10,2) not null,
+	active tinyint(1) not null,
 
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
@@ -62,33 +62,33 @@ create table restaurant_form_payment (
 	primary key (restaurant_id, form_payment_id)
 ) engine=InnoDB default charset=utf8;
 
-create table usuario (
+create table user (
 	id bigint not null auto_increment,
-	nome varchar(80) not null,
+	name varchar(80) not null,
 	email varchar(255) not null,
-	senha varchar(255) not null,
-	data_cadastro datetime not null,
+	password varchar(255) not null,
+	created_date datetime not null,
 
 	primary key (id)
 ) engine=InnoDB default charset=utf8;
 
-create table usuario_grupo (
-	usuario_id bigint not null,
-	grupo_id bigint not null,
+create table user_group (
+	user_id bigint not null,
+	group_id bigint not null,
 
-	primary key (usuario_id, grupo_id)
+	primary key (user_id, group_id)
 ) engine=InnoDB default charset=utf8;
 
 
 
 
-alter table grupo_permissao add constraint fk_grupo_permissao_permissao
-foreign key (permissao_id) references permissao (id);
+alter table group_permission add constraint fk_group_permission_permission
+foreign key (permission_id) references permission (id);
 
-alter table grupo_permissao add constraint fk_grupo_permissao_grupo
-foreign key (grupo_id) references grupo (id);
+alter table group_permission add constraint fk_group_permission_group
+foreign key (group_id) references `group` (id);
 
-alter table produto add constraint fk_produto_restaurant
+alter table product add constraint fk_product_restaurant
 foreign key (restaurant_id) references restaurant (id);
 
 alter table restaurant add constraint fk_restaurant_cuisine
@@ -103,8 +103,8 @@ foreign key (form_payment_id) references form_payment (id);
 alter table restaurant_form_payment add constraint fk_rest_forma_pagto_restaurant
 foreign key (restaurant_id) references restaurant (id);
 
-alter table usuario_grupo add constraint fk_usuario_grupo_grupo
-foreign key (grupo_id) references grupo (id);
+alter table user_group add constraint fk_user_group_group
+foreign key (group_id) references `group` (id);
 
-alter table usuario_grupo add constraint fk_usuario_grupo_usuario
-foreign key (usuario_id) references usuario (id);
+alter table user_group add constraint fk_user_group_user
+foreign key (user_id) references user (id);

@@ -15,24 +15,24 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class ItemPedido {
+public class OrderItem {
 
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal precoUnitario;
-    private BigDecimal precoTotal;
-    private Integer quantidade;
-    private String observacao;
+    private BigDecimal unitPrice;
+    private BigDecimal totalPrice;
+    private Integer quantity;
+    private String observation;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Pedido pedido;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Produto produto;
+    private Product product;
 
 }

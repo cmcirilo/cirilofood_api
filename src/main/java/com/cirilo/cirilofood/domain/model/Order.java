@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Pedido {
+public class Order {
 
     @EqualsAndHashCode.Include
     @Id
@@ -30,20 +30,20 @@ public class Pedido {
     private Long id;
 
     private BigDecimal subtotal;
-    private BigDecimal taxaFrete;
-    private BigDecimal valorTotal;
+    private BigDecimal shippingFee;
+    private BigDecimal totalValue;
 
     @Embedded
-    private Address addressEntrega;
+    private Address deliveryAddress;
 
-    private StatusPedido status;
+    private StatusOrder status;
 
     @CreationTimestamp
-    private LocalDateTime dataCriacao;
+    private LocalDateTime createdDate;
 
-    private LocalDateTime dataConfirmacao;
-    private LocalDateTime dataCancelamento;
-    private LocalDateTime dataEntrega;
+    private LocalDateTime confirmationDate;
+    private LocalDateTime cancelDate;
+    private LocalDateTime deliveryDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -54,10 +54,10 @@ public class Pedido {
     private Restaurant restaurant;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_cliente_id", nullable = false)
-    private Usuario cliente;
+    @JoinColumn(name = "user_client_id", nullable = false)
+    private User client;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itens = new ArrayList<>();
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> itens = new ArrayList<>();
 
 }

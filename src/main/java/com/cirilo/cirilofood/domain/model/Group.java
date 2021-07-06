@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Grupo {
+public class Group {
 
     @EqualsAndHashCode.Include
     @Id
@@ -18,12 +18,12 @@ public class Grupo {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private String name;
 
     @ManyToMany
-    @JoinTable(name = "grupo_permissao",
-            joinColumns = @JoinColumn(name = "grupo_id"),
-            inverseJoinColumns = @JoinColumn(name = "permissao_id"))
-    private List<Permissao> permissoes = new ArrayList<>();
+    @JoinTable(name = "group_permission",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private List<Permission> permissions = new ArrayList<>();
 
 }

@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. "
+    public static final String MSG_GENERIC_ERROR_FINAL_USER = "Ocorreu um erro interno inesperado no sistema. "
             + "Tente novamente e se o problema persistir, entre em contato "
             + "com o administrador do sistema.";
 
@@ -94,7 +94,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-        String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
+        String detail = MSG_GENERIC_ERROR_FINAL_USER;
 
         ex.printStackTrace();
 
@@ -113,13 +113,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             body = Problem.builder()
                     .title(status.getReasonPhrase())
                     .status(status.value())
-                    .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                    .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                     .build();
         } else if (body instanceof String) {
             body = Problem.builder()
                     .title((String) body)
                     .status(status.value())
-                    .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                    .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                     .build();
         }
 
@@ -142,7 +142,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = "O corpo da requisição está inválido. Verifique o erro de sintaxe";
 
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                 .build();
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
@@ -156,7 +156,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", ex.getRequestURL());
 
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -172,7 +172,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 + "Corrija ou remova essa propriedade e tente novamente.", path);
 
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -189,7 +189,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 path, ex.getValue(), ex.getTargetType().getSimpleName());
 
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -216,7 +216,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
         Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
