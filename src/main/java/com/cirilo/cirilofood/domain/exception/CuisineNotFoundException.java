@@ -4,8 +4,8 @@ public class CuisineNotFoundException extends EntityNotFoundException {
 
     private static final long serialVersionUID = 1L;
 
-    public CuisineNotFoundException(String mensagem) {
-        super(mensagem);
+    public CuisineNotFoundException(String message) {
+        super(message);
     }
 
     public CuisineNotFoundException(Long cuisineId) {

@@ -1,5 +1,7 @@
 package com.cirilo.cirilofood;
 
+import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
+import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.service.CuisineService;
 import org.junit.Test;
@@ -20,7 +22,7 @@ public class CuisineIntegrationTest {
 	private CuisineService cuisineService;
 
 	@Test
-	public void testCreateCuisineWithSuccess() {
+	public void shouldAssignCuisineId_WhenCreateCuisineWithCorrectData() {
 		//scenario
 		Cuisine cuisine = new Cuisine();
 		cuisine.setName("Chinese");
@@ -34,11 +36,21 @@ public class CuisineIntegrationTest {
 	}
 
 	@Test(expected = ConstraintViolationException.class)
-	public void testCreateCuisineWithoutName(){
+	public void shouldFail_WhenCreateCuisineWithoutName(){
 		Cuisine cuisine = new Cuisine();
 		cuisine.setName(null);
 
 		cuisine = cuisineService.save(cuisine);
+	}
+
+	@Test(expected = EntityInUseException.class)
+	public void shouldFail_WhenDeleteCuisineInUse(){
+		cuisineService.delete(1L);
+	}
+
+	@Test(expected = CuisineNotFoundException.class)
+	public void shouldFail_WhenDeleteCuisineNotExistent(){
+		cuisineService.delete(100L);
 	}
 
 }
