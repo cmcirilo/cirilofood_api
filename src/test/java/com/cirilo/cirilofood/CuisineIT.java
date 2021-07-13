@@ -1,11 +1,13 @@
 package com.cirilo.cirilofood;
 
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.validation.ConstraintViolationException;
 
 import io.restassured.RestAssured;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,22 @@ public class CuisineIT {
             .get()
         .then()
             .statusCode(HttpStatus.OK.value());
+
+    }
+
+    @Test
+    public void shouldReturnFourCuisines_WhenListCuisines() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        given()
+            .basePath("/cuisines")
+            .port(port)
+            .accept(ContentType.JSON)
+        .when()
+            .get()
+        .then()
+            .body("", hasSize(4))
+            .body("name", hasItems("Indian", "Thay"));
 
     }
 
