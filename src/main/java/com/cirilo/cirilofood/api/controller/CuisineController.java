@@ -32,7 +32,6 @@ public class CuisineController {
     private CuisineService cuisineService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public List<Cuisine> list() {
         return cuisineRepository.findAll();
     }
