@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolationException;
 
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,13 @@ public class CuisineIT {
 
     @Autowired
     private CuisineService cuisineService;
+
+    @Before
+    public void setUp(){
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        RestAssured.port = port;
+        RestAssured.basePath = "/cuisines";
+    }
 
     @Test
     public void shouldAssignCuisineId_WhenCreateCuisineWithCorrectData() {
@@ -67,11 +75,7 @@ public class CuisineIT {
 
     @Test
     public void shouldReturnStatus200_WhenListCuisines() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
         given()
-            .basePath("/cuisines")
-            .port(port)
             .accept(ContentType.JSON)
         .when()
             .get()
@@ -82,11 +86,7 @@ public class CuisineIT {
 
     @Test
     public void shouldReturnFourCuisines_WhenListCuisines() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
         given()
-            .basePath("/cuisines")
-            .port(port)
             .accept(ContentType.JSON)
         .when()
             .get()
