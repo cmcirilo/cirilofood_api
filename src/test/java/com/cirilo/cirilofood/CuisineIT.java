@@ -1,56 +1,81 @@
 package com.cirilo.cirilofood;
 
-import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
-import com.cirilo.cirilofood.domain.exception.EntityInUseException;
-import com.cirilo.cirilofood.domain.model.Cuisine;
-import com.cirilo.cirilofood.domain.service.CuisineService;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import javax.validation.ConstraintViolationException;
+
+import io.restassured.RestAssured;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.ConstraintViolationException;
+import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
+import com.cirilo.cirilofood.domain.exception.EntityInUseException;
+import com.cirilo.cirilofood.domain.model.Cuisine;
+import com.cirilo.cirilofood.domain.service.CuisineService;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.restassured.http.ContentType;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CuisineIT {
 
-	@Autowired
-	private CuisineService cuisineService;
+    @LocalServerPort
+    private int port;
 
-	@Test
-	public void shouldAssignCuisineId_WhenCreateCuisineWithCorrectData() {
-		//scenario
-		Cuisine cuisine = new Cuisine();
-		cuisine.setName("Chinese");
+    @Autowired
+    private CuisineService cuisineService;
 
-		//action
-		cuisine = cuisineService.save(cuisine);
+    @Test
+    public void shouldAssignCuisineId_WhenCreateCuisineWithCorrectData() {
+        // scenario
+        Cuisine cuisine = new Cuisine();
+        cuisine.setName("Chinese");
 
-		//validation
-		assertThat(cuisine).isNotNull();
-		assertThat(cuisine.getId()).isNotNull();
-	}
+        // action
+        cuisine = cuisineService.save(cuisine);
 
-	@Test(expected = ConstraintViolationException.class)
-	public void shouldFail_WhenCreateCuisineWithoutName(){
-		Cuisine cuisine = new Cuisine();
-		cuisine.setName(null);
+        // validation
+        assertThat(cuisine).isNotNull();
+        assertThat(cuisine.getId()).isNotNull();
+    }
 
-		cuisine = cuisineService.save(cuisine);
-	}
+    @Test(expected = ConstraintViolationException.class)
+    public void shouldFail_WhenCreateCuisineWithoutName() {
+        Cuisine cuisine = new Cuisine();
+        cuisine.setName(null);
 
-	@Test(expected = EntityInUseException.class)
-	public void shouldFail_WhenDeleteCuisineInUse(){
-		cuisineService.delete(1L);
-	}
+        cuisine = cuisineService.save(cuisine);
+    }
 
-	@Test(expected = CuisineNotFoundException.class)
-	public void shouldFail_WhenDeleteCuisineNotExistent(){
-		cuisineService.delete(100L);
-	}
+    @Test(expected = EntityInUseException.class)
+    public void shouldFail_WhenDeleteCuisineInUse() {
+        cuisineService.delete(1L);
+    }
+
+    @Test(expected = CuisineNotFoundException.class)
+    public void shouldFail_WhenDeleteCuisineNotExistent() {
+        cuisineService.delete(100L);
+    }
+
+    @Test
+    public void shouldReturnStatus200_WhenListCuisines() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        given()
+            .basePath("/cuisines")
+            .port(port)
+            .accept(ContentType.JSON)
+        .when()
+            .get()
+        .then()
+            .statusCode(HttpStatus.OK.value());
+
+    }
 
 }
