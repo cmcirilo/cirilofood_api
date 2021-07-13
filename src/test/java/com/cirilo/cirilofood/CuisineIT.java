@@ -96,4 +96,16 @@ public class CuisineIT {
 
     }
 
+    @Test
+    public void shouldReturnStatus201_WhenCreatedCuisine(){
+        given()
+            .body("{ \"name\": \"German\"  }")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.CREATED.value());
+    }
+
 }
