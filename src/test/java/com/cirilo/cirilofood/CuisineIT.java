@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.validation.ConstraintViolationException;
 
 import io.restassured.RestAssured;
+import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,11 +35,16 @@ public class CuisineIT {
     @Autowired
     private CuisineService cuisineService;
 
+    @Autowired
+    private Flyway flyway;
+
     @Before
     public void setUp(){
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cuisines";
+
+        flyway.migrate();
     }
 
     @Test
