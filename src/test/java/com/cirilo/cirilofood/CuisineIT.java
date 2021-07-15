@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -58,36 +59,56 @@ public class CuisineIT {
     @Test
     public void shouldReturnStatus200_WhenListCuisines() {
         given()
-                .accept(ContentType.JSON)
-                .when()
-                .get()
-                .then()
-                .statusCode(HttpStatus.OK.value());
-
+            .accept(ContentType.JSON)
+        .when()
+            .get()
+        .then()
+            .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     public void shouldReturnTwoCuisines_WhenListCuisines() {
         given()
-                .accept(ContentType.JSON)
-                .when()
-                .get()
-                .then()
-                .body("", hasSize(2))
-                .body("name", hasItems("American", "Thay"));
-
+            .accept(ContentType.JSON)
+        .when()
+            .get()
+        .then()
+            .body("", hasSize(2))
+            .body("name", hasItems("American", "Thay"));
     }
 
     @Test
     public void shouldReturnStatus201_WhenCreatedCuisine() {
         given()
-                .body("{ \"name\": \"German\"  }")
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .when()
-                .post()
-                .then()
-                .statusCode(HttpStatus.CREATED.value());
+            .body("{ \"name\": \"German\"  }")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void shouldReturnResponseAndStatus_WhenGetCuisineExist() {
+        given()
+            .pathParam("cuisineId",2)
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cuisineId}")
+        .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("name", equalTo("American"));
+    }
+    @Test
+    public void shouldReturnStatus404_WhenGetCuisineNotFound() {
+        given()
+            .pathParam("cuisineId",100)
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cuisineId}")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
 }
