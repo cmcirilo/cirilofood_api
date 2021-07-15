@@ -1,14 +1,9 @@
 package com.cirilo.cirilofood;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 
-import javax.validation.ConstraintViolationException;
-
-import io.restassured.RestAssured;
-import org.flywaydb.core.Flyway;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
-import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.model.Cuisine;
-import com.cirilo.cirilofood.domain.service.CuisineService;
+import com.cirilo.cirilofood.domain.repository.CuisineRepository;
+import com.cirilo.cirilofood.util.DatabaseCleaner;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 @RunWith(SpringRunner.class)
@@ -35,85 +30,64 @@ public class CuisineIT {
     private int port;
 
     @Autowired
-    private CuisineService cuisineService;
+    private DatabaseCleaner databaseCleaner;
 
     @Autowired
-    private Flyway flyway;
+    private CuisineRepository cuisineRepository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cuisines";
 
-        flyway.migrate();
+        databaseCleaner.clearTables();
+        prepareData();
     }
 
-    @Test
-    public void shouldAssignCuisineId_WhenCreateCuisineWithCorrectData() {
-        // scenario
-        Cuisine cuisine = new Cuisine();
-        cuisine.setName("Chinese");
+    private void prepareData() {
+        Cuisine cuisine1 = new Cuisine();
+        cuisine1.setName("Thay");
+        cuisineRepository.save(cuisine1);
 
-        // action
-        cuisine = cuisineService.save(cuisine);
-
-        // validation
-        assertThat(cuisine).isNotNull();
-        assertThat(cuisine.getId()).isNotNull();
-    }
-
-    @Test(expected = ConstraintViolationException.class)
-    public void shouldFail_WhenCreateCuisineWithoutName() {
-        Cuisine cuisine = new Cuisine();
-        cuisine.setName(null);
-
-        cuisine = cuisineService.save(cuisine);
-    }
-
-    @Test(expected = EntityInUseException.class)
-    public void shouldFail_WhenDeleteCuisineInUse() {
-        cuisineService.delete(1L);
-    }
-
-    @Test(expected = CuisineNotFoundException.class)
-    public void shouldFail_WhenDeleteCuisineNotExistent() {
-        cuisineService.delete(100L);
+        Cuisine cuisine2 = new Cuisine();
+        cuisine2.setName("American");
+        cuisineRepository.save(cuisine2);
     }
 
     @Test
     public void shouldReturnStatus200_WhenListCuisines() {
         given()
-            .accept(ContentType.JSON)
-        .when()
-            .get()
-        .then()
-            .statusCode(HttpStatus.OK.value());
+                .accept(ContentType.JSON)
+                .when()
+                .get()
+                .then()
+                .statusCode(HttpStatus.OK.value());
 
     }
 
     @Test
-    public void shouldReturnFourCuisines_WhenListCuisines() {
+    public void shouldReturnTwoCuisines_WhenListCuisines() {
         given()
-            .accept(ContentType.JSON)
-        .when()
-            .get()
-        .then()
-            .body("", hasSize(4))
-            .body("name", hasItems("Indian", "Thay"));
+                .accept(ContentType.JSON)
+                .when()
+                .get()
+                .then()
+                .body("", hasSize(2))
+                .body("name", hasItems("American", "Thay"));
 
     }
 
     @Test
-    public void shouldReturnStatus201_WhenCreatedCuisine(){
+    public void shouldReturnStatus201_WhenCreatedCuisine() {
         given()
-            .body("{ \"name\": \"German\"  }")
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON)
-        .when()
-            .post()
-        .then()
-            .statusCode(HttpStatus.CREATED.value());
+                .body("{ \"name\": \"German\"  }")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.CREATED.value());
     }
 
 }
