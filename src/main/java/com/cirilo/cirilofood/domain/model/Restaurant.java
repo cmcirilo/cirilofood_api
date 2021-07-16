@@ -54,6 +54,7 @@ public class Restaurant {
     // @DecimalMin("1")
     // @PositiveOrZero(message = "{ShippingFee.invalida}")
     @PositiveOrZero
+    @NotNull
     // @ShippingFee custom bean validation
     // @Multiple(number = 5) custom contraint validator
     @Column(name = "shipping_fee", nullable = false)

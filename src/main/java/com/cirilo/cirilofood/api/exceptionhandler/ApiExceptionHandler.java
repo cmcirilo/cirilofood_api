@@ -93,7 +93,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleUncaught(Exception ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
+        ProblemType problemType = ProblemType.SYSTEM_ERROR;
         String detail = MSG_GENERIC_ERROR_FINAL_USER;
 
         ex.printStackTrace();
@@ -232,7 +232,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        ProblemType problemType = ProblemType.INVALID_DATA;
         String detail = "One or more fields are invalid. Fill in correctly and try again.";
 
         List<Problem.Object> problemObjects = bindingResult.getAllErrors()
