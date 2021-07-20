@@ -23,6 +23,7 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -61,6 +62,7 @@ public class Restaurant {
     private BigDecimal shippingFee;
 
     // @JsonIgnoreProperties("hibernateLazyInitializer")
+    @JsonIgnoreProperties(value="name", allowGetters = true) // when setName throw exception also getName is OK.
     @Valid // validate properties inside cuisine with annotations usin Bean Validation
     @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
     @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
