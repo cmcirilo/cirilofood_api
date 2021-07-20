@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RestaurantService {
@@ -17,6 +18,7 @@ public class RestaurantService {
 	@Autowired
 	private CuisineService cuisineService;
 
+	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		Long cuisineId = restaurant.getCuisine().getId();
 

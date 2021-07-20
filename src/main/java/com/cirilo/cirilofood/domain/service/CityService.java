@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.repository.CityRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CityService {
@@ -23,6 +24,7 @@ public class CityService {
 	@Autowired
 	private StateService stateService;
 
+	@Transactional
 	public City save(City city) {
 		Long stateId = city.getState().getId();
 
@@ -33,6 +35,7 @@ public class CityService {
 		return cityRepository.save(city);
 	}
 
+	@Transactional
 	public void delete(Long cityId) {
 		try {
 			cityRepository.deleteById(cityId);
