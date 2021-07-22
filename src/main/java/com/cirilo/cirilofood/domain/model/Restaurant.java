@@ -23,13 +23,11 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.cirilo.cirilofood.core.validation.Groups;
 import com.cirilo.cirilofood.core.validation.ZeroValueIncludeDescription;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,37 +59,30 @@ public class Restaurant {
     @Column(name = "shipping_fee", nullable = false)
     private BigDecimal shippingFee;
 
-    // @JsonIgnoreProperties("hibernateLazyInitializer")
-    @JsonIgnoreProperties(value="name", allowGetters = true) // when setName throw exception also getName is OK.
-    @Valid // validate properties inside cuisine with annotations usin Bean Validation
+    @Valid // validate properties inside cuisine with annotations using Bean Validation
     @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
     @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cuisine_id", nullable = false)
     private Cuisine cuisine;
 
-    @JsonIgnore
     @Embedded
     private Address address;
 
-    @JsonIgnore
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, columnDefinition = "datetime")
     private LocalDateTime createdDate;
 
-    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "updated_date", nullable = false, columnDefinition = "datetime")
     private LocalDateTime updatedDate;
 
-    @JsonIgnore
     @ManyToMany // (fetch = FetchType.EAGER)
     @JoinTable(name = "restaurant_form_payment",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "form_payment_id"))
     private List<FormPayment> formsPayment = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
