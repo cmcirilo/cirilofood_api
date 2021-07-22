@@ -11,7 +11,13 @@ import com.cirilo.cirilofood.domain.model.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class RestaurantMixin {
+public abstract class RestaurantMixin {
+
+    @JsonIgnore
+    private final List<FormPayment> formsPayment = new ArrayList<>();
+
+    @JsonIgnore
+    private final List<Product> products = new ArrayList<>();
 
     @JsonIgnoreProperties(value = "name", allowGetters = true) // when setName throw exception also getName is OK.
     private Cuisine cuisine;
@@ -24,11 +30,5 @@ public class RestaurantMixin {
 
     @JsonIgnore
     private LocalDateTime updatedDate;
-
-    @JsonIgnore
-    private final List<FormPayment> formsPayment = new ArrayList<>();
-
-    @JsonIgnore
-    private final List<Product> products = new ArrayList<>();
 
 }
