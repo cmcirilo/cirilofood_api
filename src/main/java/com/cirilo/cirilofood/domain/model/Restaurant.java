@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,11 +72,11 @@ public class Restaurant {
 
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, columnDefinition = "datetime")
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
     @UpdateTimestamp
     @Column(name = "updated_date", nullable = false, columnDefinition = "datetime")
-    private LocalDateTime updatedDate;
+    private OffsetDateTime updatedDate;
 
     @ManyToMany // (fetch = FetchType.EAGER)
     @JoinTable(name = "restaurant_form_payment",
