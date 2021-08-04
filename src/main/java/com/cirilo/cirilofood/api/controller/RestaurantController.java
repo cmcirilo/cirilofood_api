@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.api.model.RestaurantModel;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -54,8 +55,12 @@ public class RestaurantController {
     }
 
     @GetMapping("/{restaurantId}")
-    public Restaurant buscar(@PathVariable Long restaurantId) {
-        return restaurantService.find(restaurantId);
+    public RestaurantModel buscar(@PathVariable Long restaurantId) {
+
+        RestaurantModel restaurantModel = null;
+
+        return restaurantModel;
+        //return restaurantService.find(restaurantId);
     }
 
     @PostMapping
