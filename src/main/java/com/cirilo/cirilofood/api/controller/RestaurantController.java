@@ -3,12 +3,11 @@ package com.cirilo.cirilofood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.api.model.RestaurantModel;
-import com.cirilo.cirilofood.domain.model.Restaurant;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.model.CuisineModel;
+import com.cirilo.cirilofood.api.model.RestaurantModel;
 import com.cirilo.cirilofood.core.validation.ValidationException;
-import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
+import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -50,46 +52,43 @@ public class RestaurantController {
     private SmartValidator validator;
 
     @GetMapping
-    public List<Restaurant> list() {
-        return restaurantRepository.findAll();
+    public List<RestaurantModel> list() {
+        return toCollectionModel(restaurantRepository.findAll());
     }
 
     @GetMapping("/{restaurantId}")
-    public RestaurantModel buscar(@PathVariable Long restaurantId) {
-
-        RestaurantModel restaurantModel = null;
-
-        return restaurantModel;
-        //return restaurantService.find(restaurantId);
+    public RestaurantModel find(@PathVariable Long restaurantId) {
+        Restaurant restaurant = restaurantService.find(restaurantId);
+        return toModel(restaurant);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurant adicionar(@RequestBody @Valid Restaurant restaurant) {
+    public RestaurantModel create(@RequestBody @Valid Restaurant restaurant) {
         try {
-            return restaurantService.save(restaurant);
+            return toModel(restaurantService.save(restaurant));
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
     @PutMapping("/{restaurantId}")
-    public Restaurant update(@PathVariable Long restaurantId,
-                             @RequestBody @Valid Restaurant restaurant) {
+    public RestaurantModel update(@PathVariable Long restaurantId,
+            @RequestBody @Valid Restaurant restaurant) {
 
         Restaurant currentRestaurant = restaurantService.find(restaurantId);
         BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "formsPayment", "address", "createdDate", "products");
 
         try {
-            return restaurantService.save(currentRestaurant);
+            return toModel(restaurantService.save(currentRestaurant));
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
     @PatchMapping("/{restaurantId}")
-    public Restaurant parcialUpdate(@PathVariable Long restaurantId,
-                                    @RequestBody Map<String, Object> fields, HttpServletRequest request) {
+    public RestaurantModel parcialUpdate(@PathVariable Long restaurantId,
+            @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 
         Restaurant currentRestaurant = restaurantService.find(restaurantId);
         merge(fields, currentRestaurant, request);
@@ -135,4 +134,22 @@ public class RestaurantController {
 
     }
 
+    private RestaurantModel toModel(Restaurant restaurant) {
+        CuisineModel cuisineModel = new CuisineModel();
+        cuisineModel.setId(restaurant.getCuisine().getId());
+        cuisineModel.setName(restaurant.getCuisine().getName());
+
+        RestaurantModel restaurantModel = new RestaurantModel();
+        restaurantModel.setId(restaurant.getId());
+        restaurantModel.setName(restaurant.getName());
+        restaurantModel.setShippingFee(restaurant.getShippingFee());
+        restaurantModel.setCuisine(cuisineModel);
+        return restaurantModel;
+    }
+
+    private List<RestaurantModel> toCollectionModel(List<Restaurant> restaurants) {
+        return restaurants.stream()
+                .map(restaurant -> toModel(restaurant))
+                .collect(Collectors.toList());
+    }
 }
