@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,12 +113,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (body == null) {
             body = Problem.builder()
                     .title(status.getReasonPhrase())
+                    .timestamp(OffsetDateTime.now())
                     .status(status.value())
                     .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                     .build();
         } else if (body instanceof String) {
             body = Problem.builder()
                     .title((String) body)
+                    .timestamp(OffsetDateTime.now())
                     .status(status.value())
                     .userMessage(MSG_GENERIC_ERROR_FINAL_USER)
                     .build();
@@ -136,6 +139,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handleInvalidFormat((InvalidFormatException) rootCause, headers, status, request);
         } else if (rootCause instanceof PropertyBindingException) {
             return handlePropertyBinding((PropertyBindingException) rootCause, headers, status, request);
+        } else if (rootCause instanceof DateTimeParseException) {
+            return handleDateTimeParseException((DateTimeParseException) rootCause, headers, status, request);
         }
 
         ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
@@ -146,6 +151,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    private ResponseEntity<Object> handleDateTimeParseException(DateTimeParseException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
+        String detail = String.format("An error occurred while parsing the date");
+
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .userMessage(
+                        MSG_GENERIC_ERROR_FINAL_USER)
+                .build();
+
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     @Override
@@ -269,7 +288,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(problemType.getUri())
                 .title(problemType.getTitle())
                 .detail(detail)
-                .timestamp(LocalDateTime.now());
+                .timestamp(OffsetDateTime.now());
     }
 
     private String joinPath(List<Reference> references) {

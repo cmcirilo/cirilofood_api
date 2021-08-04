@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +40,11 @@ public class Order {
     private StatusOrder status;
 
     @CreationTimestamp
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
-    private LocalDateTime confirmationDate;
-    private LocalDateTime cancelDate;
-    private LocalDateTime deliveryDate;
+    private OffsetDateTime confirmationDate;
+    private OffsetDateTime cancelDate;
+    private OffsetDateTime deliveryDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)

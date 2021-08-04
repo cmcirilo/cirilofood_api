@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -26,7 +27,7 @@ public class User {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
     @ManyToMany
     @JoinTable(name = "user_group",

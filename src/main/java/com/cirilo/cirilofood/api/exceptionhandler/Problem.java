@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,27 +13,27 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Problem {
 
-    private Integer status;
+    private final Integer status;
 
-    private String type;
+    private final String type;
 
-    private String title;
+    private final String title;
 
-    private String detail;
+    private final String detail;
 
-    private String userMessage;
+    private final String userMessage;
 
-    private LocalDateTime timestamp;
+    private final OffsetDateTime timestamp;
 
-    private List<Object> objects;
+    private final List<Object> objects;
 
     @Getter
     @Builder
     public static class Object {
 
-        private String name;
+        private final String name;
 
-        private String userMessage;
+        private final String userMessage;
 
     }
 }
