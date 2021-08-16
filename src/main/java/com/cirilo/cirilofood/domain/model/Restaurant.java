@@ -47,22 +47,22 @@ public class Restaurant {
 
     // @NotNull
     // @NotEmpty
-    @NotBlank
+//    @NotBlank - its not necessary because uses in Representation Domail Model - RestaurantInput
     @Column(nullable = false)
     private String name;
 
     // @DecimalMin("1")
     // @PositiveOrZero(message = "{ShippingFee.invalida}")
-    @PositiveOrZero
-    @NotNull
+//    @PositiveOrZero
+//    @NotNull
     // @ShippingFee custom bean validation
     // @Multiple(number = 5) custom contraint validator
     @Column(name = "shipping_fee", nullable = false)
     private BigDecimal shippingFee;
 
-    @Valid // validate properties inside cuisine with annotations using Bean Validation
-    @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
-    @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
+//    @Valid // validate properties inside cuisine with annotations using Bean Validation
+//    @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
+//    @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cuisine_id", nullable = false)
     private Cuisine cuisine;
