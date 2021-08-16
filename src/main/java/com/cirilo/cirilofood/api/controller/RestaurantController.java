@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.assembler.RestaurantModelAssembler;
+import com.cirilo.cirilofood.api.assembler.RestaurantInputDisassembler;
 import com.cirilo.cirilofood.api.model.RestaurantModel;
 import com.cirilo.cirilofood.api.model.input.RestaurantInput;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
-import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
@@ -39,6 +39,9 @@ public class RestaurantController {
     @Autowired
     private RestaurantModelAssembler restaurantModelAssembler;
 
+    @Autowired
+    private RestaurantInputDisassembler restaurantInputDisassembler;
+
     @GetMapping
     public List<RestaurantModel> list() {
         return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
@@ -54,7 +57,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantModel create(@RequestBody @Valid RestaurantInput restaurantInput) {
         try {
-            Restaurant restaurant = toDomainObject(restaurantInput);
+            Restaurant restaurant = restaurantInputDisassembler.toDomainObject(restaurantInput);
             return restaurantModelAssembler.toModel(restaurantService.save(restaurant));
         } catch (CuisineNotFoundException e) {
             throw new BusinessException(e.getMessage());
@@ -65,7 +68,7 @@ public class RestaurantController {
     public RestaurantModel update(@PathVariable Long restaurantId,
             @RequestBody @Valid RestaurantInput restaurantInput) {
 
-        Restaurant restaurant = toDomainObject(restaurantInput);
+        Restaurant restaurant = restaurantInputDisassembler.toDomainObject(restaurantInput);
         Restaurant currentRestaurant = restaurantService.find(restaurantId);
         BeanUtils.copyProperties(restaurant, currentRestaurant,
                 "id", "formsPayment", "address", "createdDate", "products");
@@ -77,17 +80,4 @@ public class RestaurantController {
         }
     }
 
-    private Restaurant toDomainObject(RestaurantInput restaurantInput) {
-        Restaurant restaurant = new Restaurant();
-
-        restaurant.setName(restaurantInput.getName());
-        restaurant.setShippingFee(restaurantInput.getShippingFee());
-
-        Cuisine cuisine = new Cuisine();
-        cuisine.setId(restaurantInput.getCuisine().getId());
-
-        restaurant.setCuisine(cuisine);
-
-        return restaurant;
-    }
 }
