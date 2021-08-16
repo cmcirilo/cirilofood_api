@@ -1,27 +1,23 @@
 package com.cirilo.cirilofood.api.assembler;
 
-import com.cirilo.cirilofood.api.model.CuisineModel;
-import com.cirilo.cirilofood.api.model.RestaurantModel;
-import com.cirilo.cirilofood.domain.model.Restaurant;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.cirilo.cirilofood.api.model.RestaurantModel;
+import com.cirilo.cirilofood.domain.model.Restaurant;
 
 @Component
 public class RestaurantModelAssembler { // class to convert entity to DTO
 
-    public RestaurantModel toModel(Restaurant restaurant) {
-        CuisineModel cuisineModel = new CuisineModel();
-        cuisineModel.setId(restaurant.getCuisine().getId());
-        cuisineModel.setName(restaurant.getCuisine().getName());
+    @Autowired
+    private ModelMapper modelMapper;
 
-        RestaurantModel restaurantModel = new RestaurantModel();
-        restaurantModel.setId(restaurant.getId());
-        restaurantModel.setName(restaurant.getName());
-        restaurantModel.setShippingFee(restaurant.getShippingFee());
-        restaurantModel.setCuisine(cuisineModel);
-        return restaurantModel;
+    public RestaurantModel toModel(Restaurant restaurant) {
+        return modelMapper.map(restaurant, RestaurantModel.class);
     }
 
     public List<RestaurantModel> toCollectionModel(List<Restaurant> restaurants) {
