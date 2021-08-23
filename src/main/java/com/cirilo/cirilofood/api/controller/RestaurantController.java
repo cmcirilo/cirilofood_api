@@ -68,10 +68,13 @@ public class RestaurantController {
     public RestaurantModel update(@PathVariable Long restaurantId,
             @RequestBody @Valid RestaurantInput restaurantInput) {
 
-        Restaurant restaurant = restaurantInputDisassembler.toDomainObject(restaurantInput);
+//        Restaurant restaurant = restaurantInputDisassembler.toDomainObject(restaurantInput);
+
         Restaurant currentRestaurant = restaurantService.find(restaurantId);
-        BeanUtils.copyProperties(restaurant, currentRestaurant,
-                "id", "formsPayment", "address", "createdDate", "products");
+        restaurantInputDisassembler.copyToDomainObject(restaurantInput, currentRestaurant);
+
+//        BeanUtils.copyProperties(restaurant, currentRestaurant,
+//                "id", "formsPayment", "address", "createdDate", "products");
 
         try {
             return restaurantModelAssembler.toModel(restaurantService.save(currentRestaurant));
