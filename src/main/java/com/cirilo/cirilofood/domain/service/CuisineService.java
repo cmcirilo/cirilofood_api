@@ -28,6 +28,7 @@ public class CuisineService {
     public void delete(Long cuisineId) {
         try {
             cuisineRepository.deleteById(cuisineId);
+            cuisineRepository.flush();
 
         } catch (EmptyResultDataAccessException e) {
             throw new CuisineNotFoundException(cuisineId);
