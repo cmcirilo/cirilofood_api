@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.domain.model.State;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.assembler.StateInputDisassembler;
+import com.cirilo.cirilofood.api.assembler.StateModelAssembler;
+import com.cirilo.cirilofood.api.model.StateModel;
+import com.cirilo.cirilofood.api.model.input.StateInput;
+import com.cirilo.cirilofood.domain.model.State;
 import com.cirilo.cirilofood.domain.repository.StateRepository;
 import com.cirilo.cirilofood.domain.service.StateService;
 
@@ -31,29 +34,42 @@ public class StateController {
     @Autowired
     private StateService stateService;
 
+    @Autowired
+    private StateModelAssembler stateModelAssembler;
+
+    @Autowired
+    private StateInputDisassembler stateInputDisassembler;
+
     @GetMapping
-    public List<State> list() {
-        return stateRepository.findAll();
+    public List<StateModel> list() {
+        List<State> states = stateRepository.findAll();
+        return stateModelAssembler.toCollectionModel(states);
     }
 
     @GetMapping("/{stateId}")
-    public State find(@PathVariable Long stateId) {
-        return stateService.find(stateId);
+    public StateModel find(@PathVariable Long stateId) {
+        State state = stateService.find(stateId);
+        return stateModelAssembler.toModel(state);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public State create(@RequestBody @Valid State state) {
-        return stateService.save(state);
+    public StateModel create(@RequestBody @Valid StateInput stateInput) {
+        State state = stateInputDisassembler.toDomainObject(stateInput);
+        state = stateService.save(state);
+
+        return stateModelAssembler.toModel(state);
     }
 
     @PutMapping("/{stateId}")
-    public State update(@PathVariable Long stateId,
-                        @RequestBody @Valid State state) {
+    public StateModel update(@PathVariable Long stateId,
+            @RequestBody @Valid StateInput stateInput) {
 
         State currenteState = stateService.find(stateId);
-        BeanUtils.copyProperties(state, currenteState, "id");
-        return stateService.save(currenteState);
+        stateInputDisassembler.copyToDomainObject(stateInput, currenteState);
+        currenteState = stateService.save(currenteState);
+
+        return stateModelAssembler.toModel(currenteState);
     }
 
     @DeleteMapping("/{stateId}")

@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.domain.model.Cuisine;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.assembler.CuisineInputDisassembler;
+import com.cirilo.cirilofood.api.assembler.CuisineModelAssembler;
+import com.cirilo.cirilofood.api.model.CuisineModel;
+import com.cirilo.cirilofood.api.model.input.CuisineInput;
+import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.repository.CuisineRepository;
 import com.cirilo.cirilofood.domain.service.CuisineService;
 
@@ -31,28 +34,41 @@ public class CuisineController {
     @Autowired
     private CuisineService cuisineService;
 
+    @Autowired
+    private CuisineModelAssembler cuisineModelAssembler;
+
+    @Autowired
+    private CuisineInputDisassembler cuisineInputDisassembler;
+
     @GetMapping
-    public List<Cuisine> list() {
-        return cuisineRepository.findAll();
+    public List<CuisineModel> list() {
+        List<Cuisine> cuisines = cuisineRepository.findAll();
+        return cuisineModelAssembler.toCollectionModel(cuisines);
     }
 
     @GetMapping("/{cuisineId}")
-    public Cuisine find(@PathVariable Long cuisineId) {
-        return cuisineService.find(cuisineId);
+    public CuisineModel find(@PathVariable Long cuisineId) {
+        Cuisine cuisine = cuisineService.find(cuisineId);
+        return cuisineModelAssembler.toModel(cuisine);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cuisine create(@RequestBody @Valid Cuisine cuisine) {
-        return cuisineService.save(cuisine);
+    public CuisineModel create(@RequestBody @Valid CuisineInput cuisineInput) {
+        Cuisine cuisine = cuisineInputDisassembler.toDomainObject(cuisineInput);
+        cuisine = cuisineService.save(cuisine);
+
+        return cuisineModelAssembler.toModel(cuisine);
     }
 
     @PutMapping("/{cuisineId}")
-    public Cuisine atualizar(@PathVariable Long cuisineId, @RequestBody @Valid Cuisine cuisine) {
+    public CuisineModel atualizar(@PathVariable Long cuisineId, @RequestBody @Valid CuisineInput cuisineInput) {
 
-        Cuisine cuisineAtual = cuisineService.find(cuisineId);
-        BeanUtils.copyProperties(cuisine, cuisineAtual, "id");
-        return cuisineService.save(cuisineAtual);
+        Cuisine curenteCuisine = cuisineService.find(cuisineId);
+        cuisineInputDisassembler.copyToDomainObject(cuisineInput, curenteCuisine);
+        curenteCuisine = cuisineService.save(curenteCuisine);
+
+        return cuisineModelAssembler.toModel(curenteCuisine);
     }
 
     @DeleteMapping("/{cuisineid}")

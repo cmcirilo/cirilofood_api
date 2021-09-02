@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.domain.model.City;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.api.assembler.CityInputDisassembler;
+import com.cirilo.cirilofood.api.assembler.CityModelAssembler;
+import com.cirilo.cirilofood.api.model.CityModel;
+import com.cirilo.cirilofood.api.model.input.CityInput;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
+import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.repository.CityRepository;
 import com.cirilo.cirilofood.domain.service.CityService;
 
@@ -33,35 +36,47 @@ public class CityController {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private CityModelAssembler cityModelAssembler;
+
+    @Autowired
+    private CityInputDisassembler cityInputDisassembler;
+
     @GetMapping
-    public List<City> list() {
-        return cityRepository.findAll();
+    public List<CityModel> list() {
+        List<City> cities = cityRepository.findAll();
+        return cityModelAssembler.toCollectionModel(cities);
     }
 
     @GetMapping("/{cityId}")
-    public City find(@PathVariable Long cityId) {
-        return cityService.find(cityId);
+    public CityModel find(@PathVariable Long cityId) {
+        City city = cityService.find(cityId);
+        return cityModelAssembler.toModel(city);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public City create(@RequestBody @Valid City city) {
+    public CityModel create(@RequestBody @Valid CityInput cityInput) {
         try {
-            return cityService.save(city);
+            City city = cityInputDisassembler.toDomainObject(cityInput);
+            city = cityService.save(city);
+
+            return cityModelAssembler.toModel(city);
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
     @PutMapping("/{cityId}")
-    public City update(@PathVariable Long cityId,
-                       @RequestBody @Valid City city) {
-
-        City currentCity = cityService.find(cityId);
-        BeanUtils.copyProperties(city, currentCity, "id");
+    public CityModel update(@PathVariable Long cityId,
+            @RequestBody @Valid CityInput cityInput) {
 
         try {
-            return cityService.save(currentCity);
+            City currentCity = cityService.find(cityId);
+            cityInputDisassembler.copyToDomainObject(cityInput, currentCity);
+            currentCity = cityService.save(currentCity);
+
+            return cityModelAssembler.toModel(currentCity);
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
