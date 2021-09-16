@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.domain.service;
 
-import com.cirilo.cirilofood.domain.exception.CityNotFoudException;
+import com.cirilo.cirilofood.domain.exception.CityNotFoundException;
 import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class CityService {
 			cityRepository.flush();
 
 		} catch (EmptyResultDataAccessException e) {
-			throw new CityNotFoudException(cityId);
+			throw new CityNotFoundException(cityId);
 
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -52,7 +52,7 @@ public class CityService {
 
 	public City find(Long cityId) {
 		return cityRepository.findById(cityId)
-				.orElseThrow(() -> new CityNotFoudException(cityId));
+				.orElseThrow(() -> new CityNotFoundException(cityId));
 	}
 	
 }
