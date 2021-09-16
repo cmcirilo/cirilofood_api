@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.api.assembler;
 
+import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class RestaurantInputDisassembler {
 
     public void copyToDomainObject(RestaurantInput restaurantInput, Restaurant restaurant){
         restaurant.setCuisine(new Cuisine());
+
+        if (restaurant.getAddress() != null){
+            restaurant.getAddress().setCity(new City());
+        }
+
         modelMapper.map(restaurantInput,restaurant);
     }
 }

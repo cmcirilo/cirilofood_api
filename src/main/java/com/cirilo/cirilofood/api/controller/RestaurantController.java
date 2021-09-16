@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.domain.exception.CityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,7 @@ public class RestaurantController {
         try {
             Restaurant restaurant = restaurantInputDisassembler.toDomainObject(restaurantInput);
             return restaurantModelAssembler.toModel(restaurantService.save(restaurant));
-        } catch (CuisineNotFoundException e) {
+        } catch (CuisineNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }
@@ -79,7 +80,7 @@ public class RestaurantController {
 
         try {
             return restaurantModelAssembler.toModel(restaurantService.save(currentRestaurant));
-        } catch (CuisineNotFoundException e) {
+        } catch (CuisineNotFoundException | CityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
     }

@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.domain.service;
 
 import com.cirilo.cirilofood.domain.exception.RestaurantNotFoundException;
+import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,19 @@ public class RestaurantService {
     @Autowired
     private CuisineService cuisineService;
 
+    @Autowired
+    private CityService cityService;
+
     @Transactional
     public Restaurant save(Restaurant restaurant) {
         Long cuisineId = restaurant.getCuisine().getId();
+        Long cityId = restaurant.getAddress().getCity().getId();
 
         Cuisine cuisine = cuisineService.find(cuisineId);
+        City city = cityService.find(cityId);
 
         restaurant.setCuisine(cuisine);
+        restaurant.getAddress().setCity(city);
 
         return restaurantRepository.save(restaurant);
     }
