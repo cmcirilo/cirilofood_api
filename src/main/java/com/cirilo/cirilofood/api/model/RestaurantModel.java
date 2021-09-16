@@ -18,4 +18,7 @@ public class RestaurantModel {
     private CuisineModel cuisine;
 
     private Boolean active;
+
+    private AddressModel address;
+
 }
