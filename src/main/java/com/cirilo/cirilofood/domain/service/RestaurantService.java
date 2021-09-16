@@ -12,25 +12,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RestaurantService {
 
-	@Autowired
-	private RestaurantRepository restaurantRepository;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
-	@Autowired
-	private CuisineService cuisineService;
+    @Autowired
+    private CuisineService cuisineService;
 
-	@Transactional
-	public Restaurant save(Restaurant restaurant) {
-		Long cuisineId = restaurant.getCuisine().getId();
+    @Transactional
+    public Restaurant save(Restaurant restaurant) {
+        Long cuisineId = restaurant.getCuisine().getId();
 
-		Cuisine cuisine = cuisineService.find(cuisineId);
+        Cuisine cuisine = cuisineService.find(cuisineId);
 
-		restaurant.setCuisine(cuisine);
+        restaurant.setCuisine(cuisine);
 
-		return restaurantRepository.save(restaurant);
-	}
+        return restaurantRepository.save(restaurant);
+    }
 
-	public Restaurant find(Long restaurantId) {
-		return restaurantRepository.findById(restaurantId)
-				.orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
-	}
+    public Restaurant find(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+    }
+
+    @Transactional
+    public void activate(Long restaurantId) {
+        Restaurant currentRestaurant = find(restaurantId);
+
+        currentRestaurant.activate();
+        //currentRestaurant.setActive(Boolean.TRUE);
+
+        // Itś not necessary the save instruction (restaurantRepository.save(restaurant))
+        // because JPA manages and will synchronize with the database
+    }
+
+    @Transactional
+    public void desactivate(Long restaurantId) {
+        Restaurant currentRestaurant = find(restaurantId);
+
+        currentRestaurant.desactivate();
+    }
 }

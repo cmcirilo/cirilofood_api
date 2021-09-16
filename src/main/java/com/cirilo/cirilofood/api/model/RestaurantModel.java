@@ -16,4 +16,6 @@ public class RestaurantModel {
     private BigDecimal shippingFee;
 
     private CuisineModel cuisine;
+
+    private Boolean active;
 }
