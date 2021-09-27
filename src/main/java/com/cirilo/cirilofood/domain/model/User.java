@@ -56,4 +56,8 @@ public class User {
         return !passwordMatchsWith(password);
     }
 
+    public static boolean isUsuarioDifferent(User user, User userInput) {
+        return !user.equals(userInput);
+    }
+
 }

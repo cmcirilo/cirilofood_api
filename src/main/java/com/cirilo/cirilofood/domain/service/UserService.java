@@ -1,5 +1,7 @@
 package com.cirilo.cirilofood.domain.service;
 
+import static com.cirilo.cirilofood.domain.model.User.isUsuarioDifferent;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,10 @@ public class UserService {
     @Transactional
     public User save(User user) {
 
+        userRepository.detach(user);
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 
-        if (existingUser.isPresent() && !existingUser.get().equals(user)) {
+        if (existingUser.isPresent() && isUsuarioDifferent(user, existingUser.get())) {
             throw new BusinessException(
                     String.format("There is already a registered user with this email %s", user.getEmail()));
         }
