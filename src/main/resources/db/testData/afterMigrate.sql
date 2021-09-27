@@ -58,3 +58,8 @@ insert into product (id, name, description, price, active , restaurant_id) value
 insert into product (id, name, description, price, active , restaurant_id) values (3, "Meat","Meat description", 20.0, true,2);
 
 insert into `group` (name) values ('Manager'),('Salesman'), ('Secretary');
+
+insert into `user` (id, name, email, password, created_date) values
+(1, 'Carlos Cirilo', 'carlos.cirilo@cirilofood.com', '123', utc_timestamp),
+(2, 'Kathia Cirilo', 'kathia.cirilo@cirilofood.com', '123', utc_timestamp),
+(3, 'Bernardo Cirilo', 'bernardo.cirilo@cirilofood.com', '123', utc_timestamp);

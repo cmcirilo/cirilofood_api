@@ -1,17 +1,27 @@
 package com.cirilo.cirilofood.domain.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@Table(name="`user`")
 public class User {
 
     @EqualsAndHashCode.Include
@@ -25,6 +35,9 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
     @CreationTimestamp
     @Column(nullable = false)
     private OffsetDateTime createdDate;
@@ -34,4 +47,13 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups;
+
+    public boolean passwordMatchsWith(String password) {
+        return getPassword().equals(password);
+    }
+
+    public boolean passwordDoesNotMatchsWith(String password) {
+        return !passwordMatchsWith(password);
+    }
+
 }
