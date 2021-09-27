@@ -1,5 +1,7 @@
 package com.cirilo.cirilofood.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,14 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
+
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+
+        if (existingUser.isPresent() && !existingUser.get().equals(user)) {
+            throw new BusinessException(
+                    String.format("There is already a registered user with this email %s", user.getEmail()));
+        }
+
         return userRepository.save(user);
     }
 

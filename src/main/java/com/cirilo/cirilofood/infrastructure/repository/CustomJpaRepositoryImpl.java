@@ -17,7 +17,6 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
         super(entityInformation, entityManager);
 
         this.entityManager = entityManager;
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -28,6 +27,11 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
         T entity = entityManager.createQuery(jpql, getDomainClass()).setMaxResults(1).getSingleResult();
 
         return Optional.ofNullable(entity);
+    }
+
+    @Override
+    public void detach(T entity) {
+        entityManager.detach(entity);
     }
 
 }
