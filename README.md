@@ -1,6 +1,6 @@
 # Cirilo Food - API
 
-Desenvolvido em Java 11 com Spring 2
+Developed in Java 11 with Spring 2
 
 ## Getting Started
 
