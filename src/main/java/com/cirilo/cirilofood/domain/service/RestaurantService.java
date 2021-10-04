@@ -1,14 +1,15 @@
 package com.cirilo.cirilofood.domain.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.cirilo.cirilofood.domain.exception.RestaurantNotFoundException;
 import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.model.Cuisine;
+import com.cirilo.cirilofood.domain.model.FormPayment;
 import com.cirilo.cirilofood.domain.model.Restaurant;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RestaurantService {
@@ -21,6 +22,9 @@ public class RestaurantService {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private FormPaymentService formPaymentService;
 
     @Transactional
     public Restaurant save(Restaurant restaurant) {
@@ -46,7 +50,7 @@ public class RestaurantService {
         Restaurant currentRestaurant = find(restaurantId);
 
         currentRestaurant.activate();
-        //currentRestaurant.setActive(Boolean.TRUE);
+        // currentRestaurant.setActive(Boolean.TRUE);
 
         // Itś not necessary the save instruction (restaurantRepository.save(restaurant))
         // because JPA manages and will synchronize with the database
@@ -57,5 +61,21 @@ public class RestaurantService {
         Restaurant currentRestaurant = find(restaurantId);
 
         currentRestaurant.desactivate();
+    }
+
+    @Transactional
+    public void disassociateFormPayment(Long restaurantId, Long formPaymentId) {
+        Restaurant restaurant = find(restaurantId);
+        FormPayment formPayment = formPaymentService.find(formPaymentId);
+
+        restaurant.disassociateFormPayment(formPayment);
+    }
+
+    @Transactional
+    public void associateFormPayment(Long restaurantId, Long formPaymentId) {
+        Restaurant restaurant = find(restaurantId);
+        FormPayment formPayment = formPaymentService.find(formPaymentId);
+
+        restaurant.associateFormPayment(formPayment);
     }
 }

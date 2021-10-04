@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -84,7 +86,7 @@ public class Restaurant {
     @JoinTable(name = "restaurant_form_payment",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "form_payment_id"))
-    private List<FormPayment> formsPayment = new ArrayList<>();
+    private Set<FormPayment> formsPayment = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
@@ -95,5 +97,13 @@ public class Restaurant {
 
     public void desactivate(){
         setActive(false);
+    }
+
+    public boolean disassociateFormPayment(FormPayment formPayment){
+        return getFormsPayment().remove(formPayment);
+    }
+
+    public boolean associateFormPayment(FormPayment formPayment){
+        return getFormsPayment().add(formPayment);
     }
 }
