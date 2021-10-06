@@ -1,7 +1,9 @@
 package com.cirilo.cirilofood.domain.model;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +48,7 @@ public class User {
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private List<Group> groups;
+    private Set<Group> groups = new HashSet<>();
 
     public boolean passwordMatchsWith(String password) {
         return getPassword().equals(password);
@@ -60,4 +62,11 @@ public class User {
         return !user.equals(userInput);
     }
 
+    public boolean disassociateGroup(Group group) {
+        return getGroups().remove(group);
+    }
+
+    public boolean associateGroup(Group group) {
+        return getGroups().add(group);
+    }
 }

@@ -65,3 +65,5 @@ insert into `user` (id, name, email, password, created_date) values
 (1, 'Carlos Cirilo', 'carlos.cirilo@cirilofood.com', '123', utc_timestamp),
 (2, 'Kathia Cirilo', 'kathia.cirilo@cirilofood.com', '123', utc_timestamp),
 (3, 'Bernardo Cirilo', 'bernardo.cirilo@cirilofood.com', '123', utc_timestamp);
+
+insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);

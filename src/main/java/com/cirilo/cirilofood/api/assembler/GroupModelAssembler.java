@@ -1,6 +1,8 @@
 package com.cirilo.cirilofood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -20,7 +22,7 @@ public class GroupModelAssembler {
         return modelMapper.map(group, GroupModel.class);
     }
 
-    public List<GroupModel> toCollectioModel(List<Group> groups) {
+    public List<GroupModel> toCollectioModel(Collection<Group> groups) {
         return groups.stream()
                 .map(this::toModel)
                 .collect(Collectors.toList());

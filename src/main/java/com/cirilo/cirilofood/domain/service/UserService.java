@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.UserNotFoundException;
+import com.cirilo.cirilofood.domain.model.Group;
 import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.repository.UserRepository;
 
@@ -18,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupService groupService;
 
     @Transactional
     public User save(User user) {
@@ -47,6 +51,22 @@ public class UserService {
     public User find(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    @Transactional
+    public void dsassociateGroup(Long userId, Long groupId) {
+        User user = find(userId);
+        Group group = groupService.find(groupId);
+
+        user.disassociateGroup(group);
+    }
+
+    @Transactional
+    public void associateGroup(Long userId, Long groupId) {
+        User user = find(userId);
+        Group group = groupService.find(groupId);
+
+        user.associateGroup(group);
     }
 
 }

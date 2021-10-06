@@ -1,0 +1,47 @@
+package com.cirilo.cirilofood.api.controller;
+
+import com.cirilo.cirilofood.api.assembler.GroupModelAssembler;
+import com.cirilo.cirilofood.api.model.GroupModel;
+import com.cirilo.cirilofood.domain.model.User;
+import com.cirilo.cirilofood.domain.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/users/{userId}/groups")
+public class UserGroupController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GroupModelAssembler groupModelAssembler;
+
+    @GetMapping
+    public List<GroupModel> list(@PathVariable Long userId) {
+        User user = userService.find(userId);
+
+        return groupModelAssembler.toCollectioModel(user.getGroups());
+    }
+
+    @DeleteMapping("/{groupId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void disassociate(@PathVariable Long userId, @PathVariable Long groupId) {
+        userService.dsassociateGroup(userId, groupId);
+    }
+
+    @PutMapping("/{groupId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void associate(@PathVariable Long userId, @PathVariable Long groupId) {
+        userService.associateGroup(userId, groupId);
+    }
+}
