@@ -82,6 +82,8 @@ public class Restaurant {
 
     private Boolean active = Boolean.TRUE;
 
+    private Boolean opened = Boolean.FALSE;
+
     @ManyToMany // (fetch = FetchType.EAGER)
     @JoinTable(name = "restaurant_form_payment",
             joinColumns = @JoinColumn(name = "restaurant_id"),
@@ -91,12 +93,21 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
+
     public void activate(){
         setActive(true);
     }
 
     public void desactivate(){
         setActive(false);
+    }
+
+    public void open(){
+        setOpened(true);
+    }
+
+    public void close(){
+        setOpened(false);
     }
 
     public boolean disassociateFormPayment(FormPayment formPayment){

@@ -78,4 +78,18 @@ public class RestaurantService {
 
         restaurant.associateFormPayment(formPayment);
     }
+
+    @Transactional
+    public void open(Long restaurantId) {
+        Restaurant restauranteAtual = find(restaurantId);
+
+        restauranteAtual.open();
+    }
+
+    @Transactional
+    public void close(Long restaurantId) {
+        Restaurant currentRestaurant = find(restaurantId);
+
+        currentRestaurant.close();
+    }
 }
