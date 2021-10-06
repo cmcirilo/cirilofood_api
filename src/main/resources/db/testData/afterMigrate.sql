@@ -67,3 +67,10 @@ insert into `user` (id, name, email, password, created_date) values
 (3, 'Bernardo Cirilo', 'bernardo.cirilo@cirilofood.com', '123', utc_timestamp);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
+
+delete from restaurant_owner;
+
+insert into `user` (id, name, email, password, created_date) values (5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
+
+insert into restaurant_owner (restaurant_id, user_id) values (1, 5), (3, 5);
+

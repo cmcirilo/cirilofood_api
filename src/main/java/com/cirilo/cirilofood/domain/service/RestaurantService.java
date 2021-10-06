@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.domain.service;
 
+import com.cirilo.cirilofood.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,9 @@ public class RestaurantService {
 
     @Autowired
     private FormPaymentService formPaymentService;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional
     public Restaurant save(Restaurant restaurant) {
@@ -68,7 +72,7 @@ public class RestaurantService {
         Restaurant restaurant = find(restaurantId);
         FormPayment formPayment = formPaymentService.find(formPaymentId);
 
-        restaurant.disassociateFormPayment(formPayment);
+        restaurant.removeFormPayment(formPayment);
     }
 
     @Transactional
@@ -76,7 +80,7 @@ public class RestaurantService {
         Restaurant restaurant = find(restaurantId);
         FormPayment formPayment = formPaymentService.find(formPaymentId);
 
-        restaurant.associateFormPayment(formPayment);
+        restaurant.addFormPayment(formPayment);
     }
 
     @Transactional
@@ -91,5 +95,21 @@ public class RestaurantService {
         Restaurant currentRestaurant = find(restaurantId);
 
         currentRestaurant.close();
+    }
+
+    @Transactional
+    public void disassociateOwner(Long restaurantId, Long userId) {
+        Restaurant restaurant = find(restaurantId);
+        User user = userService.find(userId);
+
+        restaurant.removeOwner(user);
+    }
+
+    @Transactional
+    public void associateOwner(Long restaurantId, Long userId) {
+        Restaurant restaurant = find(restaurantId);
+        User user = userService.find(userId);
+
+        restaurant.addOwner(user);
     }
 }

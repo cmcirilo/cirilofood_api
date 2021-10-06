@@ -1,7 +1,6 @@
 package com.cirilo.cirilofood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,17 +18,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.cirilo.cirilofood.core.validation.Groups;
 import com.cirilo.cirilofood.core.validation.ZeroValueIncludeDescription;
 
 import lombok.Data;
@@ -49,22 +41,22 @@ public class Restaurant {
 
     // @NotNull
     // @NotEmpty
-//    @NotBlank - its not necessary because uses in Representation Domail Model - RestaurantInput
+    // @NotBlank - its not necessary because uses in Representation Domail Model - RestaurantInput
     @Column(nullable = false)
     private String name;
 
     // @DecimalMin("1")
     // @PositiveOrZero(message = "{ShippingFee.invalida}")
-//    @PositiveOrZero
-//    @NotNull
+    // @PositiveOrZero
+    // @NotNull
     // @ShippingFee custom bean validation
     // @Multiple(number = 5) custom contraint validator
     @Column(name = "shipping_fee", nullable = false)
     private BigDecimal shippingFee;
 
-//    @Valid // validate properties inside cuisine with annotations using Bean Validation
-//    @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
-//    @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
+    // @Valid // validate properties inside cuisine with annotations using Bean Validation
+    // @NotNull // validate null in cuisine but not properties inside cuisine (not cascade)
+    // @ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cuisine_id", nullable = false)
     private Cuisine cuisine;
@@ -93,28 +85,41 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Product> products = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "restaurant_owner",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> owners = new HashSet<>();
 
-    public void activate(){
+    public void activate() {
         setActive(true);
     }
 
-    public void desactivate(){
+    public void desactivate() {
         setActive(false);
     }
 
-    public void open(){
+    public void open() {
         setOpened(true);
     }
 
-    public void close(){
+    public void close() {
         setOpened(false);
     }
 
-    public boolean disassociateFormPayment(FormPayment formPayment){
+    public boolean removeFormPayment(FormPayment formPayment) {
         return getFormsPayment().remove(formPayment);
     }
 
-    public boolean associateFormPayment(FormPayment formPayment){
+    public boolean addFormPayment(FormPayment formPayment) {
         return getFormsPayment().add(formPayment);
+    }
+
+    public boolean removeOwner(User user) {
+        return getOwners().remove(user);
+    }
+
+    public boolean addOwner(User user) {
+        return getOwners().add(user);
     }
 }
