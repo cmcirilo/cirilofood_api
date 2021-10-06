@@ -9,12 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cirilo.cirilofood.domain.exception.EntityInUseException;
 import com.cirilo.cirilofood.domain.exception.GroupNotFoundException;
 import com.cirilo.cirilofood.domain.model.Group;
+import com.cirilo.cirilofood.domain.model.Permission;
 import com.cirilo.cirilofood.domain.repository.GroupRepository;
 
 @Service
 public class GroupService {
 
     private static final String MSG_GROUP_IN_USE = "Group Id %d does not be removed, because is in use.";
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Autowired
     private GroupRepository groupRepository;
@@ -39,6 +43,22 @@ public class GroupService {
     public Group find(Long groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new GroupNotFoundException(groupId));
+    }
+
+    @Transactional
+    public void desassociatePermission(Long groupId, Long permissionId) {
+        Group group = find(groupId);
+        Permission permission = permissionService.find(permissionId);
+
+        group.removePermission(permission);
+    }
+
+    @Transactional
+    public void associatePermission(Long groupId, Long permissionId) {
+        Group group = find(groupId);
+        Permission permission = permissionService.find(permissionId);
+
+        group.addPermission(permission);
     }
 
 }

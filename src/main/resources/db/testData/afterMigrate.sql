@@ -57,7 +57,9 @@ insert into product (id, name, description, price, active , restaurant_id) value
 insert into product (id, name, description, price, active , restaurant_id) values (2, "Bean","Bean description", 15.0, true, 1);
 insert into product (id, name, description, price, active , restaurant_id) values (3, "Meat","Meat description", 20.0, true,2);
 
-insert into `group` (name) values ('Manager'),('Salesman'), ('Secretary');
+insert into `group` (id, name) values (1,'Manager'),(2,'Salesman'), (3,'Secretary'), (4,'Delivery Man');
+
+insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
 
 insert into `user` (id, name, email, password, created_date) values
 (1, 'Carlos Cirilo', 'carlos.cirilo@cirilofood.com', '123', utc_timestamp),
