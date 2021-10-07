@@ -28,7 +28,7 @@ create table `order` (
   constraint fk_order_form_payment foreign key (form_payment_id) references form_payment (id)
 ) engine=InnoDB default charset=utf8;
 
-create table item_order (
+create table order_item (
   id bigint not null auto_increment,
   quantity smallint(6) not null,
   unit_price decimal(10,2) not null,
@@ -38,8 +38,8 @@ create table item_order (
   product_id bigint not null,
 
   primary key (id),
-  unique key uk_item_order_product (order_id, product_id),
+  unique key uk_order_item_product (order_id, product_id),
 
-  constraint fk_item_order_order foreign key (order_id) references `order` (id),
-  constraint fk_item_order_product foreign key (product_id) references product (id)
+  constraint fk_order_item_order foreign key (order_id) references `order` (id),
+  constraint fk_order_item_product foreign key (product_id) references product (id)
 ) engine=InnoDB default charset=utf8;

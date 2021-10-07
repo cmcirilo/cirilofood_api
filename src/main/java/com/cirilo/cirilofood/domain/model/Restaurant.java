@@ -122,4 +122,12 @@ public class Restaurant {
     public boolean addOwner(User user) {
         return getOwners().add(user);
     }
+
+    public boolean acceptFormPayment(FormPayment formPayment) {
+        return getFormsPayment().contains(formPayment);
+    }
+
+    public boolean notAcceptFormPayment(FormPayment formPayment) {
+        return !acceptFormPayment(formPayment);
+    }
 }

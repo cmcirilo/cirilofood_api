@@ -74,3 +74,13 @@ insert into `user` (id, name, email, password, created_date) values (5, 'Manoel 
 
 insert into restaurant_owner (restaurant_id, user_id) values (1, 5), (3, 5);
 
+delete from `order`;
+delete from order_item;
+
+insert into `order` (id, restaurant_id, user_client_id, form_payment_id, address_city_id, address_zipcode, address_street, address_number, address_complement, address_district, status, created_date, subtotal, shipping_fee, total_value) values (1, 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil','CREATED', utc_timestamp, 298.90, 10, 308.90);
+insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (1, 1, 1, 1, 78.9, 78.9, null);
+insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');
+
+insert into `order` (id, restaurant_id, user_client_id, form_payment_id, address_city_id, address_zipcode, address_street, address_number, address_complement, address_district, status, created_date, subtotal, shipping_fee, total_value) values (2, 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED', utc_timestamp, 79, 0, 79);
+insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (3, 2, 3, 1, 79, 79, 'Ao ponto');
+
