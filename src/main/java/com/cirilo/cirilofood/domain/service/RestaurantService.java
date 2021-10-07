@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.domain.service;
 
-import com.cirilo.cirilofood.domain.model.User;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.model.FormPayment;
 import com.cirilo.cirilofood.domain.model.Restaurant;
+import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 
 @Service
@@ -47,6 +49,16 @@ public class RestaurantService {
     public Restaurant find(Long restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+    }
+
+    @Transactional
+    public void activate(List<Long> restaurantIds) {
+        restaurantIds.forEach(this::activate);
+    }
+
+    @Transactional
+    public void desactivate(List<Long> restaurantIds) {
+        restaurantIds.forEach(this::desactivate);
     }
 
     @Transactional
