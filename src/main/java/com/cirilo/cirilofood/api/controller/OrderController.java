@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.assembler.OrderModelAssembler;
+import com.cirilo.cirilofood.api.assembler.OrderResumeModelAssembler;
 import com.cirilo.cirilofood.api.model.OrderModel;
+import com.cirilo.cirilofood.api.model.OrderResumeModel;
 import com.cirilo.cirilofood.domain.model.Order;
 import com.cirilo.cirilofood.domain.repository.OrderRepository;
 import com.cirilo.cirilofood.domain.service.OrderService;
@@ -27,11 +29,14 @@ public class OrderController {
     @Autowired
     private OrderModelAssembler orderModelAssembler;
 
+    @Autowired
+    private OrderResumeModelAssembler orderResumeModelAssembler;
+
     @GetMapping
-    public List<OrderModel> list() {
+    public List<OrderResumeModel> list() {
         List<Order> allOrders = orderRepository.findAll();
 
-        return orderModelAssembler.toCollectionModel(allOrders);
+        return orderResumeModelAssembler.toCollectionModel(allOrders);
     }
 
     @GetMapping("/{orderId}")
