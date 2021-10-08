@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.cirilo.cirilofood.api.model.AddressModel;
+import com.cirilo.cirilofood.api.model.input.OrderItemInput;
 import com.cirilo.cirilofood.domain.model.Address;
+import com.cirilo.cirilofood.domain.model.OrderItem;
 
 @Configuration
 public class ModelMapperConfig {
@@ -20,6 +22,9 @@ public class ModelMapperConfig {
         addressToAddressModelTypeMap.<String> addMapping(
                 addressSource -> addressSource.getCity().getState().getName(),
                 (targetAddressModel, value) -> targetAddressModel.getCity().setState(value));
+
+        modelMapper.createTypeMap(OrderItemInput.class, OrderItem.class)
+                .addMappings(mapper -> mapper.skip(OrderItem::setId));
 
         return modelMapper;
     }

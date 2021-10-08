@@ -84,3 +84,6 @@ insert into order_item (id, order_id, product_id, quantity, unit_price, total_pr
 insert into `order` (id, restaurant_id, user_client_id, form_payment_id, address_city_id, address_zipcode, address_street, address_number, address_complement, address_district, status, created_date, subtotal, shipping_fee, total_value) values (2, 3, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro', 'CREATED', utc_timestamp, 79, 0, 79);
 insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (3, 2, 3, 1, 79, 79, 'Ao ponto');
 
+alter table `order` auto_increment = 1;
+alter table order_item auto_increment = 1;
+
