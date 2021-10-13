@@ -28,4 +28,34 @@ public class StatusOrderService {
         order.setStatus(StatusOrder.CONFIRMED);
         order.setConfirmationDate(OffsetDateTime.now());
     }
+
+    @Transactional
+    public void cancel(Long orderId) {
+        Order order = orderService.find(orderId);
+
+        if (!order.getStatus().equals(StatusOrder.CREATED)) {
+            throw new BusinessException(
+                    String.format("Status Order %d does not update from %s to %s",
+                            order.getId(), order.getStatus().getDescription(),
+                            StatusOrder.CANCELED.getDescription()));
+        }
+
+        order.setStatus(StatusOrder.CANCELED);
+        order.setCancelDate(OffsetDateTime.now());
+    }
+
+    @Transactional
+    public void delivery(Long orderId) {
+        Order order = orderService.find(orderId);
+
+        if (!order.getStatus().equals(StatusOrder.CONFIRMED)) {
+            throw new BusinessException(
+                    String.format("Status do order %d não pode ser alterado de %s para %s",
+                            order.getId(), order.getStatus().getDescription(),
+                            StatusOrder.DELIVERED.getDescription()));
+        }
+
+        order.setStatus(StatusOrder.DELIVERED);
+        order.setDeliveryDate(OffsetDateTime.now());
+    }
 }

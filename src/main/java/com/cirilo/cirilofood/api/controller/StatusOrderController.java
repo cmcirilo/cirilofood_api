@@ -22,4 +22,16 @@ public class StatusOrderController {
     public void confirm(@PathVariable Long orderId) {
         statusOrderService.confirm(orderId);
     }
+
+    @PutMapping("/cancel")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelar(@PathVariable Long orderId) {
+        statusOrderService.cancel(orderId);
+    }
+
+    @PutMapping("/delivery")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void entregar(@PathVariable Long orderId) {
+        statusOrderService.delivery(orderId);
+    }
 }
