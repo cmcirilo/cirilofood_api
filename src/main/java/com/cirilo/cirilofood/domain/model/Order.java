@@ -21,6 +21,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.cirilo.cirilofood.domain.exception.BusinessException;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -89,4 +91,29 @@ public class Order {
         getItens().forEach(item -> item.setOrder(this));
     }
 
+    public void confirm() {
+        setStatus(StatusOrder.CONFIRMED);
+        setConfirmationDate(OffsetDateTime.now());
+    }
+
+    public void delivery() {
+        setStatus(StatusOrder.DELIVERED);
+        setDeliveryDate(OffsetDateTime.now());
+    }
+
+    public void cancel() {
+        setStatus(StatusOrder.CANCELED);
+        setCancelDate(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusOrder newStatus) {
+        if (getStatus().shoudNotUpdateTo(newStatus)) {
+            throw new BusinessException(
+                    String.format("Status do order %d não pode ser alterado de %s para %s",
+                            getId(), getStatus().getDescription(),
+                            newStatus.getDescription()));
+        }
+
+        this.status = newStatus;
+    }
 }
