@@ -13,20 +13,20 @@ public class StatusOrderService {
     private OrderService orderService;
 
     @Transactional
-    public void confirm(Long orderId) {
-        Order order = orderService.find(orderId);
+    public void confirm(String code) {
+        Order order = orderService.find(code);
         order.confirm();
     }
 
     @Transactional
-    public void cancel(Long orderId) {
-        Order order = orderService.find(orderId);
+    public void cancel(String code) {
+        Order order = orderService.find(code);
         order.cancel();
     }
 
     @Transactional
-    public void delivery(Long orderId) {
-        Order order = orderService.find(orderId);
+    public void delivery(String code) {
+        Order order = orderService.find(code);
         order.delivery();
     }
 }

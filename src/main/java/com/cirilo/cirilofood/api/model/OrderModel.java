@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 public class OrderModel {
 
-    private Long id;
+    private String code;
 
     private BigDecimal subtotal;
 

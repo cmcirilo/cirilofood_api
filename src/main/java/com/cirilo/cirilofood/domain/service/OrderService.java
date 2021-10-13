@@ -36,9 +36,9 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Order find(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(orderId));
+    public Order find(String code) {
+        return orderRepository.findByCode(code)
+                .orElseThrow(() -> new OrderNotFoundException(code));
     }
 
     @Transactional

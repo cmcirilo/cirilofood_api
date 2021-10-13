@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cirilo.cirilofood.domain.service.StatusOrderService;
 
 @RestController
-@RequestMapping(value = "/orders/{orderId}")
+@RequestMapping(value = "/orders/{code}")
 public class StatusOrderController {
 
     @Autowired
@@ -19,19 +19,19 @@ public class StatusOrderController {
 
     @PutMapping("/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirm(@PathVariable Long orderId) {
-        statusOrderService.confirm(orderId);
+    public void confirm(@PathVariable String code) {
+        statusOrderService.confirm(code);
     }
 
     @PutMapping("/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelar(@PathVariable Long orderId) {
-        statusOrderService.cancel(orderId);
+    public void cancelar(@PathVariable String code) {
+        statusOrderService.cancel(code);
     }
 
     @PutMapping("/delivery")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void entregar(@PathVariable Long orderId) {
-        statusOrderService.delivery(orderId);
+    public void entregar(@PathVariable String code) {
+        statusOrderService.delivery(code);
     }
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 public class OrderResumeModel {
 
-    private Long id;
+    private String code;
 
     private BigDecimal subtotal;
 
