@@ -20,6 +20,7 @@ import com.cirilo.cirilofood.api.assembler.RestaurantInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.RestaurantModelAssembler;
 import com.cirilo.cirilofood.api.model.RestaurantModel;
 import com.cirilo.cirilofood.api.model.input.RestaurantInput;
+import com.cirilo.cirilofood.api.model.view.RestaurantView;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.CityNotFoundException;
 import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
@@ -27,6 +28,7 @@ import com.cirilo.cirilofood.domain.exception.RestaurantNotFoundException;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping(value = "/restaurants")
@@ -44,9 +46,39 @@ public class RestaurantController {
     @Autowired
     private RestaurantInputDisassembler restaurantInputDisassembler;
 
-    @GetMapping
+    // @GetMapping
+    // public MappingJacksonValue list(@RequestParam(required = false) String projection) {
+    // List<Restaurant> restaurants = restaurantRepository.findAll();
+    // List<RestaurantModel> restaurantsModel = restaurantModelAssembler.toCollectionModel(restaurants);
+    //
+    // MappingJacksonValue restaurantsWrapper = new MappingJacksonValue(restaurantsModel);
+    //
+    // restaurantsWrapper.setSerializationView(RestaurantView.Resume.class);
+    //
+    // if ("only-name".equals(projection)) {
+    // restaurantsWrapper.setSerializationView(RestaurantView.OnlyName.class);
+    // } else if ("complete".equals(projection)) {
+    // restaurantsWrapper.setSerializationView(null);
+    // }
+    //
+    // return restaurantsWrapper;
+    // }
+
+    @JsonView(RestaurantView.Resume.class)
+    @GetMapping()
     public List<RestaurantModel> list() {
+        return listComplete();
+    }
+
+    @GetMapping(params = "projection=complete")
+    public List<RestaurantModel> listComplete() {
         return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
+    }
+
+    @JsonView(RestaurantView.OnlyName.class)
+    @GetMapping(params = "projection=only-name")
+    public List<RestaurantModel> listOnlyName() {
+        return listComplete();
     }
 
     @GetMapping("/{restaurantId}")
