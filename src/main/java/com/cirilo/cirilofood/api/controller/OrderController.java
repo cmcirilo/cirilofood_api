@@ -4,13 +4,16 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +29,8 @@ import com.cirilo.cirilofood.domain.model.Order;
 import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.repository.OrderRepository;
 import com.cirilo.cirilofood.domain.service.OrderService;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -47,11 +52,29 @@ public class OrderController {
     private OrderInputDisassembler orderInputDisassembler;
 
     @GetMapping
-    public List<OrderResumeModel> list() {
+    public MappingJacksonValue list(@RequestParam(required = false) String fields) {
         List<Order> allOrders = orderRepository.findAll();
+        List<OrderResumeModel> ordersModel = orderResumeModelAssembler.toCollectionModel(allOrders);
 
-        return orderResumeModelAssembler.toCollectionModel(allOrders);
+        MappingJacksonValue orderWrapper = new MappingJacksonValue(ordersModel);
+
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
+
+        if (StringUtils.isNotBlank(fields)) {
+            filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
+        }
+
+        orderWrapper.setFilters(filterProvider);
+        return orderWrapper;
     }
+
+    // @GetMapping
+    // public List<OrderResumeModel> list() {
+    // List<Order> allOrders = orderRepository.findAll();
+    //
+    // return orderResumeModelAssembler.toCollectionModel(allOrders);
+    // }
 
     @GetMapping("/{code}")
     public OrderModel buscar(@PathVariable String code) {
