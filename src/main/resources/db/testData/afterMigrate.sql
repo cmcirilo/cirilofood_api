@@ -54,7 +54,7 @@ insert into permission (id, name, description) values (2, 'UPDATE_CUISINES', 'Al
 insert into restaurant_form_payment (restaurant_id, form_payment_id) values (1,1),(1,2),(1,3),(2,3),(3,2),(3,3);
 
 insert into product (id, name, description, price, active , restaurant_id) values (1, "Rice","Rice description", 10.0, true, 1);
-insert into product (id, name, description, price, active , restaurant_id) values (2, "Bean","Bean description", 15.0, true, 1);
+insert into product (id, name, description, price, active , restaurant_id) values (2, "Bean","Bean description", 15.0, false, 1);
 insert into product (id, name, description, price, active , restaurant_id) values (3, "Meat","Meat description", 20.0, true,2);
 
 insert into `group` (id, name) values (1,'Manager'),(2,'Salesman'), (3,'Secretary'), (4,'Delivery Man');
