@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.domain.repository.filter.OrderFilter;
+import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,30 +53,30 @@ public class OrderController {
     @Autowired
     private OrderInputDisassembler orderInputDisassembler;
 
-    @GetMapping
-    public MappingJacksonValue list(@RequestParam(required = false) String fields) {
-        List<Order> allOrders = orderRepository.findAll();
-        List<OrderResumeModel> ordersModel = orderResumeModelAssembler.toCollectionModel(allOrders);
+//    @GetMapping
+//    public MappingJacksonValue list(@RequestParam(required = false) String fields) {
+//        List<Order> allOrders = orderRepository.findAll();
+//        List<OrderResumeModel> ordersModel = orderResumeModelAssembler.toCollectionModel(allOrders);
+//
+//        MappingJacksonValue orderWrapper = new MappingJacksonValue(ordersModel);
+//
+//        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+//        filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
+//
+//        if (StringUtils.isNotBlank(fields)) {
+//            filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
+//        }
+//
+//        orderWrapper.setFilters(filterProvider);
+//        return orderWrapper;
+//    }
 
-        MappingJacksonValue orderWrapper = new MappingJacksonValue(ordersModel);
+     @GetMapping
+     public List<OrderResumeModel> find(OrderFilter orderFilter) {
+     List<Order> allOrders = orderRepository.findAll(OrderSpecifications.usingFilter(orderFilter));
 
-        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-        filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
-
-        if (StringUtils.isNotBlank(fields)) {
-            filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
-        }
-
-        orderWrapper.setFilters(filterProvider);
-        return orderWrapper;
-    }
-
-    // @GetMapping
-    // public List<OrderResumeModel> list() {
-    // List<Order> allOrders = orderRepository.findAll();
-    //
-    // return orderResumeModelAssembler.toCollectionModel(allOrders);
-    // }
+     return orderResumeModelAssembler.toCollectionModel(allOrders);
+     }
 
     @GetMapping("/{code}")
     public OrderModel buscar(@PathVariable String code) {
