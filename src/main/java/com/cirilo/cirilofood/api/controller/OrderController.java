@@ -8,6 +8,10 @@ import com.cirilo.cirilofood.domain.repository.filter.OrderFilter;
 import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,12 +75,27 @@ public class OrderController {
 //        return orderWrapper;
 //    }
 
-     @GetMapping
-     public List<OrderResumeModel> find(OrderFilter orderFilter) {
-     List<Order> allOrders = orderRepository.findAll(OrderSpecifications.usingFilter(orderFilter));
+//     @GetMapping
+//     public List<OrderResumeModel> find(OrderFilter orderFilter) {
+//     List<Order> allOrders = orderRepository.findAll(OrderSpecifications.usingFilter(orderFilter));
+//
+//     return orderResumeModelAssembler.toCollectionModel(allOrders);
+//     }
 
-     return orderResumeModelAssembler.toCollectionModel(allOrders);
-     }
+    @GetMapping
+    public Page<OrderResumeModel> find(OrderFilter orderFilter,
+                                       @PageableDefault(size = 10) Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findAll(
+                OrderSpecifications.usingFilter(orderFilter), pageable);
+
+        List<OrderResumeModel> ordersResumeModel = orderResumeModelAssembler
+                .toCollectionModel(ordersPage.getContent());
+
+        Page<OrderResumeModel> ordersResumeModelPage = new PageImpl<>(
+                ordersResumeModel, pageable, ordersPage.getTotalElements());
+
+        return ordersResumeModelPage;
+    }
 
     @GetMapping("/{code}")
     public OrderModel buscar(@PathVariable String code) {
