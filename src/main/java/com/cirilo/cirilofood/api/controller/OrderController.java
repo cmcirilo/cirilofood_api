@@ -5,23 +5,20 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.cirilo.cirilofood.core.data.PageableTranslator;
-import com.cirilo.cirilofood.domain.repository.filter.OrderFilter;
+import com.cirilo.cirilofood.domain.filter.OrderFilter;
 import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +34,6 @@ import com.cirilo.cirilofood.domain.model.Order;
 import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.repository.OrderRepository;
 import com.cirilo.cirilofood.domain.service.OrderService;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 @RestController
 @RequestMapping(value = "/orders")

@@ -7,7 +7,7 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.cirilo.cirilofood.domain.model.Order;
-import com.cirilo.cirilofood.domain.repository.filter.OrderFilter;
+import com.cirilo.cirilofood.domain.filter.OrderFilter;
 
 public class OrderSpecifications {
 

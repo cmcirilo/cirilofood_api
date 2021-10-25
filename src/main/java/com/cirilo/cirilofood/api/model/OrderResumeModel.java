@@ -26,7 +26,6 @@ public class OrderResumeModel {
 
     private RestaurantResumeModel restaurant;
 
-//    private UserModel client;
+    private UserModel client;
 
-    private String clientName;
 }

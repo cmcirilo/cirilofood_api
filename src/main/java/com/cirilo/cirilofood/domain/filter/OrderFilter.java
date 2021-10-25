@@ -1,4 +1,4 @@
-package com.cirilo.cirilofood.domain.repository.filter;
+package com.cirilo.cirilofood.domain.filter;
 
 import lombok.Getter;
 import lombok.Setter;
