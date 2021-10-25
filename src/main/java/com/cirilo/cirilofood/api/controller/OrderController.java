@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.data.PageableTranslator;
 import com.cirilo.cirilofood.domain.repository.filter.OrderFilter;
 import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,6 +87,9 @@ public class OrderController {
     @GetMapping
     public Page<OrderResumeModel> find(OrderFilter orderFilter,
                                        @PageableDefault(size = 10) Pageable pageable) {
+
+        pageable = translatePageable(pageable);
+
         Page<Order> ordersPage = orderRepository.findAll(
                 OrderSpecifications.usingFilter(orderFilter), pageable);
 
@@ -119,5 +124,16 @@ public class OrderController {
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage(), e);
         }
+    }
+
+    private Pageable translatePageable(Pageable pageable){
+        var mapping = ImmutableMap.of(
+                "code","code",
+                "restaurant.name","restaurant.name",
+                "clientName","client.name",
+                "totalValue","totalValue"
+        );
+
+        return PageableTranslator.translate(pageable,mapping);
     }
 }
