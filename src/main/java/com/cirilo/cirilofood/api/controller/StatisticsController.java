@@ -3,6 +3,9 @@ package com.cirilo.cirilofood.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cirilo.cirilofood.domain.filter.DailySaleFilter;
 import com.cirilo.cirilofood.domain.model.dto.DailySale;
 import com.cirilo.cirilofood.domain.service.SaleQueryService;
+import com.cirilo.cirilofood.domain.service.SaleReportService;
 
 @RestController
 @RequestMapping(path = "/statistics")
@@ -19,9 +23,26 @@ public class StatisticsController {
     @Autowired
     private SaleQueryService saleQueryService;
 
-    @GetMapping("/daily-sales")
+    @Autowired
+    private SaleReportService saleReportService;
+
+    @GetMapping(path = "/daily-sales", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<DailySale> findDailySales(DailySaleFilter dailySaleFilter,
             @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
         return saleQueryService.findDailySales(dailySaleFilter, timeOffSet);
+    }
+
+    @GetMapping(path = "/daily-sales", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> findDailySalesPdf(DailySaleFilter dailySaleFilter,
+            @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
+
+        byte[] bytes = saleReportService.buildDailySales(dailySaleFilter, timeOffSet);
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=daily-sales.pdf");
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .headers(headers)
+                .body(bytes);
     }
 }
