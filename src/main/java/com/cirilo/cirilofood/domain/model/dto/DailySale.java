@@ -1,18 +1,18 @@
 package com.cirilo.cirilofood.domain.model.dto;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @AllArgsConstructor
 @Getter
 @Setter
 public class DailySale {
 
-    private LocalDate date;
+    private Date createdDate;
 
     private Long totalSale;
 
