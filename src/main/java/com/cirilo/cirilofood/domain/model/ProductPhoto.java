@@ -32,5 +32,5 @@ public class ProductPhoto {
 
     private String contentType;
 
-    private Integer size;
+    private Long size;
 }
