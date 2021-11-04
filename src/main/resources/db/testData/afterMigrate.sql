@@ -12,6 +12,7 @@ DELETE FROM restaurant;
 DELETE FROM restaurant_form_payment;
 DELETE FROM `user`;
 DELETE FROM user_group;
+DELETE FROM product_photo;
 
 set foreign_key_checks=1;
 
