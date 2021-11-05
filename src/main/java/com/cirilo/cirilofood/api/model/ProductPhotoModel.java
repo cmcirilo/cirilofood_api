@@ -1,6 +1,5 @@
 package com.cirilo.cirilofood.api.model;
 
-import com.cirilo.cirilofood.domain.model.Product;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.domain.repository;
 
 import com.cirilo.cirilofood.domain.model.Product;
+import com.cirilo.cirilofood.domain.model.ProductPhoto;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
 
     @Query("from Product p where p.active = true and restaurant = :restaurant")
     List<Product> findActivesByRestaurant(Restaurant restaurant);
+
+    @Query("select f from ProductPhoto f join f.product p " +
+            "where p.restaurant.id = :restaurantId and f.product.id = :productId")
+    Optional<ProductPhoto> findProductPhotoById(Long restaurantId, Long productId);
 }

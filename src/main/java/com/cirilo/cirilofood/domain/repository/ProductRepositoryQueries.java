@@ -5,5 +5,5 @@ import com.cirilo.cirilofood.domain.model.ProductPhoto;
 public interface ProductRepositoryQueries {
 
     ProductPhoto save(ProductPhoto productPhoto);
-    
+    void delete(ProductPhoto productPhoto);
 }

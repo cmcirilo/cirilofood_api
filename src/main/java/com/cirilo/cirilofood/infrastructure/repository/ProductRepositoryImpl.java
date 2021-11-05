@@ -1,12 +1,13 @@
 package com.cirilo.cirilofood.infrastructure.repository;
 
-import com.cirilo.cirilofood.domain.model.ProductPhoto;
-import com.cirilo.cirilofood.domain.repository.ProductRepositoryQueries;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import com.cirilo.cirilofood.domain.model.ProductPhoto;
+import com.cirilo.cirilofood.domain.repository.ProductRepositoryQueries;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryQueries {
@@ -18,5 +19,11 @@ public class ProductRepositoryImpl implements ProductRepositoryQueries {
     @Override
     public ProductPhoto save(ProductPhoto productPhoto) {
         return manager.merge(productPhoto);
+    }
+
+    @Transactional
+    @Override
+    public void delete(ProductPhoto productPhoto) {
+        manager.remove(productPhoto);
     }
 }
