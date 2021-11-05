@@ -1,24 +1,25 @@
 package com.cirilo.cirilofood.api.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.api.assembler.ProductPhotoModelAssembler;
-import com.cirilo.cirilofood.api.model.ProductPhotoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cirilo.cirilofood.api.assembler.ProductPhotoModelAssembler;
+import com.cirilo.cirilofood.api.model.ProductPhotoModel;
 import com.cirilo.cirilofood.api.model.input.ProductPhotoInput;
 import com.cirilo.cirilofood.domain.model.Product;
 import com.cirilo.cirilofood.domain.model.ProductPhoto;
 import com.cirilo.cirilofood.domain.service.ProductPhotoService;
 import com.cirilo.cirilofood.domain.service.ProductService;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
@@ -50,9 +51,10 @@ public class RestaurantProductPhotoController {
     //
     // }
 
-     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId,
-                                         @Valid ProductPhotoInput productPhotoInput) throws IOException {
+            @Valid ProductPhotoInput productPhotoInput)
+        throws IOException {
 
         Product product = productService.find(restaurantId, productId);
 
@@ -68,5 +70,12 @@ public class RestaurantProductPhotoController {
         ProductPhoto productPhotoSaved = productPhotoService.save(productPhoto, file.getInputStream());
 
         return productPhotoModelAssembler.toModel(productPhotoSaved);
+    }
+
+    @GetMapping
+    public ProductPhotoModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
+        ProductPhoto productPhoto = productPhotoService.find(restaurantId, productId);
+
+        return productPhotoModelAssembler.toModel(productPhoto);
     }
 }

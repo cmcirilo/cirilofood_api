@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.domain.service;
 import java.io.InputStream;
 import java.util.Optional;
 
+import com.cirilo.cirilofood.domain.exception.ProductPhotoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,11 @@ public class ProductPhotoService {
         photoStorageService.replace(existingFile, newPhoto);
 
         return productPhoto;
+    }
+
+    public ProductPhoto find(Long restaurantId, Long productId){
+        return productRepository.findProductPhotoById(restaurantId, productId)
+                .orElseThrow(() -> new ProductPhotoNotFoundException(restaurantId, productId));
     }
 
 }
