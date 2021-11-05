@@ -18,6 +18,8 @@ import com.cirilo.cirilofood.domain.model.ProductPhoto;
 import com.cirilo.cirilofood.domain.service.ProductPhotoService;
 import com.cirilo.cirilofood.domain.service.ProductService;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
 public class RestaurantProductPhotoController {
@@ -50,7 +52,7 @@ public class RestaurantProductPhotoController {
 
      @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId,
-                                         @Valid ProductPhotoInput productPhotoInput) {
+                                         @Valid ProductPhotoInput productPhotoInput) throws IOException {
 
         Product product = productService.find(restaurantId, productId);
 
@@ -63,7 +65,7 @@ public class RestaurantProductPhotoController {
         productPhoto.setSize(file.getSize());
         productPhoto.setFileName(file.getOriginalFilename());
 
-        ProductPhoto productPhotoSaved = productPhotoService.save(productPhoto);
+        ProductPhoto productPhotoSaved = productPhotoService.save(productPhoto, file.getInputStream());
 
         return productPhotoModelAssembler.toModel(productPhotoSaved);
     }
