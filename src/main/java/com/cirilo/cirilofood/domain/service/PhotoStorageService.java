@@ -22,7 +22,7 @@ public interface PhotoStorageService {
         if (existingFile != null){
             this.remove(existingFile);
         }
-    };
+    }
 
     @Builder
     @Getter
