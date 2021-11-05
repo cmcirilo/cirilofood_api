@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.infrastructure.service.storage;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -35,6 +36,17 @@ public class LocalPhotoStorageService implements PhotoStorageService {
             Files.deleteIfExists(filePath);
         } catch (Exception e) {
             throw new StorageException("Its not possible remove file", e);
+        }
+    }
+
+    @Override
+    public InputStream find(String fileName) {
+        try{
+            Path filePath = getFilePath(fileName);
+
+            return Files.newInputStream(filePath);
+        }catch (Exception e) {
+            throw new StorageException("Its not possible find file", e);
         }
     }
 

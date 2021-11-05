@@ -12,6 +12,8 @@ public interface PhotoStorageService {
 
     void remove(String fileName);
 
+    InputStream find(String fileName);
+
     default String generateFileName(String originFileName) {
         return UUID.randomUUID() + "_" + originFileName;
     }
