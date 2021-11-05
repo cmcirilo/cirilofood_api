@@ -10,9 +10,19 @@ public interface PhotoStorageService {
 
     void upload(Photo photo);
 
+    void remove(String fileName);
+
     default String generateFileName(String originFileName) {
         return UUID.randomUUID() + "_" + originFileName;
     }
+
+    default void replace(String existingFile, Photo newPhoto){
+        this.upload(newPhoto);
+
+        if (existingFile != null){
+            this.remove(existingFile);
+        }
+    };
 
     @Builder
     @Getter
