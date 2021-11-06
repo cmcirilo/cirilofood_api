@@ -54,4 +54,14 @@ public class ProductPhotoService {
                 .orElseThrow(() -> new ProductPhotoNotFoundException(restaurantId, productId));
     }
 
+    @Transactional
+    public void remove(Long restaurantId, Long productId) {
+        ProductPhoto productPhoto = find(restaurantId, productId);
+
+        productRepository.delete(productPhoto);
+        productRepository.flush();
+
+        photoStorageService.remove(productPhoto.getFileName());
+    }
+
 }
