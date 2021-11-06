@@ -1,11 +1,17 @@
 package com.cirilo.cirilofood.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 
+import javax.print.DocFlavor;
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +24,7 @@ import com.cirilo.cirilofood.api.model.ProductPhotoModel;
 import com.cirilo.cirilofood.api.model.input.ProductPhotoInput;
 import com.cirilo.cirilofood.domain.model.Product;
 import com.cirilo.cirilofood.domain.model.ProductPhoto;
+import com.cirilo.cirilofood.domain.service.PhotoStorageService;
 import com.cirilo.cirilofood.domain.service.ProductPhotoService;
 import com.cirilo.cirilofood.domain.service.ProductService;
 
@@ -33,6 +40,9 @@ public class RestaurantProductPhotoController {
 
     @Autowired
     private ProductPhotoModelAssembler productPhotoModelAssembler;
+
+    @Autowired
+    private PhotoStorageService photoStorageService;
 
     // @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     // public void updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId,
@@ -72,10 +82,29 @@ public class RestaurantProductPhotoController {
         return productPhotoModelAssembler.toModel(productPhotoSaved);
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductPhotoModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         ProductPhoto productPhoto = productPhotoService.find(restaurantId, productId);
 
         return productPhotoModelAssembler.toModel(productPhoto);
     }
+
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<InputStreamResource> download(@PathVariable Long restaurantId, @PathVariable Long productId) {
+        try{
+            ProductPhoto productPhoto = productPhotoService.find(restaurantId, productId);
+
+            InputStream inputStream = photoStorageService.find(productPhoto.getFileName());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(inputStream));
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+
+
+
+    }
+
 }
