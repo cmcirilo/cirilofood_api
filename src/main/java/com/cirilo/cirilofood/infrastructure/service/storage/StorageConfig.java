@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.cirilo.cirilofood.core.storage.StorageProperties;
 import com.cirilo.cirilofood.domain.service.PhotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +18,7 @@ public class StorageConfig {
     private StorageProperties storageProperties;
 
     @Bean
+    @ConditionalOnProperty(name = "cirilofood.storage.type", havingValue = "s3")
     public AmazonS3 amazonS3() {
         var credentials = new BasicAWSCredentials(
                 storageProperties.getS3().getAccessKeyId(),
