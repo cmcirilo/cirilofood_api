@@ -1,20 +1,20 @@
 package com.cirilo.cirilofood.infrastructure.service.storage;
 
+import com.cirilo.cirilofood.core.storage.StorageProperties;
+import com.cirilo.cirilofood.domain.service.PhotoStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
-
-import com.cirilo.cirilofood.domain.service.PhotoStorageService;
-
 @Service
 public class LocalPhotoStorageService implements PhotoStorageService {
 
-    @Value("${cirilofood.storage.local.photos-folder}")
-    private Path photosFolder;
+    @Autowired
+    private StorageProperties storageProperties;
 
     @Override
     public void upload(Photo photo) {
@@ -41,16 +41,16 @@ public class LocalPhotoStorageService implements PhotoStorageService {
 
     @Override
     public InputStream find(String fileName) {
-        try{
+        try {
             Path filePath = getFilePath(fileName);
 
             return Files.newInputStream(filePath);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new StorageException("Its not possible find file", e);
         }
     }
 
     private Path getFilePath(String fileName) {
-        return photosFolder.resolve(Path.of(fileName));
+        return storageProperties.getLocal().getPhotosFolder().resolve(Path.of(fileName));
     }
 }
