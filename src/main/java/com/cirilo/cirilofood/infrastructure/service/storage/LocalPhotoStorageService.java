@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-//@Service
+@Service
 public class LocalPhotoStorageService implements PhotoStorageService {
 
     @Autowired
@@ -19,10 +18,10 @@ public class LocalPhotoStorageService implements PhotoStorageService {
     @Override
     public void upload(Photo photo) {
         try {
-            Path filePath = getFilePath(photo.getFileName());
+            Path pathFile = getPathFile(photo.getFileName());
 
             FileCopyUtils.copy(photo.getInputStream(),
-                    Files.newOutputStream(filePath));
+                    Files.newOutputStream(pathFile));
         } catch (Exception e) {
             throw new StorageException("Its not possible upload file", e);
         }
@@ -31,26 +30,30 @@ public class LocalPhotoStorageService implements PhotoStorageService {
     @Override
     public void remove(String fileName) {
         try {
-            Path filePath = getFilePath(fileName);
+            Path pathFile = getPathFile(fileName);
 
-            Files.deleteIfExists(filePath);
+            Files.deleteIfExists(pathFile);
         } catch (Exception e) {
             throw new StorageException("Its not possible remove file", e);
         }
     }
 
     @Override
-    public InputStream find(String fileName) {
+    public RecoveredPhoto find(String fileName) {
         try {
-            Path filePath = getFilePath(fileName);
+            Path pathFile = getPathFile(fileName);
 
-            return Files.newInputStream(filePath);
+            RecoveredPhoto recoveredPhoto = RecoveredPhoto.builder()
+                    .inputStream(Files.newInputStream(pathFile))
+                    .build();
+
+            return recoveredPhoto;
         } catch (Exception e) {
             throw new StorageException("Its not possible find file", e);
         }
     }
 
-    private Path getFilePath(String fileName) {
+    private Path getPathFile(String fileName) {
         return storageProperties.getLocal().getPhotosFolder().resolve(Path.of(fileName));
     }
 }

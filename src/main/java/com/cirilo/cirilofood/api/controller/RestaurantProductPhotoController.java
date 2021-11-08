@@ -1,13 +1,18 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.cirilo.cirilofood.api.assembler.ProductPhotoModelAssembler;
+import com.cirilo.cirilofood.api.model.ProductPhotoModel;
+import com.cirilo.cirilofood.api.model.input.ProductPhotoInput;
+import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.domain.model.Product;
+import com.cirilo.cirilofood.domain.model.ProductPhoto;
+import com.cirilo.cirilofood.domain.service.PhotoStorageService;
+import com.cirilo.cirilofood.domain.service.PhotoStorageService.RecoveredPhoto;
+import com.cirilo.cirilofood.domain.service.ProductPhotoService;
+import com.cirilo.cirilofood.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +27,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cirilo.cirilofood.api.assembler.ProductPhotoModelAssembler;
-import com.cirilo.cirilofood.api.model.ProductPhotoModel;
-import com.cirilo.cirilofood.api.model.input.ProductPhotoInput;
-import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
-import com.cirilo.cirilofood.domain.model.Product;
-import com.cirilo.cirilofood.domain.model.ProductPhoto;
-import com.cirilo.cirilofood.domain.service.PhotoStorageService;
-import com.cirilo.cirilofood.domain.service.ProductPhotoService;
-import com.cirilo.cirilofood.domain.service.ProductService;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
@@ -68,7 +67,7 @@ public class RestaurantProductPhotoController {
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId,
             @Valid ProductPhotoInput productPhotoInput)
-        throws IOException {
+            throws IOException {
 
         Product product = productService.find(restaurantId, productId);
 
@@ -94,9 +93,9 @@ public class RestaurantProductPhotoController {
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> download(@PathVariable Long restaurantId, @PathVariable Long productId,
+    public ResponseEntity<?> download(@PathVariable Long restaurantId, @PathVariable Long productId,
             @RequestHeader(name = "accept") String acceptHeader)
-        throws HttpMediaTypeNotAcceptableException {
+            throws HttpMediaTypeNotAcceptableException {
 
         try {
             ProductPhoto productPhoto = productPhotoService.find(restaurantId, productId);
@@ -106,11 +105,18 @@ public class RestaurantProductPhotoController {
 
             verifyCompatibilityMediaType(mediaTypePhoto, acceptMediaTypes);
 
-            InputStream inputStream = photoStorageService.find(productPhoto.getFileName());
+            RecoveredPhoto recoveredPhoto = photoStorageService.find(productPhoto.getFileName());
+
+            if (recoveredPhoto.hasUrl()) {
+                return ResponseEntity
+                        .status(HttpStatus.FOUND)
+                        .header(HttpHeaders.LOCATION, recoveredPhoto.getUrl())
+                        .build();
+            }
 
             return ResponseEntity.ok()
                     .contentType(mediaTypePhoto)
-                    .body(new InputStreamResource(inputStream));
+                    .body(new InputStreamResource(recoveredPhoto.getInputStream()));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -124,7 +130,7 @@ public class RestaurantProductPhotoController {
     }
 
     private void verifyCompatibilityMediaType(MediaType mediaTypePhoto, List<MediaType> acceptMediaTypes)
-        throws HttpMediaTypeNotAcceptableException {
+            throws HttpMediaTypeNotAcceptableException {
 
         boolean compatible = acceptMediaTypes.stream()
                 .anyMatch(acceptMediaType -> acceptMediaType.isCompatibleWith(mediaTypePhoto));

@@ -12,7 +12,7 @@ public interface PhotoStorageService {
 
     void remove(String fileName);
 
-    InputStream find(String fileName);
+    RecoveredPhoto find(String fileName);
 
     default String generateFileName(String originFileName) {
         return UUID.randomUUID() + "_" + originFileName;
@@ -37,6 +37,24 @@ public interface PhotoStorageService {
         private Long contentLength;
 
         private InputStream inputStream;
+
+    }
+
+    @Builder
+    @Getter
+    class RecoveredPhoto {
+
+        private InputStream inputStream;
+
+        private String url;
+
+        public boolean hasUrl() {
+            return url != null;
+        }
+
+        public boolean hasInputStream() {
+            return inputStream != null;
+        }
 
     }
 
