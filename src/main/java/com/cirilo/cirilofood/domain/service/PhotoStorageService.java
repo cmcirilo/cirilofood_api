@@ -1,10 +1,10 @@
 package com.cirilo.cirilofood.domain.service;
 
-import java.io.InputStream;
-import java.util.UUID;
-
 import lombok.Builder;
 import lombok.Getter;
+
+import java.io.InputStream;
+import java.util.UUID;
 
 public interface PhotoStorageService {
 
@@ -18,10 +18,10 @@ public interface PhotoStorageService {
         return UUID.randomUUID() + "_" + originFileName;
     }
 
-    default void replace(String existingFile, Photo newPhoto){
+    default void replace(String existingFile, Photo newPhoto) {
         this.upload(newPhoto);
 
-        if (existingFile != null){
+        if (existingFile != null) {
             this.remove(existingFile);
         }
     }
@@ -31,6 +31,10 @@ public interface PhotoStorageService {
     class Photo {
 
         private String fileName;
+
+        private String contentType;
+
+        private Long contentLength;
 
         private InputStream inputStream;
 

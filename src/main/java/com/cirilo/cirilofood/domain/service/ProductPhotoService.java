@@ -1,16 +1,15 @@
 package com.cirilo.cirilofood.domain.service;
 
-import java.io.InputStream;
-import java.util.Optional;
-
 import com.cirilo.cirilofood.domain.exception.ProductPhotoNotFoundException;
+import com.cirilo.cirilofood.domain.model.ProductPhoto;
+import com.cirilo.cirilofood.domain.repository.ProductRepository;
+import com.cirilo.cirilofood.domain.service.PhotoStorageService.Photo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cirilo.cirilofood.domain.model.ProductPhoto;
-import com.cirilo.cirilofood.domain.repository.ProductRepository;
-import com.cirilo.cirilofood.domain.service.PhotoStorageService.Photo;
+import java.io.InputStream;
+import java.util.Optional;
 
 @Service
 public class ProductPhotoService {
@@ -41,6 +40,7 @@ public class ProductPhotoService {
 
         Photo newPhoto = Photo.builder()
                 .fileName(productPhoto.getFileName())
+                .contentType(productPhoto.getContentType())
                 .inputStream(fileData)
                 .build();
 
@@ -49,7 +49,7 @@ public class ProductPhotoService {
         return productPhoto;
     }
 
-    public ProductPhoto find(Long restaurantId, Long productId){
+    public ProductPhoto find(Long restaurantId, Long productId) {
         return productRepository.findProductPhotoById(restaurantId, productId)
                 .orElseThrow(() -> new ProductPhotoNotFoundException(restaurantId, productId));
     }
