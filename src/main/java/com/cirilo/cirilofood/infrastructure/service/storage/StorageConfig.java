@@ -5,12 +5,13 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.cirilo.cirilofood.core.storage.StorageProperties;
+import com.cirilo.cirilofood.domain.service.PhotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AmazonS3Config {
+public class StorageConfig {
 
     @Autowired
     private StorageProperties storageProperties;
@@ -26,6 +27,15 @@ public class AmazonS3Config {
                 .withRegion(storageProperties.getS3().getRegion())
                 .build();
 
+    }
+
+    @Bean
+    public PhotoStorageService photoStorageService() {
+        if (StorageProperties.StorageType.S3.equals(storageProperties.getType())) {
+            return new S3PhotoStorageService();
+        }
+
+        return new LocalPhotoStorageService();
     }
 
 }
