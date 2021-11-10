@@ -1,13 +1,16 @@
 package com.cirilo.cirilofood.domain.service;
 
+import com.cirilo.cirilofood.domain.model.Order;
+import com.cirilo.cirilofood.domain.service.MailService.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cirilo.cirilofood.domain.model.Order;
-
 @Service
 public class StatusOrderService {
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private OrderService orderService;
@@ -16,6 +19,14 @@ public class StatusOrderService {
     public void confirm(String code) {
         Order order = orderService.find(code);
         order.confirm();
+
+        var message = Message.builder()
+                .subject(order.getRestaurant().getName() + " - Order confirmed")
+                .body("The order id <strong>" + order.getCode() + "</strong> confirmed")
+                .recipient(order.getClient().getEmail())
+                .build();
+
+        mailService.send(message);
     }
 
     @Transactional
