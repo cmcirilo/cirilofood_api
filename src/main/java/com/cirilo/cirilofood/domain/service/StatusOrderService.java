@@ -22,7 +22,8 @@ public class StatusOrderService {
 
         var message = Message.builder()
                 .subject(order.getRestaurant().getName() + " - Order confirmed")
-                .body("The order id <strong>" + order.getCode() + "</strong> confirmed")
+                .variable("order",order)
+                .body("confirmed-order.html")
                 .recipient(order.getClient().getEmail())
                 .build();
 
