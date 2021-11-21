@@ -9,12 +9,11 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0"
        style="max-width: 400px; color: #6F6F6F">
     <#list order.itens as item>
-    <tr>
-        <td style="padding: 10px 0">${item.quantity} x ${item.product.name}</td>
-        <td style="width: 30px">${item.totalPrice?string.currency}</td>
-    </tr>
-</
-#list>
+        <tr>
+            <td style="padding: 10px 0">${item.quantity} x ${item.product.name}</td>
+            <td style="width: 30px">${item.totalPrice?string.currency}</td>
+        </tr>
+    </#list>
 
 <tr>
     <td style="padding: 10px 0">Shipping Fee</td>

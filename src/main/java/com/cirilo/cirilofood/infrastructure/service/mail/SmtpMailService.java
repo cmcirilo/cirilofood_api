@@ -12,7 +12,6 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.internet.MimeMessage;
 
-@Service
 public class SmtpMailService implements MailService {
 
     @Autowired
@@ -43,7 +42,7 @@ public class SmtpMailService implements MailService {
 
     }
 
-    private String processTemplate(Message message) {
+    protected String processTemplate(Message message) {
         try {
             Template template = freeMarkerConfiguration.getTemplate(message.getBody());
 
