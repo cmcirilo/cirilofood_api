@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 public class SmtpMailService implements MailService {
@@ -25,21 +26,25 @@ public class SmtpMailService implements MailService {
 
     @Override public void send(Message message) {
         try {
-            String body = processTemplate(message);
-
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
-            mimeMessageHelper.setFrom(mailProperties.getSender());
-            mimeMessageHelper.setTo(message.getRecipients().toArray(new String[0]));
-            mimeMessageHelper.setSubject(message.getSubject());
-            mimeMessageHelper.setText(body, true);
+            MimeMessage mimeMessage = createMimeMessage(message);
 
             mailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new MailException("Its not possible send mail", e);
         }
+    }
 
+    protected MimeMessage createMimeMessage(Message message) throws MessagingException {
+        String body = processTemplate(message);
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+        mimeMessageHelper.setFrom(mailProperties.getSender());
+        mimeMessageHelper.setTo(message.getRecipients().toArray(new String[0]));
+        mimeMessageHelper.setSubject(message.getSubject());
+        mimeMessageHelper.setText(body, true);
+        return mimeMessage;
     }
 
     protected String processTemplate(Message message) {

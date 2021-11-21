@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.core.mail;
 
 import com.cirilo.cirilofood.domain.service.MailService;
 import com.cirilo.cirilofood.infrastructure.service.mail.FakeMailService;
+import com.cirilo.cirilofood.infrastructure.service.mail.SandboxMailService;
 import com.cirilo.cirilofood.infrastructure.service.mail.SmtpMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,8 @@ public class MailConfig {
                 return new FakeMailService();
             case SMTP:
                 return new SmtpMailService();
+            case SANDBOX:
+                return new SandboxMailService();
             default:
                 return null;
         }
