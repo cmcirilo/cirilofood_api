@@ -22,15 +22,6 @@ public class StatusOrderService {
 
         //to force register event ConfirmedOrderEvent in method confirm
         orderRepository.save(order);
-
-        //        var message = Message.builder()
-        //                .subject(order.getRestaurant().getName() + " - Order confirmed")
-        //                .variable("order",order)
-        //                .body("confirmed-order.html")
-        //                .recipient(order.getClient().getEmail())
-        //                .build();
-        //
-        //        mailService.send(message);
     }
 
     @Transactional
