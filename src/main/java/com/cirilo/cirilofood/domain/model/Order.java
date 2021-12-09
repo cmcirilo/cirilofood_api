@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import com.cirilo.cirilofood.domain.event.CanceledOrderEvent;
 import com.cirilo.cirilofood.domain.event.ConfirmedOrderEvent;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -112,6 +113,8 @@ public class Order extends AbstractAggregateRoot<Order> {
     public void cancel() {
         setStatus(StatusOrder.CANCELED);
         setCancelDate(OffsetDateTime.now());
+
+        registerEvent(new CanceledOrderEvent(this));
     }
 
     private void setStatus(StatusOrder newStatus) {

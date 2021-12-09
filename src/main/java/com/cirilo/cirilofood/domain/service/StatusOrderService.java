@@ -28,6 +28,8 @@ public class StatusOrderService {
     public void cancel(String code) {
         Order order = orderService.find(code);
         order.cancel();
+
+        orderRepository.save(order);
     }
 
     @Transactional
