@@ -1,7 +1,7 @@
 package com.cirilo.cirilofood.domain.service;
 
 import com.cirilo.cirilofood.domain.model.Order;
-import com.cirilo.cirilofood.domain.service.MailService.Message;
+import com.cirilo.cirilofood.domain.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,24 +10,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class StatusOrderService {
 
     @Autowired
-    private MailService mailService;
+    private OrderService orderService;
 
     @Autowired
-    private OrderService orderService;
+    private OrderRepository orderRepository;
 
     @Transactional
     public void confirm(String code) {
         Order order = orderService.find(code);
         order.confirm();
 
-        var message = Message.builder()
-                .subject(order.getRestaurant().getName() + " - Order confirmed")
-                .variable("order",order)
-                .body("confirmed-order.html")
-                .recipient(order.getClient().getEmail())
-                .build();
+        //to force register event ConfirmedOrderEvent in method confirm
+        orderRepository.save(order);
 
-        mailService.send(message);
+        //        var message = Message.builder()
+        //                .subject(order.getRestaurant().getName() + " - Order confirmed")
+        //                .variable("order",order)
+        //                .body("confirmed-order.html")
+        //                .recipient(order.getClient().getEmail())
+        //                .build();
+        //
+        //        mailService.send(message);
     }
 
     @Transactional

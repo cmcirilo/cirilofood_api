@@ -21,18 +21,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import com.cirilo.cirilofood.domain.event.ConfirmedOrderEvent;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "`order`")
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
 
     @EqualsAndHashCode.Include
     @Id
@@ -98,6 +100,8 @@ public class Order {
     public void confirm() {
         setStatus(StatusOrder.CONFIRMED);
         setConfirmationDate(OffsetDateTime.now());
+
+        registerEvent(new ConfirmedOrderEvent(this));
     }
 
     public void delivery() {
