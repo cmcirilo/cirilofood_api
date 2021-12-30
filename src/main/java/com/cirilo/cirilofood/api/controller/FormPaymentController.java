@@ -55,9 +55,14 @@ public class FormPaymentController {
     }
 
     @GetMapping("/{formPaymentId}")
-    public FormPaymentModel find(@PathVariable Long formPaymentId) {
+    public ResponseEntity<FormPaymentModel> find(@PathVariable Long formPaymentId) {
         FormPayment formPayment = formPaymentService.find(formPaymentId);
-        return formPaymentModelAssembler.toModel(formPayment);
+
+        FormPaymentModel formPaymentModel = formPaymentModelAssembler.toModel(formPayment);
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formPaymentModel);
     }
 
     @PostMapping
