@@ -52,9 +52,9 @@ public class FormPaymentController {
         return ResponseEntity.ok()
                 // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
                 // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) //only local cache in browser
-                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //allows public cache like reverse proxy
-//                .cacheControl(CacheControl.noCache()) //cacheable but always validates eTags
-//                .cacheControl(CacheControl.noStore()) //no cacheable
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) // allows public cache like reverse proxy
+                // .cacheControl(CacheControl.noCache()) //cacheable but always validates eTags
+                // .cacheControl(CacheControl.noStore()) //no cacheable
                 .body(formsPaymentModel);
     }
 
