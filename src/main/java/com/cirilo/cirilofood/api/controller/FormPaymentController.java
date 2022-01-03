@@ -47,10 +47,14 @@ public class FormPaymentController {
     public ResponseEntity<List<FormPaymentModel>> list() {
         List<FormPayment> formsPaymment = formPaymentRepository.findAll();
 
-        List<FormPaymentModel> formsPaymentModel =  formPaymentModelAssembler.toCollectioModel(formsPaymment);
+        List<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectioModel(formsPaymment);
 
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) //only local cache in browser
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //allows public cache like reverse proxy
+//                .cacheControl(CacheControl.noCache()) //cacheable but always validates eTags
+//                .cacheControl(CacheControl.noStore()) //no cacheable
                 .body(formsPaymentModel);
     }
 
