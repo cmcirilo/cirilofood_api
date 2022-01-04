@@ -8,6 +8,9 @@ import javax.persistence.Id;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.OffsetDateTime;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -21,5 +24,8 @@ public class FormPayment {
 	
 	@Column(nullable = false)
 	private String description;
+
+	@UpdateTimestamp
+	private OffsetDateTime updatedDate;
 	
 }

@@ -45,9 +45,9 @@ insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, update
 insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, updated_date, active, opened) values (2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp, true, false);
 insert into restaurant (id, name, shipping_fee, cuisine_id, created_date, updated_date, active, opened) values (3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp, true, false);
 
-insert into form_payment (id, description) values (1, 'Credit');
-insert into form_payment (id, description) values (2, 'Debit');
-insert into form_payment (id, description) values (3, 'Cash');
+insert into form_payment (id, description, updated_date) values (1, 'Credit', utc_timestamp);
+insert into form_payment (id, description, updated_date) values (2, 'Debit', utc_timestamp);
+insert into form_payment (id, description, updated_date) values (3, 'Cash', utc_timestamp);
 
 insert into permission (id, name, description) values (1, 'LIST_CUISINES', 'Allow list cuisines');
 insert into permission (id, name, description) values (2, 'UPDATE_CUISINES', 'Allow update cuisines');
