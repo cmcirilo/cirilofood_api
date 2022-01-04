@@ -14,4 +14,7 @@ public interface FormPaymentRepository extends JpaRepository<FormPayment, Long> 
     @Query("select max(updatedDate) from FormPayment")
     OffsetDateTime getUpdatedDate();
 
+    @Query("select updatedDate from FormPayment where id =:formPaymentId")
+    OffsetDateTime getUpdatedDateById(Long formPaymentId);
+
 }

@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.api.controller;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.cirilo.cirilofood.api.assembler.FormPaymentInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.FormPaymentModelAssembler;
@@ -44,7 +47,21 @@ public class FormPaymentController {
     private FormPaymentInputDisassembler formPaymentInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<FormPaymentModel>> list() {
+    public ResponseEntity<List<FormPaymentModel>> list(ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime lastUpdatedDate = formPaymentRepository.getUpdatedDate();
+
+        if (lastUpdatedDate != null) {
+            eTag = String.valueOf(lastUpdatedDate.toEpochSecond());
+        }
+
+        if (request.checkNotModified(eTag)) {
+            return null;
+        }
+
         List<FormPayment> formsPaymment = formPaymentRepository.findAll();
 
         List<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectioModel(formsPaymment);
@@ -52,14 +69,29 @@ public class FormPaymentController {
         return ResponseEntity.ok()
                 // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
                 // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) //only local cache in browser
-                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) // allows public cache like reverse proxy
                 // .cacheControl(CacheControl.noCache()) //cacheable but always validates eTags
                 // .cacheControl(CacheControl.noStore()) //no cacheable
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) // allows public cache like reverse proxy
+                .eTag(eTag)
                 .body(formsPaymentModel);
     }
 
     @GetMapping("/{formPaymentId}")
-    public ResponseEntity<FormPaymentModel> find(@PathVariable Long formPaymentId) {
+    public ResponseEntity<FormPaymentModel> find(@PathVariable Long formPaymentId, ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime updatedDate = formPaymentRepository.getUpdatedDateById(formPaymentId);
+
+        if (updatedDate != null) {
+            eTag = String.valueOf(updatedDate.toEpochSecond());
+        }
+
+        if (request.checkNotModified(eTag)) {
+            return null;
+        }
+
         FormPayment formPayment = formPaymentService.find(formPaymentId);
 
         FormPaymentModel formPaymentModel = formPaymentModelAssembler.toModel(formPayment);
