@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +28,7 @@ import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.repository.CityRepository;
 import com.cirilo.cirilofood.domain.service.CityService;
 
+@Api(tags = "Cities")
 @RestController
 @RequestMapping(value = "/cities")
 public class CityController {
@@ -42,18 +45,21 @@ public class CityController {
     @Autowired
     private CityInputDisassembler cityInputDisassembler;
 
+    @ApiOperation("List Cities")
     @GetMapping
     public List<CityModel> list() {
         List<City> cities = cityRepository.findAll();
         return cityModelAssembler.toCollectionModel(cities);
     }
 
+    @ApiOperation("Find City by Id")
     @GetMapping("/{cityId}")
     public CityModel find(@PathVariable Long cityId) {
         City city = cityService.find(cityId);
         return cityModelAssembler.toModel(city);
     }
 
+    @ApiOperation("Create City")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel create(@RequestBody @Valid CityInput cityInput) {
@@ -67,6 +73,7 @@ public class CityController {
         }
     }
 
+    @ApiOperation("Update City by Id")
     @PutMapping("/{cityId}")
     public CityModel update(@PathVariable Long cityId,
             @RequestBody @Valid CityInput cityInput) {
@@ -82,6 +89,7 @@ public class CityController {
         }
     }
 
+    @ApiOperation("Delete City by Id")
     @DeleteMapping("/{cityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long cityId) {
