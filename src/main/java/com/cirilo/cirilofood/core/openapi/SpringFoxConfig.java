@@ -3,6 +3,8 @@ package com.cirilo.cirilofood.core.openapi;
 import java.util.Arrays;
 import java.util.List;
 
+import com.cirilo.cirilofood.api.model.CityModel;
+import com.cirilo.cirilofood.api.model.CuisineModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -43,6 +45,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)
+//                .ignoredParameterTypes(CityModel.class, CuisineModel.class) // if i want ignore some classes
                 .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
                 .globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages())
