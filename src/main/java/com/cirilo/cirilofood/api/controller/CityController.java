@@ -6,11 +6,19 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.assembler.CityInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.CityModelAssembler;
-import com.cirilo.cirilofood.api.exceptionhandler.Problem;
+import com.cirilo.cirilofood.api.controller.openapi.CityControllerOpenApi;
 import com.cirilo.cirilofood.api.model.CityModel;
 import com.cirilo.cirilofood.api.model.input.CityInput;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
@@ -19,12 +27,9 @@ import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.repository.CityRepository;
 import com.cirilo.cirilofood.domain.service.CityService;
 
-import io.swagger.annotations.*;
-
-@Api(tags = "Cities")
 @RestController
 @RequestMapping(value = "/cities")
-public class CityController {
+public class CityController implements CityControllerOpenApi {
 
     @Autowired
     private CityRepository cityRepository;
@@ -38,31 +43,21 @@ public class CityController {
     @Autowired
     private CityInputDisassembler cityInputDisassembler;
 
-    @ApiOperation("List Cities")
     @GetMapping
     public List<CityModel> list() {
         List<City> cities = cityRepository.findAll();
         return cityModelAssembler.toCollectionModel(cities);
     }
 
-    @ApiOperation("Find City by Id")
-    @ApiResponses({
-        @ApiResponse(code = 400, message = "City Id invalid", response = Problem.class),
-        @ApiResponse(code = 404, message = "City Id not found", response = Problem.class)
-    })
     @GetMapping("/{cityId}")
-    public CityModel find(@ApiParam(value = "City Id", example = "1") @PathVariable Long cityId) {
+    public CityModel find(@PathVariable Long cityId) {
         City city = cityService.find(cityId);
         return cityModelAssembler.toModel(city);
     }
 
-    @ApiOperation("Create City")
-    @ApiResponses({
-        @ApiResponse(code = 201, message = "City created")
-    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CityModel create(@ApiParam(name = "body", value = "Representation of new city") @RequestBody @Valid CityInput cityInput) {
+    public CityModel create(@RequestBody @Valid CityInput cityInput) {
         try {
             City city = cityInputDisassembler.toDomainObject(cityInput);
             city = cityService.save(city);
@@ -73,14 +68,8 @@ public class CityController {
         }
     }
 
-    @ApiOperation("Update City by Id")
-    @ApiResponses({
-        @ApiResponse(code = 200, message = "City updated"),
-        @ApiResponse(code = 404, message = "City Id not found", response = Problem.class)
-    })
     @PutMapping("/{cityId}")
-    public CityModel update(@ApiParam(value = "City Id", example = "1") @PathVariable Long cityId,
-            @ApiParam(name = "body", value = "Representation of updated city") @RequestBody @Valid CityInput cityInput) {
+    public CityModel update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
 
         try {
             City currentCity = cityService.find(cityId);
@@ -93,14 +82,9 @@ public class CityController {
         }
     }
 
-    @ApiOperation("Delete City by Id")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "City deleted"),
-            @ApiResponse(code = 404, message = "City Id not found", response = Problem.class)
-    })
     @DeleteMapping("/{cityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@ApiParam(value = "City Id", example = "1") @PathVariable Long cityId) {
+    public void delete(@PathVariable Long cityId) {
         cityService.delete(cityId);
     }
 
