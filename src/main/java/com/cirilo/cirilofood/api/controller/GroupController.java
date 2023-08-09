@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,19 +14,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.assembler.GroupInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.GroupModelAssembler;
+import com.cirilo.cirilofood.api.controller.openapi.GroupControllerOpenApi;
 import com.cirilo.cirilofood.api.model.GroupModel;
 import com.cirilo.cirilofood.api.model.input.GroupInput;
 import com.cirilo.cirilofood.domain.model.Group;
 import com.cirilo.cirilofood.domain.repository.GroupRepository;
 import com.cirilo.cirilofood.domain.service.GroupService;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/groups")
-public class GroupController {
+public class GroupController implements GroupControllerOpenApi {
 
     @Autowired
     private GroupRepository groupRepository;
