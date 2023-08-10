@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.assembler.GroupInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.GroupModelAssembler;
-import com.cirilo.cirilofood.api.controller.openapi.GroupControllerOpenApi;
+import com.cirilo.cirilofood.api.openapi.controller.GroupControllerOpenApi;
 import com.cirilo.cirilofood.api.model.GroupModel;
 import com.cirilo.cirilofood.api.model.input.GroupInput;
 import com.cirilo.cirilofood.domain.model.Group;

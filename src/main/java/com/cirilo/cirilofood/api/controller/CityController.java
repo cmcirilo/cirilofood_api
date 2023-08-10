@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.assembler.CityInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.CityModelAssembler;
-import com.cirilo.cirilofood.api.controller.openapi.CityControllerOpenApi;
+import com.cirilo.cirilofood.api.openapi.controller.CityControllerOpenApi;
 import com.cirilo.cirilofood.api.model.CityModel;
 import com.cirilo.cirilofood.api.model.input.CityInput;
 import com.cirilo.cirilofood.domain.exception.BusinessException;

@@ -1,4 +1,4 @@
-package com.cirilo.cirilofood.api.controller.openapi.model;
+package com.cirilo.cirilofood.api.openapi.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.cirilo.cirilofood.api.controller.openapi;
+package com.cirilo.cirilofood.api.openapi.controller;
 
 import java.util.List;
 
