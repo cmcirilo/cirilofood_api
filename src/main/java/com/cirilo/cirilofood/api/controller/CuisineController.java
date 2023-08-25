@@ -23,13 +23,14 @@ import com.cirilo.cirilofood.api.assembler.CuisineInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.CuisineModelAssembler;
 import com.cirilo.cirilofood.api.model.CuisineModel;
 import com.cirilo.cirilofood.api.model.input.CuisineInput;
+import com.cirilo.cirilofood.api.openapi.controller.CuisineControllerOpenApi;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.repository.CuisineRepository;
 import com.cirilo.cirilofood.domain.service.CuisineService;
 
 @RestController
 @RequestMapping(value = "/cuisines")
-public class CuisineController {
+public class CuisineController implements CuisineControllerOpenApi {
 
     @Autowired
     private CuisineRepository cuisineRepository;
@@ -48,7 +49,7 @@ public class CuisineController {
         Page<Cuisine> cuisinesPage = cuisineRepository.findAll(pageable);
         List<CuisineModel> cuisinesModel = cuisineModelAssembler.toCollectionModel(cuisinesPage.getContent());
 
-        Page<CuisineModel> cuisinesModelPage= new PageImpl<>(cuisinesModel,pageable,cuisinesPage.getTotalElements());
+        Page<CuisineModel> cuisinesModelPage = new PageImpl<>(cuisinesModel, pageable, cuisinesPage.getTotalElements());
 
         return cuisinesModelPage;
     }

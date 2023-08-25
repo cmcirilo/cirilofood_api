@@ -58,7 +58,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, CuisineModel.class), CuisinesModelOpenApi.class))
                 .apiInfo(apiInfo())
-                .tags(new Tag("Cities", "Manage the cities"), new Tag("Groups", "Manage the groups"));
+                .tags(new Tag("Cities", "Manage the cities"),
+                        new Tag("Groups", "Manage the groups"),
+                        new Tag("Cuisines", "Manage the cuisines"));
 
     }
 
