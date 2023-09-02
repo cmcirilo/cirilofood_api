@@ -24,14 +24,14 @@ public interface GroupControllerOpenApi {
         @ApiResponse(code = 404, message = "Group not found", response = Problem.class)
     })
     GroupModel find(
-            @ApiParam(value = "Group Id", example = "1") Long groupId);
+            @ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
 
     @ApiOperation("Create Group")
     @ApiResponses({
         @ApiResponse(code = 201, message = "Group added"),
     })
     GroupModel create(
-            @ApiParam(name = "body", value = "Representation of new Group") GroupInput groupId);
+            @ApiParam(name = "body", value = "Representation of new Group", required = true) GroupInput groupId);
 
     @ApiOperation("Update group by Id")
     @ApiResponses({
@@ -39,9 +39,9 @@ public interface GroupControllerOpenApi {
         @ApiResponse(code = 404, message = "Group not found", response = Problem.class)
     })
     GroupModel udpate(
-            @ApiParam(value = "Group Id", example = "1") Long grupoId,
+            @ApiParam(value = "Group Id", example = "1", required = true) Long grupoId,
 
-            @ApiParam(name = "body", value = "Representation of group with new data") GroupInput groupId);
+            @ApiParam(name = "body", value = "Representation of group with new data", required = true) GroupInput groupId);
 
     @ApiOperation("Remove group by Id")
     @ApiResponses({
@@ -49,5 +49,5 @@ public interface GroupControllerOpenApi {
         @ApiResponse(code = 404, message = "Group not found", response = Problem.class)
     })
     void delete(
-            @ApiParam(value = "Group Id", example = "1") Long groupId);
+            @ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
 }

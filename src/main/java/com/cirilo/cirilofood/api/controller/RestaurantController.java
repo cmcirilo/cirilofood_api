@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.api.openapi.model.RestaurantBasicModelOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,7 @@ import com.cirilo.cirilofood.api.assembler.RestaurantModelAssembler;
 import com.cirilo.cirilofood.api.model.RestaurantModel;
 import com.cirilo.cirilofood.api.model.input.RestaurantInput;
 import com.cirilo.cirilofood.api.model.view.RestaurantView;
+import com.cirilo.cirilofood.api.openapi.controller.RestaurantControllerOpenApi;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.CityNotFoundException;
 import com.cirilo.cirilofood.domain.exception.CuisineNotFoundException;
@@ -31,13 +32,9 @@ import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 import com.fasterxml.jackson.annotation.JsonView;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
-@RequestMapping(value = "/restaurants")
-public class RestaurantController {
+@RequestMapping(path = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantController implements RestaurantControllerOpenApi {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -69,11 +66,6 @@ public class RestaurantController {
     // return restaurantsWrapper;
     // }
 
-    @ApiOperation(value = "List restaurants", response = RestaurantBasicModelOpenApi.class)
-    @ApiImplicitParams({
-        @ApiImplicitParam(value = "Name of projection orders", allowableValues = "only-name",
-                name = "projection", paramType = "query", type = "string")
-    })
     @JsonView(RestaurantView.Resume.class)
     @GetMapping()
     public List<RestaurantModel> list() {
@@ -85,7 +77,6 @@ public class RestaurantController {
         return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
     }
 
-    @ApiOperation(value = "List restaurants", hidden = true)
     @JsonView(RestaurantView.OnlyName.class)
     @GetMapping(params = "projection=only-name")
     public List<RestaurantModel> listOnlyName() {

@@ -24,26 +24,26 @@ public interface CuisineControllerOpenApi {
         @ApiResponse(code = 400, message = "Cuisine Id invalid", response = Problem.class),
         @ApiResponse(code = 404, message = "Cuisine not found", response = Problem.class)
     })
-    CuisineModel find(@ApiParam(value = "Cuisine Id", example = "1") Long cuisineId);
+    CuisineModel find(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineId);
 
     @ApiOperation("Create cuisine")
     @ApiResponses({
         @ApiResponse(code = 201, message = "Cuisine created"),
     })
-    CuisineModel create(@ApiParam(name = "body", value = "Cuisine's representation") CuisineInput cuisineInput);
+    CuisineModel create(@ApiParam(name = "body", value = "Cuisine's representation", required = true) CuisineInput cuisineInput);
 
     @ApiOperation("Update cuisine by Id")
     @ApiResponses({
         @ApiResponse(code = 200, message = "Cuisine Updated"),
         @ApiResponse(code = 404, message = "Cuisine not found", response = Problem.class)
     })
-    CuisineModel atualizar(@ApiParam(value = "Cuisine Id", example = "1") Long cuisineId,
-            @ApiParam(name = "body", value = "Representation of new cuisine with with new data") CuisineInput cuisineInput);
+    CuisineModel atualizar(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineId,
+            @ApiParam(name = "body", value = "Representation of new cuisine with with new data", required = true) CuisineInput cuisineInput);
 
     @ApiOperation("Remove cuisine by Id")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Cuisine removed"),
         @ApiResponse(code = 404, message = "Cuisine not found", response = Problem.class)
     })
-    void remover(@ApiParam(value = "Cuisine Id", example = "1") Long cuisineid);
+    void remover(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineid);
 }

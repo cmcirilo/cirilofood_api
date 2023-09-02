@@ -37,12 +37,12 @@ public interface OrderControllerOpenApi {
     @ApiResponses({
         @ApiResponse(code = 404, message = "Order not found", response = Problem.class)
     })
-    OrderModel search(@ApiParam(value = "Order Id", example = "1") String code);
+    OrderModel search(@ApiParam(value = "Order Id", example = "1", required = true) String code);
 
     @ApiOperation("Create order")
     @ApiResponses({
         @ApiResponse(code = 201, message = "Order created"),
     })
-    OrderModel create(@ApiParam(name = "body", value = "Representation of new order") OrderInput orderInput);
+    OrderModel create(@ApiParam(name = "body", value = "Representation of new order", required = true) OrderInput orderInput);
 
 }

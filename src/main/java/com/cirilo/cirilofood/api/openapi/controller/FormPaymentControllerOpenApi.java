@@ -26,27 +26,27 @@ public interface FormPaymentControllerOpenApi {
         @ApiResponse(code = 400, message = "Form Payment Id invalid", response = Problem.class),
         @ApiResponse(code = 404, message = "Form Payment not found", response = Problem.class)
     })
-    ResponseEntity<FormPaymentModel> find(@ApiParam(value = "Form Payment Id", example = "1") Long formPaymentId, ServletWebRequest request);
+    ResponseEntity<FormPaymentModel> find(@ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId, ServletWebRequest request);
 
     @ApiOperation("Create Form Payment")
     @ApiResponses({
         @ApiResponse(code = 201, message = "Form Payment created"),
     })
-    FormPaymentModel create(@ApiParam(name = "body", value = "Representation of new Form Payment") FormPaymentInput formPaymentInput);
+    FormPaymentModel create(@ApiParam(name = "body", value = "Representation of new Form Payment", required = true) FormPaymentInput formPaymentInput);
 
     @ApiOperation("Update Form Payment by Id")
     @ApiResponses({
         @ApiResponse(code = 200, message = "Form Payment updated"),
         @ApiResponse(code = 404, message = "Form Payment not found", response = Problem.class)
     })
-    FormPaymentModel udpate(@ApiParam(value = "Form Payment Id", example = "1") Long formPaymentId,
-            @ApiParam(name = "corpo", value = "Representation of new Form Payment with new data") FormPaymentInput formPaymentInput);
+    FormPaymentModel udpate(@ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId,
+            @ApiParam(name = "corpo", value = "Representation of new Form Payment with new data", required = true) FormPaymentInput formPaymentInput);
 
     @ApiOperation("Remove Form Payment by Id")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Form Payment removed"),
         @ApiResponse(code = 404, message = "Form Payment not found", response = Problem.class)
     })
-    void delete(@ApiParam(value = "Form Payment Id", example = "1") Long formPaymentId);
+    void delete(@ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId);
 
 }
