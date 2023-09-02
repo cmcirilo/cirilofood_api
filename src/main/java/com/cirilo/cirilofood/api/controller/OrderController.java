@@ -4,10 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.core.data.PageableTranslator;
-import com.cirilo.cirilofood.domain.filter.OrderFilter;
-import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,12 +24,19 @@ import com.cirilo.cirilofood.api.assembler.OrderResumeModelAssembler;
 import com.cirilo.cirilofood.api.model.OrderModel;
 import com.cirilo.cirilofood.api.model.OrderResumeModel;
 import com.cirilo.cirilofood.api.model.input.OrderInput;
+import com.cirilo.cirilofood.core.data.PageableTranslator;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
+import com.cirilo.cirilofood.domain.filter.OrderFilter;
 import com.cirilo.cirilofood.domain.model.Order;
 import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.repository.OrderRepository;
 import com.cirilo.cirilofood.domain.service.OrderService;
+import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
+import com.google.common.collect.ImmutableMap;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -54,34 +57,38 @@ public class OrderController {
     @Autowired
     private OrderInputDisassembler orderInputDisassembler;
 
-//    @GetMapping
-//    public MappingJacksonValue list(@RequestParam(required = false) String fields) {
-//        List<Order> allOrders = orderRepository.findAll();
-//        List<OrderResumeModel> ordersModel = orderResumeModelAssembler.toCollectionModel(allOrders);
-//
-//        MappingJacksonValue orderWrapper = new MappingJacksonValue(ordersModel);
-//
-//        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-//        filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
-//
-//        if (StringUtils.isNotBlank(fields)) {
-//            filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
-//        }
-//
-//        orderWrapper.setFilters(filterProvider);
-//        return orderWrapper;
-//    }
+    // @GetMapping
+    // public MappingJacksonValue list(@RequestParam(required = false) String fields) {
+    // List<Order> allOrders = orderRepository.findAll();
+    // List<OrderResumeModel> ordersModel = orderResumeModelAssembler.toCollectionModel(allOrders);
+    //
+    // MappingJacksonValue orderWrapper = new MappingJacksonValue(ordersModel);
+    //
+    // SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+    // filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
+    //
+    // if (StringUtils.isNotBlank(fields)) {
+    // filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(fields.split(",")));
+    // }
+    //
+    // orderWrapper.setFilters(filterProvider);
+    // return orderWrapper;
+    // }
 
-//     @GetMapping
-//     public List<OrderResumeModel> find(OrderFilter orderFilter) {
-//     List<Order> allOrders = orderRepository.findAll(OrderSpecifications.usingFilter(orderFilter));
-//
-//     return orderResumeModelAssembler.toCollectionModel(allOrders);
-//     }
+    // @GetMapping
+    // public List<OrderResumeModel> find(OrderFilter orderFilter) {
+    // List<Order> allOrders = orderRepository.findAll(OrderSpecifications.usingFilter(orderFilter));
+    //
+    // return orderResumeModelAssembler.toCollectionModel(allOrders);
+    // }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(value = "Properties names to filter response separated by comma",
+                name = "fields", paramType = "qyery", type = "string")
+    })
     @GetMapping
     public Page<OrderResumeModel> find(OrderFilter orderFilter,
-                                       @PageableDefault(size = 10) Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
 
         pageable = translatePageable(pageable);
 
@@ -97,8 +104,12 @@ public class OrderController {
         return ordersResumeModelPage;
     }
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(value = "Properties names to filter response separated by comma",
+                name = "fields", paramType = "qyery", type = "string")
+    })
     @GetMapping("/{code}")
-    public OrderModel buscar(@PathVariable String code) {
+    public OrderModel search(@PathVariable String code) {
         Order order = orderService.find(code);
 
         return orderModelAssembler.toModel(order);
@@ -121,14 +132,13 @@ public class OrderController {
         }
     }
 
-    private Pageable translatePageable(Pageable pageable){
+    private Pageable translatePageable(Pageable pageable) {
         var mapping = ImmutableMap.of(
-                "code","code",
-                "restaurant.name","restaurant.name",
-                "clientName","client.name",
-                "totalValue","totalValue"
-        );
+                "code", "code",
+                "restaurant.name", "restaurant.name",
+                "clientName", "client.name",
+                "totalValue", "totalValue");
 
-        return PageableTranslator.translate(pageable,mapping);
+        return PageableTranslator.translate(pageable, mapping);
     }
 }
