@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import com.cirilo.cirilofood.api.assembler.OrderResumeModelAssembler;
 import com.cirilo.cirilofood.api.model.OrderModel;
 import com.cirilo.cirilofood.api.model.OrderResumeModel;
 import com.cirilo.cirilofood.api.model.input.OrderInput;
+import com.cirilo.cirilofood.api.openapi.controller.OrderControllerOpenApi;
 import com.cirilo.cirilofood.core.data.PageableTranslator;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
@@ -35,12 +37,9 @@ import com.cirilo.cirilofood.domain.service.OrderService;
 import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecifications;
 import com.google.common.collect.ImmutableMap;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-
 @RestController
-@RequestMapping(value = "/orders")
-public class OrderController {
+@RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+public class OrderController implements OrderControllerOpenApi {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -82,10 +81,6 @@ public class OrderController {
     // return orderResumeModelAssembler.toCollectionModel(allOrders);
     // }
 
-    @ApiImplicitParams({
-        @ApiImplicitParam(value = "Properties names to filter response separated by comma",
-                name = "fields", paramType = "qyery", type = "string")
-    })
     @GetMapping
     public Page<OrderResumeModel> find(OrderFilter orderFilter,
             @PageableDefault(size = 10) Pageable pageable) {
@@ -104,10 +99,6 @@ public class OrderController {
         return ordersResumeModelPage;
     }
 
-    @ApiImplicitParams({
-        @ApiImplicitParam(value = "Properties names to filter response separated by comma",
-                name = "fields", paramType = "qyery", type = "string")
-    })
     @GetMapping("/{code}")
     public OrderModel search(@PathVariable String code) {
         Order order = orderService.find(code);

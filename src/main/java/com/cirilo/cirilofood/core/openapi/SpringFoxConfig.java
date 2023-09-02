@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.cirilo.cirilofood.api.model.OrderResumeModel;
+import com.cirilo.cirilofood.api.openapi.model.OrderResumeModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -67,11 +69,15 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, CuisineModel.class), CuisinesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                typeResolver.resolve(Page.class, OrderResumeModel.class),
+                OrderResumeModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),
                         new Tag("Cuisines", "Manage the cuisines"),
-                        new Tag("Forms Payment", "Manage the forms payment"));
+                        new Tag("Forms Payment", "Manage the forms payment"),
+                        new Tag("Orders", "Manage the orders"));
 
     }
 
