@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +21,14 @@ import com.cirilo.cirilofood.api.assembler.StateInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.StateModelAssembler;
 import com.cirilo.cirilofood.api.model.StateModel;
 import com.cirilo.cirilofood.api.model.input.StateInput;
+import com.cirilo.cirilofood.api.openapi.controller.StateControllerOpenApi;
 import com.cirilo.cirilofood.domain.model.State;
 import com.cirilo.cirilofood.domain.repository.StateRepository;
 import com.cirilo.cirilofood.domain.service.StateService;
 
 @RestController
-@RequestMapping("/states")
-public class StateController {
+@RequestMapping(path = "/states", produces = MediaType.APPLICATION_JSON_VALUE)
+public class StateController implements StateControllerOpenApi {
 
     @Autowired
     private StateRepository stateRepository;
