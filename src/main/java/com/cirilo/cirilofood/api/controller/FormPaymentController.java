@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +27,14 @@ import com.cirilo.cirilofood.api.assembler.FormPaymentInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.FormPaymentModelAssembler;
 import com.cirilo.cirilofood.api.model.FormPaymentModel;
 import com.cirilo.cirilofood.api.model.input.FormPaymentInput;
+import com.cirilo.cirilofood.api.openapi.controller.FormPaymentControllerOpenApi;
 import com.cirilo.cirilofood.domain.model.FormPayment;
 import com.cirilo.cirilofood.domain.repository.FormPaymentRepository;
 import com.cirilo.cirilofood.domain.service.FormPaymentService;
 
 @RestController
-@RequestMapping("/forms-payment")
-public class FormPaymentController {
+@RequestMapping(path = "/forms-payment", produces = MediaType.APPLICATION_JSON_VALUE)
+public class FormPaymentController implements FormPaymentControllerOpenApi {
 
     @Autowired
     private FormPaymentRepository formPaymentRepository;
