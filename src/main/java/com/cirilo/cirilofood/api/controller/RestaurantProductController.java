@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.cirilo.cirilofood.api.assembler.ProductInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.ProductModelAssembler;
 import com.cirilo.cirilofood.api.model.ProductModel;
 import com.cirilo.cirilofood.api.model.input.ProductInput;
+import com.cirilo.cirilofood.api.openapi.controller.RestaurantProductControllerOpenApi;
 import com.cirilo.cirilofood.domain.model.Product;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.repository.ProductRepository;
@@ -27,8 +29,8 @@ import com.cirilo.cirilofood.domain.service.ProductService;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/products")
-public class RestaurantProductController {
+@RequestMapping(path = "/restaurants/{restaurantId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantProductController implements RestaurantProductControllerOpenApi {
 
     @Autowired
     private ProductRepository productRepository;
@@ -69,7 +71,7 @@ public class RestaurantProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductModel create(@PathVariable Long restaurantId,
-                               @RequestBody @Valid ProductInput productInput) {
+            @RequestBody @Valid ProductInput productInput) {
         Restaurant restaurant = restaurantService.find(restaurantId);
 
         Product product = productInputDisassembler.toDomainObject(productInput);
@@ -82,7 +84,7 @@ public class RestaurantProductController {
 
     @PutMapping("/{productId}")
     public ProductModel update(@PathVariable Long restaurantId, @PathVariable Long productId,
-                               @RequestBody @Valid ProductInput productInput) {
+            @RequestBody @Valid ProductInput productInput) {
         Product currentProduct = productService.find(restaurantId, productId);
 
         productInputDisassembler.copyToDomainObject(productInput, currentProduct);
