@@ -1,16 +1,20 @@
 package com.cirilo.cirilofood.core.openapi;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import com.cirilo.cirilofood.api.model.OrderResumeModel;
-import com.cirilo.cirilofood.api.openapi.model.OrderResumeModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -19,13 +23,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.CuisineModel;
+import com.cirilo.cirilofood.api.model.OrderResumeModel;
 import com.cirilo.cirilofood.api.openapi.model.CuisinesModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.OrderResumeModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -59,19 +64,20 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
-//                .globalOperationParameters(Collections.singletonList(new ParameterBuilder()
-//                        .name("fields")
-//                        .description("Properties names to filter response separated by comma")
-//                        .parameterType("query")
-//                        .modelRef(new ModelRef("string"))
-//                        .build()))
+                // .globalOperationParameters(Collections.singletonList(new ParameterBuilder()
+                // .name("fields")
+                // .description("Properties names to filter response separated by comma")
+                // .parameterType("query")
+                // .modelRef(new ModelRef("string"))
+                // .build()))
                 .additionalModels(typeResolver.resolve(Problem.class))
-                .ignoredParameterTypes(ServletWebRequest.class)
+                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
+                        Resource.class, File.class, InputStream.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, CuisineModel.class), CuisinesModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
-                typeResolver.resolve(Page.class, OrderResumeModel.class),
-                OrderResumeModelOpenApi.class))
+                        typeResolver.resolve(Page.class, OrderResumeModel.class),
+                        OrderResumeModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),
