@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.api.controller;
 
 import java.util.List;
 
+import com.cirilo.cirilofood.api.openapi.controller.StatisticsControllerOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ import com.cirilo.cirilofood.domain.service.SaleReportService;
 
 @RestController
 @RequestMapping(path = "/statistics")
-public class StatisticsController {
+public class StatisticsController implements StatisticsControllerOpenApi {
 
     @Autowired
     private SaleQueryService saleQueryService;
