@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +22,14 @@ import com.cirilo.cirilofood.api.model.UserModel;
 import com.cirilo.cirilofood.api.model.input.PasswordInput;
 import com.cirilo.cirilofood.api.model.input.UserInput;
 import com.cirilo.cirilofood.api.model.input.UserWithPasswordInput;
+import com.cirilo.cirilofood.api.openapi.controller.UserControllerOpenApi;
 import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.repository.UserRepository;
 import com.cirilo.cirilofood.domain.service.UserService;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UserController implements UserControllerOpenApi {
 
     @Autowired
     private UserRepository userRepository;
@@ -66,7 +68,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public UserModel update(@PathVariable Long userId,
-                            @RequestBody @Valid UserInput userInput) {
+            @RequestBody @Valid UserInput userInput) {
         User currentUser = userService.find(userId);
         userInputDisassembler.copyToDomainObject(userInput, currentUser);
         currentUser = userService.save(currentUser);
