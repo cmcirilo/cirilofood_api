@@ -1,4 +1,4 @@
-package com.cirilo.cirilofood.core.openapi;
+package com.cirilo.cirilofood.core.springfox;
 
 import java.io.File;
 import java.io.InputStream;
@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
