@@ -17,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.ResourceUriHelper;
 import com.cirilo.cirilofood.api.assembler.CityInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.CityModelAssembler;
-import com.cirilo.cirilofood.api.openapi.controller.CityControllerOpenApi;
 import com.cirilo.cirilofood.api.model.CityModel;
 import com.cirilo.cirilofood.api.model.input.CityInput;
+import com.cirilo.cirilofood.api.openapi.controller.CityControllerOpenApi;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
 import com.cirilo.cirilofood.domain.model.City;
@@ -63,7 +64,11 @@ public class CityController implements CityControllerOpenApi {
             City city = cityInputDisassembler.toDomainObject(cityInput);
             city = cityService.save(city);
 
-            return cityModelAssembler.toModel(city);
+            CityModel cityModel = cityModelAssembler.toModel(city);
+
+            ResourceUriHelper.addUriInResponseHeader(cityModel.getId());
+
+            return cityModel;
         } catch (EntityNotFoundException e) {
             throw new BusinessException(e.getMessage());
         }
