@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,7 +56,14 @@ public class CityController implements CityControllerOpenApi {
     @GetMapping("/{cityId}")
     public CityModel find(@PathVariable Long cityId) {
         City city = cityService.find(cityId);
-        return cityModelAssembler.toModel(city);
+
+        CityModel cityModel = cityModelAssembler.toModel(city);
+        cityModel.add(new Link("http://localhost:8080/cities/1", IanaLinkRelations.SELF));
+        cityModel.add(new Link("http://localhost:8080/cities/", IanaLinkRelations.COLLECTION));
+
+        cityModel.getState().add(new Link("http://localhost:8080/states/1"));
+
+        return cityModel;
     }
 
     @PostMapping
