@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.api.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
@@ -58,15 +59,15 @@ public class CityController implements CityControllerOpenApi {
         City city = cityService.find(cityId);
 
         CityModel cityModel = cityModelAssembler.toModel(city);
-        cityModel.add(linkTo(CityController.class).slash(cityModel.getId()).withSelfRel());
-        cityModel.add(linkTo(CityController.class).slash(cityModel.getId()).withRel("cities"));
 
-        cityModel.getState().add(linkTo(StateController.class).slash(cityModel.getState().getId()).withSelfRel());
+        cityModel.add(linkTo(methodOn(CityController.class).find(cityModel.getId())).withSelfRel());
+        cityModel.add(linkTo(methodOn(CityController.class).list()).withRel("cities"));
+        cityModel.getState().add(linkTo(methodOn(StateController.class).find(cityModel.getState().getId())).withSelfRel());
 
-        // cityModel.add(new Link("http://localhost:8080/cities/1", IanaLinkRelations.SELF));
-        // cityModel.add(new Link("http://localhost:8080/cities/", IanaLinkRelations.COLLECTION));
+        // cityModel.add(linkTo(CityController.class).slash(cityModel.getId()).withSelfRel());
+        // cityModel.add(linkTo(CityController.class).slash(cityModel.getId()).withRel("cities"));
         //
-        // cityModel.getState().add(new Link("http://localhost:8080/states/1"));
+        // cityModel.getState().add(linkTo(StateController.class).slash(cityModel.getState().getId()).withSelfRel());
 
         return cityModel;
     }
