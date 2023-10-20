@@ -8,6 +8,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,9 +51,20 @@ public class CityController implements CityControllerOpenApi {
     private CityInputDisassembler cityInputDisassembler;
 
     @GetMapping
-    public List<CityModel> list() {
+    public CollectionModel<CityModel> list() {
         List<City> cities = cityRepository.findAll();
-        return cityModelAssembler.toCollectionModel(cities);
+        List<CityModel> citiesModel = cityModelAssembler.toCollectionModel(cities);
+
+        citiesModel.forEach(cityModel -> {
+            cityModel.add(linkTo(methodOn(CityController.class).find(cityModel.getId())).withSelfRel());
+            cityModel.add(linkTo(methodOn(CityController.class).list()).withRel("cities"));
+            cityModel.getState().add(linkTo(methodOn(StateController.class).find(cityModel.getState().getId())).withSelfRel());
+        });
+
+        CollectionModel<CityModel> citiesCollectionModel = new CollectionModel<>(citiesModel);
+        citiesCollectionModel.add(linkTo(CityController.class).withSelfRel());
+
+        return citiesCollectionModel;
     }
 
     @GetMapping("/{cityId}")

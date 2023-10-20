@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.CityModel;
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
 public interface CityControllerOpenApi {
 
     @ApiOperation("List Cities")
-    List<CityModel> list();
+    CollectionModel<CityModel> list();
 
     @ApiOperation("Find City by Id")
     @ApiResponses({
