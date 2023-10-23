@@ -1,15 +1,11 @@
 package com.cirilo.cirilofood.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.core.Relation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,36 +49,13 @@ public class CityController implements CityControllerOpenApi {
     @GetMapping
     public CollectionModel<CityModel> list() {
         List<City> cities = cityRepository.findAll();
-        List<CityModel> citiesModel = cityModelAssembler.toCollectionModel(cities);
-
-        citiesModel.forEach(cityModel -> {
-            cityModel.add(linkTo(methodOn(CityController.class).find(cityModel.getId())).withSelfRel());
-            cityModel.add(linkTo(methodOn(CityController.class).list()).withRel("cities"));
-            cityModel.getState().add(linkTo(methodOn(StateController.class).find(cityModel.getState().getId())).withSelfRel());
-        });
-
-        CollectionModel<CityModel> citiesCollectionModel = new CollectionModel<>(citiesModel);
-        citiesCollectionModel.add(linkTo(CityController.class).withSelfRel());
-
-        return citiesCollectionModel;
+        return cityModelAssembler.toCollectionModel(cities);
     }
 
     @GetMapping("/{cityId}")
     public CityModel find(@PathVariable Long cityId) {
         City city = cityService.find(cityId);
-
-        CityModel cityModel = cityModelAssembler.toModel(city);
-
-        cityModel.add(linkTo(methodOn(CityController.class).find(cityModel.getId())).withSelfRel());
-        cityModel.add(linkTo(methodOn(CityController.class).list()).withRel("cities"));
-        cityModel.getState().add(linkTo(methodOn(StateController.class).find(cityModel.getState().getId())).withSelfRel());
-
-        // cityModel.add(linkTo(CityController.class).slash(cityModel.getId()).withSelfRel());
-        // cityModel.add(linkTo(CityController.class).slash(cityModel.getId()).withRel("cities"));
-        //
-        // cityModel.getState().add(linkTo(StateController.class).slash(cityModel.getState().getId()).withSelfRel());
-
-        return cityModel;
+        return cityModelAssembler.toModel(city);
     }
 
     @PostMapping
