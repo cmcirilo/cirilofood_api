@@ -13,12 +13,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Users")
 public interface UserControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UserModel> list();
+    CollectionModel<UserModel> list();
 
     @ApiOperation("Find user by Id")
     @ApiResponses({

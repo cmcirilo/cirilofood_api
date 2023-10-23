@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class UserController implements UserControllerOpenApi {
     private UserInputDisassembler userInputDisassembler;
 
     @GetMapping
-    public List<UserModel> list() {
+    public CollectionModel<UserModel> list() {
         List<User> allUsers = userRepository.findAll();
 
         return userModelAssembler.toCollectionModel(allUsers);
