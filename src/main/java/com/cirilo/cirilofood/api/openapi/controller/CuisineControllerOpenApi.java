@@ -1,7 +1,7 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.CuisineModel;
@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiResponses;
 public interface CuisineControllerOpenApi {
 
     @ApiOperation("List cuisines on pagination")
-    Page<CuisineModel> list(Pageable pageable);
+    PagedModel<CuisineModel> list(Pageable pageable);
 
     @ApiOperation("Get cuisine by Id")
     @ApiResponses({

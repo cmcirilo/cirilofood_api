@@ -1,25 +1,37 @@
 package com.cirilo.cirilofood.api.assembler;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.cirilo.cirilofood.api.model.CuisineModel;
-import com.cirilo.cirilofood.domain.model.Cuisine;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import com.cirilo.cirilofood.api.model.CityModel;
-import com.cirilo.cirilofood.domain.model.City;
+import com.cirilo.cirilofood.api.controller.CuisineController;
+import com.cirilo.cirilofood.api.model.CuisineModel;
+import com.cirilo.cirilofood.domain.model.Cuisine;
 
 @Component
-public class CuisineModelAssembler { // class to convert entity to DTO
+public class CuisineModelAssembler extends RepresentationModelAssemblerSupport<Cuisine, CuisineModel> { // class to convert entity to DTO
 
     @Autowired
     private ModelMapper modelMapper;
 
+    public CuisineModelAssembler() {
+        super(CuisineController.class, CuisineModel.class);
+    }
+
+    @Override
     public CuisineModel toModel(Cuisine cuisine) {
-        return modelMapper.map(cuisine, CuisineModel.class);
+        CuisineModel cuisineModel = createModelWithId(cuisine.getId(), cuisine);
+        modelMapper.map(cuisine, cuisineModel);
+
+        cuisineModel.add(linkTo(CuisineController.class).withRel("cuisines"));
+
+        return cuisineModel;
     }
 
     public List<CuisineModel> toCollectionModel(List<Cuisine> cuisines) {

@@ -1,13 +1,12 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,14 +43,13 @@ public class CuisineController implements CuisineControllerOpenApi {
     @Autowired
     private CuisineInputDisassembler cuisineInputDisassembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Cuisine> pagedResourcesAssembler;
+
     @GetMapping
-    public Page<CuisineModel> list(Pageable pageable) {
+    public PagedModel<CuisineModel> list(Pageable pageable) {
         Page<Cuisine> cuisinesPage = cuisineRepository.findAll(pageable);
-        List<CuisineModel> cuisinesModel = cuisineModelAssembler.toCollectionModel(cuisinesPage.getContent());
-
-        Page<CuisineModel> cuisinesModelPage = new PageImpl<>(cuisinesModel, pageable, cuisinesPage.getTotalElements());
-
-        return cuisinesModelPage;
+        return pagedResourcesAssembler.toModel(cuisinesPage, cuisineModelAssembler);
     }
 
     @GetMapping("/{cuisineId}")
