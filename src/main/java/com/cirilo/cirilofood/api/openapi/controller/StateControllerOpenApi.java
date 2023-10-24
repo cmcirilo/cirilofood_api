@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.StateModel;
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
 public interface StateControllerOpenApi {
 
     @ApiOperation("List states")
-    List<StateModel> list();
+    CollectionModel<StateModel> list();
 
     @ApiOperation("Find state by Id")
     @ApiResponses({

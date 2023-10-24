@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,7 +44,7 @@ public class StateController implements StateControllerOpenApi {
     private StateInputDisassembler stateInputDisassembler;
 
     @GetMapping
-    public List<StateModel> list() {
+    public CollectionModel<StateModel> list() {
         List<State> states = stateRepository.findAll();
         return stateModelAssembler.toCollectionModel(states);
     }
