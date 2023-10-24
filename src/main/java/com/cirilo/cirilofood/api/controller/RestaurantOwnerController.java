@@ -1,6 +1,7 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -34,7 +35,9 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
 
-        return userModelAssembler.toCollectionModel(restaurant.getOwners());
+        return userModelAssembler.toCollectionModel(restaurant.getOwners())
+                .removeLinks()
+                .add(linkTo(methodOn(RestaurantOwnerController.class).list(restaurantId)).withSelfRel());
     }
 
     @DeleteMapping("/{userId}")
