@@ -103,6 +103,7 @@ public class OrderController implements OrderControllerOpenApi {
         Order order = orderService.find(code);
 
         return orderModelAssembler.toModel(order);
+
     }
 
     @PostMapping
