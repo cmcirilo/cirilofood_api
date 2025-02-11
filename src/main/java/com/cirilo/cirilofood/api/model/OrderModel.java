@@ -7,10 +7,13 @@ import java.util.List;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
+@Relation(collectionRelation = "orders")
 @Setter
 @Getter
-public class OrderModel {
+public class OrderModel extends RepresentationModel<OrderModel> {
 
     @ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
     private String code;

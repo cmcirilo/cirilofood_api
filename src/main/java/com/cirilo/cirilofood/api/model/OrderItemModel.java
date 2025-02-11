@@ -5,10 +5,11 @@ import java.math.BigDecimal;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Setter
-public class OrderItemModel {
+public class OrderItemModel extends RepresentationModel<OrderItemModel> {
 
     @ApiModelProperty(example = "1")
     private Long productId;

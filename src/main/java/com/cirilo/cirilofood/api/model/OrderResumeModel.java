@@ -6,11 +6,14 @@ import java.time.OffsetDateTime;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 // @JsonFilter("orderFilter")
+@Relation(collectionRelation = "orders")
 @Setter
 @Getter
-public class OrderResumeModel {
+public class OrderResumeModel extends RepresentationModel<OrderResumeModel> {
 
     @ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
     private String code;

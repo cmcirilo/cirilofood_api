@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.hateoas.PagedModel;
 
 @Api(tags = "Orders")
 public interface OrderControllerOpenApi {
@@ -26,8 +27,8 @@ public interface OrderControllerOpenApi {
                 name = "fields", paramType = "qyery", type = "string")
     })
     @ApiOperation("Searh orders")
-    Page<OrderResumeModel> find(OrderFilter orderFilter,
-            @PageableDefault(size = 10) Pageable pageable);
+    PagedModel<OrderResumeModel> find(OrderFilter orderFilter,
+                                      @PageableDefault(size = 10) Pageable pageable);
 
     @ApiImplicitParams({
         @ApiImplicitParam(value = "Properties names to filter response separated by comma",
