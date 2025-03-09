@@ -1,12 +1,9 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -28,6 +25,7 @@ import com.cirilo.cirilofood.api.model.OrderModel;
 import com.cirilo.cirilofood.api.model.OrderResumeModel;
 import com.cirilo.cirilofood.api.model.input.OrderInput;
 import com.cirilo.cirilofood.api.openapi.controller.OrderControllerOpenApi;
+import com.cirilo.cirilofood.core.data.PageWrapper;
 import com.cirilo.cirilofood.core.data.PageableTranslator;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
@@ -88,12 +86,13 @@ public class OrderController implements OrderControllerOpenApi {
 
     @GetMapping
     public PagedModel<OrderResumeModel> find(OrderFilter orderFilter,
-                                             @PageableDefault(size = 10) Pageable pageable) {
-
-        pageable = translatePageable(pageable);
+            @PageableDefault(size = 10) Pageable pageable) {
+        Pageable pageableTranslated = translatePageable(pageable);
 
         Page<Order> ordersPage = orderRepository.findAll(
-                OrderSpecifications.usingFilter(orderFilter), pageable);
+                OrderSpecifications.usingFilter(orderFilter), pageableTranslated);
+
+        ordersPage = new PageWrapper<>(ordersPage, pageable);
 
         return pagedResourcesAssembler.toModel(ordersPage, orderResumeModelAssembler);
     }
@@ -126,7 +125,7 @@ public class OrderController implements OrderControllerOpenApi {
     private Pageable translatePageable(Pageable pageable) {
         var mapping = ImmutableMap.of(
                 "code", "code",
-                "restaurant.name", "restaurant.name",
+                "restaurantName", "restaurant.name",
                 "clientName", "client.name",
                 "totalValue", "totalValue");
 
