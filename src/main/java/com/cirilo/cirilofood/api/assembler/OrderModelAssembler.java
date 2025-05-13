@@ -1,7 +1,19 @@
 package com.cirilo.cirilofood.api.assembler;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.stereotype.Component;
 
 import com.cirilo.cirilofood.api.controller.CityController;
 import com.cirilo.cirilofood.api.controller.FormPaymentController;
@@ -9,16 +21,8 @@ import com.cirilo.cirilofood.api.controller.OrderController;
 import com.cirilo.cirilofood.api.controller.RestaurantController;
 import com.cirilo.cirilofood.api.controller.RestaurantProductController;
 import com.cirilo.cirilofood.api.controller.UserController;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
-import org.springframework.stereotype.Component;
-
 import com.cirilo.cirilofood.api.model.OrderModel;
 import com.cirilo.cirilofood.domain.model.Order;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Order, OrderModel> {
@@ -35,7 +39,15 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getId(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(linkTo(OrderController.class).withRel("orders"));
+        TemplateVariables pageVariables = new TemplateVariables(
+                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
+
+        String ordersUrl = linkTo(OrderController.class).toUri().toString();
+
+        orderModel.add(new Link(UriTemplate.of(ordersUrl, pageVariables), "orders"));
+        // orderModel.add(linkTo(OrderController.class).withRel("orders"));
 
         orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
                 .find(order.getRestaurant().getId())).withSelfRel());
@@ -59,6 +71,7 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
 
         return orderModel;
     }
+
     public List<OrderModel> toCollectionModel(List<Order> orders) {
         return orders.stream()
                 .map(this::toModel)
