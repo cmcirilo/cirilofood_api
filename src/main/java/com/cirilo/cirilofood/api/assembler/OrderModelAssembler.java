@@ -44,9 +44,15 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
                 new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
 
+        TemplateVariables filterVariables = new TemplateVariables(
+                new TemplateVariable("clientId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("restaurantId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("initialCreatedDate", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("finalCreatedDate", TemplateVariable.VariableType.REQUEST_PARAM));
+
         String ordersUrl = linkTo(OrderController.class).toUri().toString();
 
-        orderModel.add(new Link(UriTemplate.of(ordersUrl, pageVariables), "orders"));
+        orderModel.add(new Link(UriTemplate.of(ordersUrl, pageVariables.concat(filterVariables)), "orders"));
         // orderModel.add(linkTo(OrderController.class).withRel("orders"));
 
         orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
