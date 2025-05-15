@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
@@ -30,6 +31,9 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
     public OrderModelAssembler() {
         super(OrderController.class, OrderModel.class);
     }
@@ -39,21 +43,7 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getId(), order);
         modelMapper.map(order, orderModel);
 
-        TemplateVariables pageVariables = new TemplateVariables(
-                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        TemplateVariables filterVariables = new TemplateVariables(
-                new TemplateVariable("clientId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("restaurantId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("initialCreatedDate", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("finalCreatedDate", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        String ordersUrl = linkTo(OrderController.class).toUri().toString();
-
-        orderModel.add(new Link(UriTemplate.of(ordersUrl, pageVariables.concat(filterVariables)), "orders"));
-        // orderModel.add(linkTo(OrderController.class).withRel("orders"));
+        orderModel.add(ciriloLinks.linkToOrders());
 
         orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
                 .find(order.getRestaurant().getId())).withSelfRel());
