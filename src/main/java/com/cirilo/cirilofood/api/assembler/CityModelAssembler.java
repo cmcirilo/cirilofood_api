@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api.assembler;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -20,6 +21,9 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
     public CityModelAssembler() {
         super(CityController.class, CityModel.class);
     }
@@ -29,8 +33,8 @@ public class CityModelAssembler extends RepresentationModelAssemblerSupport<City
         CityModel cityModel = createModelWithId(city.getId(), city);
         modelMapper.map(city, cityModel);
 
-        cityModel.add(linkTo(methodOn(CityController.class).list()).withRel("cities"));
-        cityModel.getState().add(linkTo(methodOn(StateController.class).find(cityModel.getState().getId())).withSelfRel());
+        cityModel.add(ciriloLinks.linkToCities("cities"));
+        cityModel.getState().add(ciriloLinks.linkToState(cityModel.getState().getId()));
 
         return cityModel;
     }

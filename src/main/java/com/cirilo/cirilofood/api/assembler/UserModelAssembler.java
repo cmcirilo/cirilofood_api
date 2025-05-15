@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api.assembler;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -20,6 +21,9 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
     public UserModelAssembler() {
         super(UserController.class, UserModel.class);
     }
@@ -28,10 +32,9 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
         UserModel userModel = createModelWithId(user.getId(), user);
         modelMapper.map(user, userModel);
 
-        userModel.add(linkTo(UserController.class).withRel("users"));
+        userModel.add(ciriloLinks.linkToUsers("users"));
 
-        userModel.add(linkTo(methodOn(UserGroupController.class)
-                .list(user.getId())).withRel("user-groups"));
+        userModel.add(ciriloLinks.linkToGroupsUser(user.getId(),"user-groups"));
 
         return userModel;
     }

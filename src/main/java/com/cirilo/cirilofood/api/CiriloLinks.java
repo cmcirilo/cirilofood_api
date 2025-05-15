@@ -1,7 +1,18 @@
 package com.cirilo.cirilofood.api;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.cirilo.cirilofood.api.controller.CityController;
+import com.cirilo.cirilofood.api.controller.CuisineController;
+import com.cirilo.cirilofood.api.controller.FormPaymentController;
+import com.cirilo.cirilofood.api.controller.RestaurantController;
+import com.cirilo.cirilofood.api.controller.RestaurantOwnerController;
+import com.cirilo.cirilofood.api.controller.RestaurantProductController;
+import com.cirilo.cirilofood.api.controller.StateController;
+import com.cirilo.cirilofood.api.controller.UserController;
+import com.cirilo.cirilofood.api.controller.UserGroupController;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
 import org.springframework.hateoas.TemplateVariables;
@@ -30,5 +41,110 @@ public class CiriloLinks {
 
         return new Link(UriTemplate.of(ordersUrl, PAGINATION_VARIABLES.concat(filterVariables)), "orders");
         // orderModel.add(linkTo(OrderController.class).withRel("orders"));
+    }
+
+    public Link linkToRestaurant(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .find(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurant(Long restaurantId) {
+        return linkToRestaurant(restaurantId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToUser(Long userId, String rel) {
+        return linkTo(methodOn(UserController.class)
+                .find(userId)).withRel(rel);
+    }
+
+    public Link linkToUser(Long userId) {
+        return linkToUser(userId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToUsers(String rel) {
+        return linkTo(UserController.class).withRel(rel);
+    }
+
+    public Link linkToUsers() {
+        return linkToUsers(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGroupsUser(Long userId, String rel) {
+        return linkTo(methodOn(UserGroupController.class)
+                .list(userId)).withRel(rel);
+    }
+
+    public Link linkToGroupsUser(Long userId) {
+        return linkToGroupsUser(userId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToOwnersRestaurant(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantOwnerController.class)
+                .list(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToOwnersRestaurant(Long restaurantId) {
+        return linkToOwnersRestaurant(restaurantId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToFormPayment(Long formPaymentId, String rel) {
+        return linkTo(methodOn(FormPaymentController.class)
+                .find(formPaymentId, null)).withRel(rel);
+    }
+
+    public Link linkToFormPayment(Long formPaymentId) {
+        return linkToFormPayment(formPaymentId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToCity(Long cityId, String rel) {
+        return linkTo(methodOn(CityController.class)
+                .find(cityId)).withRel(rel);
+    }
+
+    public Link linkToCity(Long cityId) {
+        return linkToCity(cityId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToCities(String rel) {
+        return linkTo(CityController.class).withRel(rel);
+    }
+
+    public Link linkToCities() {
+        return linkToCities(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToState(Long stateId, String rel) {
+        return linkTo(methodOn(StateController.class)
+                .find(stateId)).withRel(rel);
+    }
+
+    public Link linkToState(Long stateId) {
+        return linkToState(stateId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToStates(String rel) {
+        return linkTo(StateController.class).withRel(rel);
+    }
+
+    public Link linkToStates() {
+        return linkToStates(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToProduct(Long restaurantId, Long productId, String rel) {
+        return linkTo(methodOn(RestaurantProductController.class)
+                .find(restaurantId, productId))
+                .withRel(rel);
+    }
+
+    public Link linkToProduct(Long restaurantId, Long productId) {
+        return linkToProduct(restaurantId, productId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToCuisines(String rel) {
+        return linkTo(CuisineController.class).withRel(rel);
+    }
+
+    public Link linkToCuisines() {
+        return linkToCuisines(IanaLinkRelations.SELF.value());
     }
 }
