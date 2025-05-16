@@ -3,15 +3,6 @@ package com.cirilo.cirilofood.api;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.cirilo.cirilofood.api.controller.CityController;
-import com.cirilo.cirilofood.api.controller.CuisineController;
-import com.cirilo.cirilofood.api.controller.FormPaymentController;
-import com.cirilo.cirilofood.api.controller.RestaurantController;
-import com.cirilo.cirilofood.api.controller.RestaurantOwnerController;
-import com.cirilo.cirilofood.api.controller.RestaurantProductController;
-import com.cirilo.cirilofood.api.controller.StateController;
-import com.cirilo.cirilofood.api.controller.UserController;
-import com.cirilo.cirilofood.api.controller.UserGroupController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
@@ -19,7 +10,17 @@ import org.springframework.hateoas.TemplateVariables;
 import org.springframework.hateoas.UriTemplate;
 import org.springframework.stereotype.Component;
 
+import com.cirilo.cirilofood.api.controller.CityController;
+import com.cirilo.cirilofood.api.controller.CuisineController;
+import com.cirilo.cirilofood.api.controller.FormPaymentController;
 import com.cirilo.cirilofood.api.controller.OrderController;
+import com.cirilo.cirilofood.api.controller.RestaurantController;
+import com.cirilo.cirilofood.api.controller.RestaurantOwnerController;
+import com.cirilo.cirilofood.api.controller.RestaurantProductController;
+import com.cirilo.cirilofood.api.controller.StateController;
+import com.cirilo.cirilofood.api.controller.StatusOrderController;
+import com.cirilo.cirilofood.api.controller.UserController;
+import com.cirilo.cirilofood.api.controller.UserGroupController;
 
 @Component
 public class CiriloLinks {
@@ -41,6 +42,21 @@ public class CiriloLinks {
 
         return new Link(UriTemplate.of(ordersUrl, PAGINATION_VARIABLES.concat(filterVariables)), "orders");
         // orderModel.add(linkTo(OrderController.class).withRel("orders"));
+    }
+
+    public Link linkToStatusConfirmationOrder(String orderId, String rel) {
+        return linkTo(methodOn(StatusOrderController.class)
+                .confirm(orderId)).withRel(rel);
+    }
+
+    public Link linkToStatusDeliveryOrder(String orderId, String rel) {
+        return linkTo(methodOn(StatusOrderController.class)
+                .delivery(orderId)).withRel(rel);
+    }
+
+    public Link linkToStatusCancelattionOrder(String orderId, String rel) {
+        return linkTo(methodOn(StatusOrderController.class)
+                .cancel(orderId)).withRel(rel);
     }
 
     public Link linkToRestaurant(Long restaurantId, String rel) {

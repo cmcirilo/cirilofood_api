@@ -30,10 +30,16 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
 
     @Override
     public OrderModel toModel(Order order) {
-        OrderModel orderModel = createModelWithId(order.getId(), order);
+        OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
         orderModel.add(ciriloLinks.linkToOrders());
+
+        orderModel.add(ciriloLinks.linkToStatusConfirmationOrder(order.getCode(), "confirmation"));
+
+        orderModel.add(ciriloLinks.linkToStatusDeliveryOrder(order.getCode(), "delivery"));
+
+        orderModel.add(ciriloLinks.linkToStatusCancelattionOrder(order.getCode(), "cancelattion"));
 
         orderModel.getRestaurant().add(
                 ciriloLinks.linkToRestaurant(order.getRestaurant().getId()));
