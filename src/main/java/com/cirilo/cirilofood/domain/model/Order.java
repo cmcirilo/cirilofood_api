@@ -21,15 +21,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import com.cirilo.cirilofood.domain.event.CanceledOrderEvent;
 import com.cirilo.cirilofood.domain.event.ConfirmedOrderEvent;
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -118,7 +118,7 @@ public class Order extends AbstractAggregateRoot<Order> {
     }
 
     private void setStatus(StatusOrder newStatus) {
-        if (getStatus().shoudNotUpdateTo(newStatus)) {
+        if (getStatus().shouldNotUpdateTo(newStatus)) {
             throw new BusinessException(
                     String.format("Status do order %s não pode ser alterado de %s para %s",
                             getCode(), getStatus().getDescription(),
@@ -128,8 +128,21 @@ public class Order extends AbstractAggregateRoot<Order> {
         this.status = newStatus;
     }
 
-    @PrePersist //executed before persist
+    @PrePersist // executed before persist
     private void generateCode() {
         setCode(UUID.randomUUID().toString());
     }
+
+    public boolean canItBeConfirmed() {
+        return getStatus().shouldUpdateTo(StatusOrder.CONFIRMED);
+    }
+
+    public boolean canItBeDelivered() {
+        return getStatus().shouldUpdateTo(StatusOrder.DELIVERED);
+    }
+
+    public boolean canItBeCanceled() {
+        return getStatus().shouldUpdateTo(StatusOrder.CANCELED);
+    }
+
 }

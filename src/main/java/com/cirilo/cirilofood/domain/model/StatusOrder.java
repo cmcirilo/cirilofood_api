@@ -23,7 +23,11 @@ public enum StatusOrder {
         return this.description;
     }
 
-    public boolean shoudNotUpdateTo(StatusOrder newStatus) {
+    public boolean shouldNotUpdateTo(StatusOrder newStatus) {
         return !newStatus.previousStatus.contains(this);
+    }
+
+    public boolean shouldUpdateTo(StatusOrder newStatus) {
+        return !shouldNotUpdateTo(newStatus);
     }
 }
