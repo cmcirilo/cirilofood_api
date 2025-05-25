@@ -40,6 +40,6 @@ public class StateModelAssembler extends RepresentationModelAssemblerSupport<Sta
     @Override
     public CollectionModel<StateModel> toCollectionModel(Iterable<? extends State> entities) {
         return super.toCollectionModel(entities)
-                .add(linkTo(StateController.class).withSelfRel());
+                .add(ciriloLinks.linkToStates());
     }
 }

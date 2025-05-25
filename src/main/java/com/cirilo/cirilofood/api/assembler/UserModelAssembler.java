@@ -42,7 +42,7 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
     @Override
     public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
         return super.toCollectionModel(entities)
-                .add(linkTo(UserController.class).withSelfRel());
+                .add(ciriloLinks.linkToUsers());
     }
 
 }

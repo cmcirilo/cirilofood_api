@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.cirilo.cirilofood.api.controller.RestaurantFormPaymentController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
@@ -162,5 +163,27 @@ public class CiriloLinks {
 
     public Link linkToCuisines() {
         return linkToCuisines(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestaurants(String rel) {
+        return linkTo(RestaurantController.class).withRel(rel);
+    }
+
+    public Link linkToRestaurants() {
+        return linkToRestaurants(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestaurantFormsPagament(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantFormPaymentController.class)
+                .list(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToCuisine(Long cuisineId, String rel) {
+        return linkTo(methodOn(CuisineController.class)
+                .find(cuisineId)).withRel(rel);
+    }
+
+    public Link linkToCuisine(Long cuisineId) {
+        return linkToCuisine(cuisineId, IanaLinkRelations.SELF.value());
     }
 }

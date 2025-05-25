@@ -5,8 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.assembler.RestaurantBasicModelAssembler;
 import com.cirilo.cirilofood.api.assembler.RestaurantInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.RestaurantModelAssembler;
+import com.cirilo.cirilofood.api.assembler.RestaurantOnlyNameModelAssembler;
+import com.cirilo.cirilofood.api.model.RestaurantBasicModel;
 import com.cirilo.cirilofood.api.model.RestaurantModel;
+import com.cirilo.cirilofood.api.model.RestaurantOnlyNameModel;
 import com.cirilo.cirilofood.api.model.input.RestaurantInput;
-import com.cirilo.cirilofood.api.model.view.RestaurantView;
 import com.cirilo.cirilofood.api.openapi.controller.RestaurantControllerOpenApi;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.CityNotFoundException;
@@ -30,7 +35,6 @@ import com.cirilo.cirilofood.domain.exception.RestaurantNotFoundException;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
-import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping(path = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,6 +51,12 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 
     @Autowired
     private RestaurantInputDisassembler restaurantInputDisassembler;
+
+    @Autowired
+    private RestaurantBasicModelAssembler restaurantBasicModelAssembler;
+
+    @Autowired
+    private RestaurantOnlyNameModelAssembler restaurantOnlyNameModelAssembler;
 
     // @GetMapping
     // public MappingJacksonValue list(@RequestParam(required = false) String projection) {
@@ -66,21 +76,23 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     // return restaurantsWrapper;
     // }
 
-    @JsonView(RestaurantView.Resume.class)
+    // @JsonView(RestaurantView.Resume.class)
     @GetMapping()
-    public List<RestaurantModel> list() {
-        return listComplete();
+    public CollectionModel<RestaurantBasicModel> list() {
+        return restaurantBasicModelAssembler
+                .toCollectionModel(restaurantRepository.findAll());
     }
 
     @GetMapping(params = "projection=complete")
-    public List<RestaurantModel> listComplete() {
+    public CollectionModel<RestaurantModel> listComplete() {
         return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
     }
 
-    @JsonView(RestaurantView.OnlyName.class)
+    // @JsonView(RestaurantView.OnlyName.class)
     @GetMapping(params = "projection=only-name")
-    public List<RestaurantModel> listOnlyName() {
-        return listComplete();
+    public CollectionModel<RestaurantOnlyNameModel> listOnlyName() {
+        return restaurantOnlyNameModelAssembler
+                .toCollectionModel(restaurantRepository.findAll());
     }
 
     @GetMapping("/{restaurantId}")
@@ -121,26 +133,34 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 
     @PutMapping("/{restaurantId}/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void activate(@PathVariable Long restaurantId) {
+    public ResponseEntity<Void> activate(@PathVariable Long restaurantId) {
         restaurantService.activate(restaurantId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{restaurantId}/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desactivate(@PathVariable Long restaurantId) {
+    public ResponseEntity<Void> desactivate(@PathVariable Long restaurantId) {
         restaurantService.desactivate(restaurantId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{restaurantId}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void open(@PathVariable Long restaurantId) {
+    public ResponseEntity<Void> open(@PathVariable Long restaurantId) {
         restaurantService.open(restaurantId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{restaurantId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void close(@PathVariable Long restaurantId) {
+    public ResponseEntity<Void> close(@PathVariable Long restaurantId) {
         restaurantService.close(restaurantId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/activations")

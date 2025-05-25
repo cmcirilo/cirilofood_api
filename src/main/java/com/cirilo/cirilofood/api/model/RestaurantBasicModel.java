@@ -1,18 +1,18 @@
-package com.cirilo.cirilofood.api.openapi.model;
+package com.cirilo.cirilofood.api.model;
 
 import java.math.BigDecimal;
 
-import com.cirilo.cirilofood.api.model.CuisineModel;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel("RestaurantBasicModel")
-@Getter
+@Relation(collectionRelation = "restaurants")
 @Setter
-public class RestaurantBasicModelOpenApi {
+@Getter
+public class RestaurantBasicModel extends RepresentationModel<RestaurantBasicModel> {
 
     @ApiModelProperty(example = "1")
     private Long id;
@@ -24,4 +24,5 @@ public class RestaurantBasicModelOpenApi {
     private BigDecimal shippingFee;
 
     private CuisineModel cuisine;
+
 }
