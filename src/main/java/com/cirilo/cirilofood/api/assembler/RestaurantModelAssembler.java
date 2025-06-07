@@ -42,6 +42,26 @@ public class RestaurantModelAssembler extends RepresentationModelAssemblerSuppor
         restaurantModel.add(ciriloLinks.linkToOwnersRestaurant(restaurant.getId(),
                 "owners"));
 
+        if (restaurant.activateAllowed()) {
+            restaurantModel.add(
+                    ciriloLinks.linkToRestaurantActivate(restaurant.getId(), "activate"));
+        }
+
+        if (restaurant.desactivateAllowed()) {
+            restaurantModel.add(
+                    ciriloLinks.linkToRestaurantDesactivate(restaurant.getId(), "desactivate"));
+        }
+
+        if (restaurant.openAllowed()) {
+            restaurantModel.add(
+                    ciriloLinks.linkToRestaurantOpen(restaurant.getId(), "open"));
+        }
+
+        if (restaurant.closeAllowed()) {
+            restaurantModel.add(
+                    ciriloLinks.linkToRestaurantClose(restaurant.getId(), "close"));
+        }
+
         return restaurantModel;
     }
 

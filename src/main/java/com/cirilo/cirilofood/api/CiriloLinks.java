@@ -186,4 +186,24 @@ public class CiriloLinks {
     public Link linkToCuisine(Long cuisineId) {
         return linkToCuisine(cuisineId, IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToRestaurantOpen(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .open(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantClose(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .close(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantDesactivate(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .desactivate(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantActivate(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantController.class)
+                .activate(restaurantId)).withRel(rel);
+    }
 }
