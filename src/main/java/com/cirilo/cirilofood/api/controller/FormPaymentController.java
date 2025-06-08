@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,7 +50,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
     private FormPaymentInputDisassembler formPaymentInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<FormPaymentModel>> list(ServletWebRequest request) {
+    public ResponseEntity<CollectionModel<FormPaymentModel>> list(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
         String eTag = "0";
@@ -66,7 +67,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
 
         List<FormPayment> formsPaymment = formPaymentRepository.findAll();
 
-        List<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectioModel(formsPaymment);
+        CollectionModel<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectionModel(formsPaymment);
 
         return ResponseEntity.ok()
                 // .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))

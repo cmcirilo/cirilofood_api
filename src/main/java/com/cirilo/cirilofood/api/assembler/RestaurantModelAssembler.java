@@ -36,7 +36,7 @@ public class RestaurantModelAssembler extends RepresentationModelAssemblerSuppor
         restaurantModel.getAddress().getCity().add(
                 ciriloLinks.linkToCuisine(restaurant.getAddress().getCity().getId()));
 
-        restaurantModel.add(ciriloLinks.linkToRestaurantFormsPagament(restaurant.getId(),
+        restaurantModel.add(ciriloLinks.linkToRestaurantFormsPayment(restaurant.getId(),
                 "forms-payment"));
 
         restaurantModel.add(ciriloLinks.linkToOwnersRestaurant(restaurant.getId(),

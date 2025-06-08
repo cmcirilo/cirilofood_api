@@ -177,7 +177,7 @@ public class CiriloLinks {
         return linkToRestaurants(IanaLinkRelations.SELF.value());
     }
 
-    public Link linkToRestaurantFormsPagament(Long restaurantId, String rel) {
+    public Link linkToRestaurantFormsPayment(Long restaurantId, String rel) {
         return linkTo(methodOn(RestaurantFormPaymentController.class)
                 .list(restaurantId)).withRel(rel);
     }
@@ -209,5 +209,17 @@ public class CiriloLinks {
     public Link linkToRestaurantActivate(Long restaurantId, String rel) {
         return linkTo(methodOn(RestaurantController.class)
                 .activate(restaurantId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantFormsPayment(Long restaurantId) {
+        return linkToRestaurantFormsPayment(restaurantId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToFormsPayment(String rel) {
+        return linkTo(FormPaymentController.class).withRel(rel);
+    }
+
+    public Link linkToFormsPayment() {
+        return linkToFormsPayment(IanaLinkRelations.SELF.value());
     }
 }

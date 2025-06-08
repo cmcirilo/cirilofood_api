@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.api.openapi.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -19,7 +20,7 @@ import io.swagger.annotations.ApiResponses;
 public interface FormPaymentControllerOpenApi {
 
     @ApiOperation("List Forms Payment")
-    ResponseEntity<List<FormPaymentModel>> list(ServletWebRequest request);
+    ResponseEntity<CollectionModel<FormPaymentModel>> list(ServletWebRequest request);
 
     @ApiOperation("Find Form Payment by Id")
     @ApiResponses({
