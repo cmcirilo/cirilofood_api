@@ -3,7 +3,6 @@ package com.cirilo.cirilofood.api;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.cirilo.cirilofood.api.controller.RestaurantFormPaymentController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
@@ -16,6 +15,7 @@ import com.cirilo.cirilofood.api.controller.CuisineController;
 import com.cirilo.cirilofood.api.controller.FormPaymentController;
 import com.cirilo.cirilofood.api.controller.OrderController;
 import com.cirilo.cirilofood.api.controller.RestaurantController;
+import com.cirilo.cirilofood.api.controller.RestaurantFormPaymentController;
 import com.cirilo.cirilofood.api.controller.RestaurantOwnerController;
 import com.cirilo.cirilofood.api.controller.RestaurantProductController;
 import com.cirilo.cirilofood.api.controller.StateController;
@@ -31,7 +31,10 @@ public class CiriloLinks {
             new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
             new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
 
-    public Link linkToOrders() {
+    public static final TemplateVariables PROJECTION_VARIABLES = new TemplateVariables(
+            new TemplateVariable("projection", TemplateVariable.VariableType.REQUEST_PARAM));
+
+    public Link linkToOrders(String rel) {
 
         TemplateVariables filterVariables = new TemplateVariables(
                 new TemplateVariable("clientId", TemplateVariable.VariableType.REQUEST_PARAM),
@@ -41,7 +44,7 @@ public class CiriloLinks {
 
         String ordersUrl = linkTo(OrderController.class).toUri().toString();
 
-        return new Link(UriTemplate.of(ordersUrl, PAGINATION_VARIABLES.concat(filterVariables)), "orders");
+        return new Link(UriTemplate.of(ordersUrl, PAGINATION_VARIABLES.concat(filterVariables)), rel);
         // orderModel.add(linkTo(OrderController.class).withRel("orders"));
     }
 
@@ -166,7 +169,8 @@ public class CiriloLinks {
     }
 
     public Link linkToRestaurants(String rel) {
-        return linkTo(RestaurantController.class).withRel(rel);
+        String restaurantsUrl = linkTo(RestaurantController.class).toUri().toString();
+        return new Link(UriTemplate.of(restaurantsUrl, PROJECTION_VARIABLES), rel);
     }
 
     public Link linkToRestaurants() {

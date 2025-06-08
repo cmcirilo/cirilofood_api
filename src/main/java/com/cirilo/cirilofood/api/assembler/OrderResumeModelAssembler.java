@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api.assembler;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import com.cirilo.cirilofood.api.controller.OrderController;
 import com.cirilo.cirilofood.api.controller.RestaurantController;
 import com.cirilo.cirilofood.api.controller.UserController;
@@ -23,6 +24,10 @@ public class OrderResumeModelAssembler extends RepresentationModelAssemblerSuppo
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
+
     public OrderResumeModelAssembler() {
         super(OrderController.class, OrderResumeModel.class);
     }
@@ -32,7 +37,7 @@ public class OrderResumeModelAssembler extends RepresentationModelAssemblerSuppo
         OrderResumeModel orderModel = createModelWithId(order.getId(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(linkTo(OrderController.class).withRel("orders"));
+        orderModel.add(ciriloLinks.linkToOrders("orders"));
 
         orderModel.getRestaurant().add(linkTo(methodOn(RestaurantController.class)
                 .find(order.getRestaurant().getId())).withSelfRel());

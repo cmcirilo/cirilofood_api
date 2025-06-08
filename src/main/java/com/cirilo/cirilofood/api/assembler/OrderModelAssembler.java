@@ -31,7 +31,7 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(ciriloLinks.linkToOrders());
+        orderModel.add(ciriloLinks.linkToOrders("orders"));
 
         if (order.canItBeConfirmed()) {
             orderModel.add(ciriloLinks.linkToStatusConfirmationOrder(order.getCode(), "confirmation"));
