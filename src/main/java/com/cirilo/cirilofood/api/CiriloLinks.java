@@ -220,6 +220,11 @@ public class CiriloLinks {
                 .disassociateFormPayment(restaurantId, formPaymentId)).withRel(rel);
     }
 
+    public Link linkToRestaurantFormPaymentAssociate(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantFormPaymentController.class)
+                .associateFormPayment(restaurantId, null)).withRel(rel);
+    }
+
     public Link linkToFormsPayment(String rel) {
         return linkTo(FormPaymentController.class).withRel(rel);
     }

@@ -39,7 +39,8 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
 
         CollectionModel<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectionModel(restaurant.getFormsPayment())
                 .removeLinks()
-                .add(ciriloLinks.linkToRestaurantFormsPayment(restaurantId));
+                .add(ciriloLinks.linkToRestaurantFormsPayment(restaurantId))
+                .add(ciriloLinks.linkToRestaurantFormPaymentAssociate(restaurantId, "associate"));
 
         formsPaymentModel.getContent().forEach(formPaymentModel -> {
             formPaymentModel.add(ciriloLinks.linkToRestaurantFormPaymentDisassociate(restaurantId, formPaymentModel.getId(), "disassociate"));
@@ -58,8 +59,10 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
 
     @PutMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {
+    public ResponseEntity<Void> associateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {
         restaurantService.associateFormPayment(restaurantId, formPaymentId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

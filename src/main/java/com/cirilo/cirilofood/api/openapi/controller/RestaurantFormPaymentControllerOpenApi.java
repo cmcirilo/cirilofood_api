@@ -35,6 +35,6 @@ public interface RestaurantFormPaymentControllerOpenApi {
         @ApiResponse(code = 404, message = "Restaurant or form payment not found",
                 response = Problem.class)
     })
-    void associateFormPayment(@ApiParam(value = "Restaurant Id", example = "1", required = true) Long restaurantId,
+    ResponseEntity<Void> associateFormPayment(@ApiParam(value = "Restaurant Id", example = "1", required = true) Long restaurantId,
             @ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId);
 }
