@@ -1,7 +1,5 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
-
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.FormPaymentModel;
 
@@ -11,6 +9,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Restaurants")
 public interface RestaurantFormPaymentControllerOpenApi {
@@ -27,7 +26,7 @@ public interface RestaurantFormPaymentControllerOpenApi {
         @ApiResponse(code = 404, message = "Restaurant or form payment not found",
                 response = Problem.class)
     })
-    void disassociateFormPayment(@ApiParam(value = "Restaurant Id", example = "1", required = true) Long restaurantId,
+    ResponseEntity<Void> disassociateFormPayment(@ApiParam(value = "Restaurant Id", example = "1", required = true) Long restaurantId,
             @ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId);
 
     @ApiOperation("Associate restaurant with form payment")

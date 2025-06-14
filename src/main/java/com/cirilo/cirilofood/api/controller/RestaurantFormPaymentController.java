@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,15 +37,23 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
     public CollectionModel<FormPaymentModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
 
-        return formPaymentModelAssembler.toCollectionModel(restaurant.getFormsPayment())
+        CollectionModel<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectionModel(restaurant.getFormsPayment())
                 .removeLinks()
                 .add(ciriloLinks.linkToRestaurantFormsPayment(restaurantId));
+
+        formsPaymentModel.getContent().forEach(formPaymentModel -> {
+            formPaymentModel.add(ciriloLinks.linkToRestaurantFormPaymentDisassociate(restaurantId, formPaymentModel.getId(), "disassociate"));
+        });
+
+        return formsPaymentModel;
     }
 
     @DeleteMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void disassociateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {
+    public ResponseEntity<Void> disassociateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {
         restaurantService.disassociateFormPayment(restaurantId, formPaymentId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{formPaymentId}")

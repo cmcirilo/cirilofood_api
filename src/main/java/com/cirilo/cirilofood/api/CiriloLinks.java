@@ -215,6 +215,11 @@ public class CiriloLinks {
         return linkToRestaurantFormsPayment(restaurantId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToRestaurantFormPaymentDisassociate(Long restaurantId, Long formPaymentId, String rel) {
+        return linkTo(methodOn(RestaurantFormPaymentController.class)
+                .disassociateFormPayment(restaurantId, formPaymentId)).withRel(rel);
+    }
+
     public Link linkToFormsPayment(String rel) {
         return linkTo(FormPaymentController.class).withRel(rel);
     }
