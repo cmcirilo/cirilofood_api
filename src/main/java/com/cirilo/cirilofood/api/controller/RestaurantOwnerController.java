@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,21 +40,34 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
 
-        return userModelAssembler.toCollectionModel(restaurant.getOwners())
+        CollectionModel<UserModel> usersModel = userModelAssembler
+                .toCollectionModel(restaurant.getOwners())
                 .removeLinks()
-                .add(ciriloLinks.linkToOwnersRestaurant(restaurantId));
+                .add(ciriloLinks.linkToOwnersRestaurant(restaurantId))
+                .add(ciriloLinks.linkToRestaurantOwnerAssociate(restaurantId, "associate"));
+
+        usersModel.getContent().stream().forEach(userModel -> {
+            userModel.add(ciriloLinks.linkToRestaurantOwnerDisassociate(
+                    restaurantId, userModel.getId(), "disassociate"));
+        });
+
+        return usersModel;
 
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
         restaurantService.disassociateOwner(restaurantId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
+    public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
         restaurantService.associateOwner(restaurantId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 }

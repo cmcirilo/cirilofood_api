@@ -232,4 +232,16 @@ public class CiriloLinks {
     public Link linkToFormsPayment() {
         return linkToFormsPayment(IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToRestaurantOwnerDisassociate(
+            Long restaurantId, Long userId, String rel) {
+
+        return linkTo(methodOn(RestaurantOwnerController.class)
+                .disassociate(restaurantId, userId)).withRel(rel);
+    }
+
+    public Link linkToRestaurantOwnerAssociate(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantOwnerController.class)
+                .associate(restaurantId, null)).withRel(rel);
+    }
 }
