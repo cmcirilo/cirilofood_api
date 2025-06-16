@@ -32,6 +32,9 @@ public class ProductModelAssembler extends RepresentationModelAssemblerSupport<P
 
         productModel.add(ciriloLinks.linkToProducts(product.getRestaurant().getId(), "products"));
 
+        productModel.add(ciriloLinks.linkToProductPhoto(
+                product.getRestaurant().getId(), product.getId(), "photo"));
+
         return productModel;
     }
 
