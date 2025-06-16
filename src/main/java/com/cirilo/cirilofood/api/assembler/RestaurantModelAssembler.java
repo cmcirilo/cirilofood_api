@@ -24,23 +24,13 @@ public class RestaurantModelAssembler extends RepresentationModelAssemblerSuppor
         super(RestaurantController.class, RestaurantModel.class);
     }
 
+    @Override
     public RestaurantModel toModel(Restaurant restaurant) {
+
         RestaurantModel restaurantModel = createModelWithId(restaurant.getId(), restaurant);
         modelMapper.map(restaurant, restaurantModel);
 
         restaurantModel.add(ciriloLinks.linkToRestaurants("restaurants"));
-
-        restaurantModel.getCuisine().add(
-                ciriloLinks.linkToCuisine(restaurant.getCuisine().getId()));
-
-        restaurantModel.getAddress().getCity().add(
-                ciriloLinks.linkToCuisine(restaurant.getAddress().getCity().getId()));
-
-        restaurantModel.add(ciriloLinks.linkToRestaurantFormsPayment(restaurant.getId(),
-                "forms-payment"));
-
-        restaurantModel.add(ciriloLinks.linkToOwnersRestaurant(restaurant.getId(),
-                "owners"));
 
         if (restaurant.activateAllowed()) {
             restaurantModel.add(
@@ -61,6 +51,23 @@ public class RestaurantModelAssembler extends RepresentationModelAssemblerSuppor
             restaurantModel.add(
                     ciriloLinks.linkToRestaurantClose(restaurant.getId(), "close"));
         }
+
+        restaurantModel.add(ciriloLinks.linkToProducts(restaurant.getId(), "products"));
+
+        restaurantModel.getCuisine().add(
+                ciriloLinks.linkToCuisine(restaurant.getCuisine().getId()));
+
+        if (restaurantModel.getAddress() != null
+                && restaurantModel.getAddress().getCity() != null) {
+            restaurantModel.getAddress().getCity().add(
+                    ciriloLinks.linkToCity(restaurant.getAddress().getCity().getId()));
+        }
+
+        restaurantModel.add(ciriloLinks.linkToRestaurantFormsPayment(restaurant.getId(),
+                "forms-payment"));
+
+        restaurantModel.add(ciriloLinks.linkToOwnersRestaurant(restaurant.getId(),
+                "owners"));
 
         return restaurantModel;
     }

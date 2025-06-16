@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import com.cirilo.cirilofood.api.assembler.ProductInputDisassembler;
 import com.cirilo.cirilofood.api.assembler.ProductModelAssembler;
 import com.cirilo.cirilofood.api.model.ProductModel;
@@ -47,20 +49,26 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private ProductInputDisassembler productInputDisassembler;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
+    @Override
     @GetMapping
-    public List<ProductModel> list(@PathVariable Long restaurantId, @RequestParam(required = false) boolean includeInactives) {
+    public CollectionModel<ProductModel> list(@PathVariable Long restaurantId, @RequestParam(required = false) Boolean includeInactives) {
         Restaurant restaurant = restaurantService.find(restaurantId);
         List<Product> allProducts;
 
-        if (includeInactives) {
+        if (includeInactives != null && includeInactives) {
             allProducts = productRepository.findAllByRestaurant(restaurant);
         } else {
             allProducts = productRepository.findActivesByRestaurant(restaurant);
         }
 
-        return productModelAssembler.toCollectionModel(allProducts);
+        return productModelAssembler.toCollectionModel(allProducts)
+                .add(ciriloLinks.linkToProducts(restaurantId));
     }
 
+    @Override
     @GetMapping("/{productId}")
     public ProductModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         Product product = productService.find(restaurantId, productId);
@@ -68,6 +76,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductModel create(@PathVariable Long restaurantId,
@@ -82,6 +91,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
+    @Override
     @PutMapping("/{productId}")
     public ProductModel update(@PathVariable Long restaurantId, @PathVariable Long productId,
             @RequestBody @Valid ProductInput productInput) {

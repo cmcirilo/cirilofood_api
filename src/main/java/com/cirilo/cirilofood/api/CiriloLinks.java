@@ -244,4 +244,13 @@ public class CiriloLinks {
         return linkTo(methodOn(RestaurantOwnerController.class)
                 .associate(restaurantId, null)).withRel(rel);
     }
+
+    public Link linkToProducts(Long restaurantId, String rel) {
+        return linkTo(methodOn(RestaurantProductController.class)
+                .list(restaurantId, null)).withRel(rel);
+    }
+
+    public Link linkToProducts(Long restaurantId) {
+        return linkToProducts(restaurantId, IanaLinkRelations.SELF.value());
+    }
 }

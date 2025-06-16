@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.ProductModel;
@@ -20,9 +20,9 @@ public interface RestaurantProductControllerOpenApi {
         @ApiResponse(code = 400, message = "Restaurant Id invalid", response = Problem.class),
         @ApiResponse(code = 404, message = "Restaurant not found", response = Problem.class)
     })
-    List<ProductModel> list(
+    CollectionModel<ProductModel> list(
             @ApiParam(value = "Restaurant Id", example = "1", required = true) Long restaurantId,
-            @ApiParam(value = "Indicate that should or not include inactive products in list", example = "false", required = true) boolean includeInactives);
+            @ApiParam(value = "Indicate that should or not include inactive products in list", example = "false", required = true) Boolean includeInactives);
 
     @ApiOperation("Find restaurant's product")
     @ApiResponses({
