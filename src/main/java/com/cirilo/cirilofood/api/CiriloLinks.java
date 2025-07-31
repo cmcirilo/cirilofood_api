@@ -3,7 +3,6 @@ package com.cirilo.cirilofood.api;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.cirilo.cirilofood.api.controller.RestaurantProductPhotoController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
@@ -14,11 +13,14 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.controller.CityController;
 import com.cirilo.cirilofood.api.controller.CuisineController;
 import com.cirilo.cirilofood.api.controller.FormPaymentController;
+import com.cirilo.cirilofood.api.controller.GroupController;
+import com.cirilo.cirilofood.api.controller.GroupPermissionController;
 import com.cirilo.cirilofood.api.controller.OrderController;
 import com.cirilo.cirilofood.api.controller.RestaurantController;
 import com.cirilo.cirilofood.api.controller.RestaurantFormPaymentController;
 import com.cirilo.cirilofood.api.controller.RestaurantOwnerController;
 import com.cirilo.cirilofood.api.controller.RestaurantProductController;
+import com.cirilo.cirilofood.api.controller.RestaurantProductPhotoController;
 import com.cirilo.cirilofood.api.controller.StateController;
 import com.cirilo.cirilofood.api.controller.StatusOrderController;
 import com.cirilo.cirilofood.api.controller.UserController;
@@ -262,5 +264,18 @@ public class CiriloLinks {
 
     public Link linkToProductPhoto(Long restauranteId, Long produtoId) {
         return linkToProductPhoto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGroups(String rel) {
+        return linkTo(GroupController.class).withRel(rel);
+    }
+
+    public Link linkToGroups() {
+        return linkToGroups(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrpupPermissions(Long groupId, String rel) {
+        return linkTo(methodOn(GroupPermissionController.class)
+                .list(groupId)).withRel(rel);
     }
 }

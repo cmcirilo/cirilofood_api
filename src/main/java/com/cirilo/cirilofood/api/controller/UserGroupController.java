@@ -1,8 +1,7 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,11 +28,13 @@ public class UserGroupController implements UserGroupControllerOpenApi {
     @Autowired
     private GroupModelAssembler groupModelAssembler;
 
+    @Override
     @GetMapping
-    public List<GroupModel> list(@PathVariable Long userId) {
+    public CollectionModel<GroupModel> list(@PathVariable Long userId) {
         User user = userService.find(userId);
 
-        return groupModelAssembler.toCollectioModel(user.getGroups());
+        return groupModelAssembler.toCollectioModel(user.getGroups())
+                .removeLinks();
     }
 
     @DeleteMapping("/{groupId}")

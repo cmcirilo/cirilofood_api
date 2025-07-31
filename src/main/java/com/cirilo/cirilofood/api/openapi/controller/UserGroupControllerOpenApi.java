@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.GroupModel;
@@ -18,7 +18,7 @@ public interface UserGroupControllerOpenApi {
     @ApiResponses({
         @ApiResponse(code = 404, message = "User not found", response = Problem.class)
     })
-    List<GroupModel> list(@ApiParam(value = "User Id", example = "1", required = true) Long userId);
+    CollectionModel<GroupModel> list(@ApiParam(value = "User Id", example = "1", required = true) Long userId);
 
     @ApiOperation("Disassociate user group")
     @ApiResponses({

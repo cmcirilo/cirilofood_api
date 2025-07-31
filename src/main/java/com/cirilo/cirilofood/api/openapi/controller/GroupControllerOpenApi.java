@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.GroupModel;
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
 public interface GroupControllerOpenApi {
 
     @ApiOperation("List groups")
-    List<GroupModel> list();
+    CollectionModel<GroupModel> list();
 
     @ApiOperation("Find Group by Id")
     @ApiResponses({
