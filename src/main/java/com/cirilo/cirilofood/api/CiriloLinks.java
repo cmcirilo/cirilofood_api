@@ -301,4 +301,14 @@ public class CiriloLinks {
         return linkTo(methodOn(GroupPermissionController.class)
                 .desassociate(groupId, permissionId)).withRel(rel);
     }
+
+    public Link linkToUserGroupAssociation(Long userId, String rel) {
+        return linkTo(methodOn(UserGroupController.class)
+                .associate(userId, null)).withRel(rel);
+    }
+
+    public Link linkToUserGroupDesassociation(Long userId, Long groupId, String rel) {
+        return linkTo(methodOn(UserGroupController.class)
+                .disassociate(userId, groupId)).withRel(rel);
+    }
 }

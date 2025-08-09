@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Users")
 public interface UserGroupControllerOpenApi {
@@ -26,7 +27,7 @@ public interface UserGroupControllerOpenApi {
         @ApiResponse(code = 404, message = "User or group not found",
                 response = Problem.class)
     })
-    void disassociate(
+    ResponseEntity<Void> disassociate(
             @ApiParam(value = "User Id", example = "1", required = true) Long userId,
             @ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
 
@@ -36,6 +37,6 @@ public interface UserGroupControllerOpenApi {
         @ApiResponse(code = 404, message = "User or group not found",
                 response = Problem.class)
     })
-    void associate(@ApiParam(value = "User Id", example = "1", required = true) Long userId,
-            @ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
+    ResponseEntity<Void> associate(@ApiParam(value = "User Id", example = "1", required = true) Long userId,
+                                   @ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
 }

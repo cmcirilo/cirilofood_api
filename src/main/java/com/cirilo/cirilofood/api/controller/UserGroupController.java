@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import com.cirilo.cirilofood.api.assembler.GroupModelAssembler;
 import com.cirilo.cirilofood.api.model.GroupModel;
 import com.cirilo.cirilofood.api.openapi.controller.UserGroupControllerOpenApi;
@@ -28,24 +30,39 @@ public class UserGroupController implements UserGroupControllerOpenApi {
     @Autowired
     private GroupModelAssembler groupModelAssembler;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
     @Override
     @GetMapping
     public CollectionModel<GroupModel> list(@PathVariable Long userId) {
         User user = userService.find(userId);
 
-        return groupModelAssembler.toCollectioModel(user.getGroups())
-                .removeLinks();
+        CollectionModel<GroupModel> groups = groupModelAssembler.toCollectionModel(user.getGroups())
+                .removeLinks()
+                .add(ciriloLinks.linkToUserGroupAssociation(userId, "associate"));
+
+        groups.getContent().forEach(groupModel -> {
+            groupModel.add(ciriloLinks.linkToUserGroupDesassociation(
+                    userId, groupModel.getId(), "desassociate"));
+        });
+
+        return groups;
     }
 
+    @Override
     @DeleteMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void disassociate(@PathVariable Long userId, @PathVariable Long groupId) {
+    public ResponseEntity<Void> disassociate(@PathVariable Long userId, @PathVariable Long groupId) {
         userService.dsassociateGroup(userId, groupId);
+        return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PutMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associate(@PathVariable Long userId, @PathVariable Long groupId) {
+    public ResponseEntity<Void> associate(@PathVariable Long userId, @PathVariable Long groupId) {
         userService.associateGroup(userId, groupId);
+        return ResponseEntity.noContent().build();
     }
 }
