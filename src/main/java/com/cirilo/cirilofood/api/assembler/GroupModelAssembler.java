@@ -31,7 +31,7 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
 
         groupModel.add(ciriloLinks.linkToGroups("groups"));
 
-        groupModel.add(ciriloLinks.linkToGrpupPermissions(group.getId(), "permissions"));
+        groupModel.add(ciriloLinks.linkToGroupPermissions(group.getId(), "permissions"));
 
         return groupModel;
     }

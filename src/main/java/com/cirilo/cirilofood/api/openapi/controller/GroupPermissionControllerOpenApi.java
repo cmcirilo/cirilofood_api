@@ -1,6 +1,6 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.PermissionModel;
@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Groups")
 public interface GroupPermissionControllerOpenApi {
@@ -19,7 +20,7 @@ public interface GroupPermissionControllerOpenApi {
         @ApiResponse(code = 400, message = "Group Id invalid", response = Problem.class),
         @ApiResponse(code = 404, message = "Group not found", response = Problem.class)
     })
-    List<PermissionModel> list(@ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
+    CollectionModel<PermissionModel> list(@ApiParam(value = "Group Id", example = "1", required = true) Long groupId);
 
     @ApiOperation("Disassociation group permission")
     @ApiResponses({
@@ -27,8 +28,8 @@ public interface GroupPermissionControllerOpenApi {
         @ApiResponse(code = 404, message = "Group or permission not found",
                 response = Problem.class)
     })
-    void desassociate(@ApiParam(value = "Group Id", example = "1", required = true) Long groupId,
-            @ApiParam(value = "Permission Id", example = "1", required = true) Long permissionId);
+    ResponseEntity<Void> desassociate(@ApiParam(value = "Group Id", example = "1", required = true) Long groupId,
+                                      @ApiParam(value = "Permission Id", example = "1", required = true) Long permissionId);
 
     @ApiOperation("Association group permission")
     @ApiResponses({
@@ -36,6 +37,6 @@ public interface GroupPermissionControllerOpenApi {
         @ApiResponse(code = 404, message = "Group or permission not found",
                 response = Problem.class)
     })
-    void associate(@ApiParam(value = "Group Id", example = "1", required = true) Long groupId,
+    ResponseEntity<Void> associate(@ApiParam(value = "Group Id", example = "1", required = true) Long groupId,
             @ApiParam(value = "Permission Id", example = "1", required = true) Long permissionId);
 }

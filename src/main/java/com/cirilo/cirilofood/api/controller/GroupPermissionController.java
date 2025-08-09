@@ -1,10 +1,10 @@
 package com.cirilo.cirilofood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import com.cirilo.cirilofood.api.assembler.PermissionModelAssembler;
 import com.cirilo.cirilofood.api.model.PermissionModel;
 import com.cirilo.cirilofood.api.openapi.controller.GroupPermissionControllerOpenApi;
@@ -29,22 +30,39 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
     @Autowired
     private PermissionModelAssembler permissionModelAssembler;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
+    @Override
     @GetMapping
-    public List<PermissionModel> list(@PathVariable Long groupId) {
+    public CollectionModel<PermissionModel> list(@PathVariable Long groupId) {
         Group group = groupService.find(groupId);
 
-        return permissionModelAssembler.toCollectionModel(group.getPermissions());
+        CollectionModel<PermissionModel> permissions = permissionModelAssembler.toCollectionModel(group.getPermissions())
+                .removeLinks()
+                .add(ciriloLinks.linkToGroupPermissions(groupId))
+                .add(ciriloLinks.linkToGroupPermissionsAssociation(groupId, "associate"));
+
+        permissions.getContent().forEach(permissaoModel -> {
+            permissaoModel.add(ciriloLinks.linkToGroupPermissionsDesassociation(
+                    groupId, permissaoModel.getId(), "desassociate"));
+        });
+
+        return permissions;
     }
 
+    @Override
     @DeleteMapping("/{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociate(@PathVariable Long groupId, @PathVariable Long permissionId) {
+    public ResponseEntity<Void> desassociate(@PathVariable Long groupId, @PathVariable Long permissionId) {
         groupService.desassociatePermission(groupId, permissionId);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associate(@PathVariable Long groupId, @PathVariable Long permissionId) {
+    public ResponseEntity<Void> associate(@PathVariable Long groupId, @PathVariable Long permissionId) {
         groupService.associatePermission(groupId, permissionId);
+        return ResponseEntity.noContent().build();
     }
 }

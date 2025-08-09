@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.cirilo.cirilofood.api.controller.PermissionController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
@@ -274,8 +275,30 @@ public class CiriloLinks {
         return linkToGroups(IanaLinkRelations.SELF.value());
     }
 
-    public Link linkToGrpupPermissions(Long groupId, String rel) {
+    public Link linkToGroupPermissions(Long groupId, String rel) {
         return linkTo(methodOn(GroupPermissionController.class)
                 .list(groupId)).withRel(rel);
+    }
+
+    public Link linkToPermissions(String rel) {
+        return linkTo(PermissionController.class).withRel(rel);
+    }
+
+    public Link linkToPermissions() {
+        return linkToPermissions(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGroupPermissions(Long groupId) {
+        return linkToGroupPermissions(groupId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGroupPermissionsAssociation(Long groupId, String rel) {
+        return linkTo(methodOn(GroupPermissionController.class)
+                .associate(groupId, null)).withRel(rel);
+    }
+
+    public Link linkToGroupPermissionsDesassociation(Long groupId, Long permissionId, String rel) {
+        return linkTo(methodOn(GroupPermissionController.class)
+                .desassociate(groupId, permissionId)).withRel(rel);
     }
 }
