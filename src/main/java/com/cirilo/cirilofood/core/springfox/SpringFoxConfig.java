@@ -26,10 +26,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.CityModel;
 import com.cirilo.cirilofood.api.model.CuisineModel;
+import com.cirilo.cirilofood.api.model.FormPaymentModel;
 import com.cirilo.cirilofood.api.model.OrderResumeModel;
 import com.cirilo.cirilofood.api.model.StateModel;
 import com.cirilo.cirilofood.api.openapi.model.CitiesModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.CuisinesModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.FormsPaymentModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.LinksModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.OrderResumeModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.PageableModelOpenApi;
@@ -92,6 +94,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, StateModel.class),
                         StatesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, FormPaymentModel.class),
+                        FormsPaymentModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),

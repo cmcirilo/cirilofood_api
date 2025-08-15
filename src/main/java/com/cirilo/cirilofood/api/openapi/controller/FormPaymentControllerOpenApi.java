@@ -1,7 +1,5 @@
 package com.cirilo.cirilofood.api.openapi.controller;
 
-import java.util.List;
-
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -9,6 +7,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.model.FormPaymentModel;
 import com.cirilo.cirilofood.api.model.input.FormPaymentInput;
+import com.cirilo.cirilofood.api.openapi.model.FormsPaymentModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Forms Payment")
 public interface FormPaymentControllerOpenApi {
 
-    @ApiOperation("List Forms Payment")
+    @ApiOperation(value = "List Forms Payment", response = FormsPaymentModelOpenApi.class)
     ResponseEntity<CollectionModel<FormPaymentModel>> list(ServletWebRequest request);
 
     @ApiOperation("Find Form Payment by Id")
@@ -27,7 +26,8 @@ public interface FormPaymentControllerOpenApi {
         @ApiResponse(code = 400, message = "Form Payment Id invalid", response = Problem.class),
         @ApiResponse(code = 404, message = "Form Payment not found", response = Problem.class)
     })
-    ResponseEntity<FormPaymentModel> find(@ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId, ServletWebRequest request);
+    ResponseEntity<FormPaymentModel> find(@ApiParam(value = "Form Payment Id", example = "1", required = true) Long formPaymentId,
+            ServletWebRequest request);
 
     @ApiOperation("Create Form Payment")
     @ApiResponses({
