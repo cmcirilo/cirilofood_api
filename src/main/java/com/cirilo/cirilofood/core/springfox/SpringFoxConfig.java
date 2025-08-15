@@ -8,6 +8,10 @@ import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
 
+import com.cirilo.cirilofood.api.model.GroupModel;
+import com.cirilo.cirilofood.api.model.PermissionModel;
+import com.cirilo.cirilofood.api.openapi.model.GroupsModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.PermissionsModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -97,6 +101,12 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, FormPaymentModel.class),
                         FormsPaymentModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, GroupModel.class),
+                        GroupsModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, PermissionModel.class),
+                        PermissionsModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),
