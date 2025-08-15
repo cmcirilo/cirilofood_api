@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.api.openapi.controller;
 
 import java.util.List;
 
+import com.cirilo.cirilofood.api.controller.StatisticsController;
 import org.springframework.http.ResponseEntity;
 
 import com.cirilo.cirilofood.domain.filter.DailySaleFilter;
@@ -15,6 +16,9 @@ import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Statistics")
 public interface StatisticsControllerOpenApi {
+
+    @ApiOperation(value = "Statistics", hidden = true)
+    StatisticsController.StatisticsModel statistics();
 
     @ApiOperation("Statistics Daily Sales")
     @ApiImplicitParams({

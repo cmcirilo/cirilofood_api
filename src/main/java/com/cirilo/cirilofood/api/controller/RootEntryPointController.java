@@ -29,6 +29,7 @@ public class RootEntryPointController {
         rootEntryPointModel.add(ciriloLinks.linkToFormsPayment("forms-payment"));
         rootEntryPointModel.add(ciriloLinks.linkToStates("states"));
         rootEntryPointModel.add(ciriloLinks.linkToCities("cities"));
+        rootEntryPointModel.add(ciriloLinks.linkToStatistics("statistics"));
 
         return rootEntryPointModel;
     }

@@ -2,8 +2,10 @@ package com.cirilo.cirilofood.api.controller;
 
 import java.util.List;
 
+import com.cirilo.cirilofood.api.CiriloLinks;
 import com.cirilo.cirilofood.api.openapi.controller.StatisticsControllerOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class StatisticsController implements StatisticsControllerOpenApi {
     @Autowired
     private SaleReportService saleReportService;
 
+    @Autowired
+    private CiriloLinks ciriloLinks;
+
     @GetMapping(path = "/daily-sales", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<DailySale> findDailySales(DailySaleFilter dailySaleFilter,
             @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
@@ -45,5 +50,18 @@ public class StatisticsController implements StatisticsControllerOpenApi {
                 .contentType(MediaType.APPLICATION_PDF)
                 .headers(headers)
                 .body(bytes);
+    }
+
+    @Override
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public StatisticsModel statistics() {
+        var statisticsModel = new StatisticsModel();
+
+        statisticsModel.add(ciriloLinks.linkToStatisticsDailySales("daily-sales"));
+
+        return statisticsModel;
+    }
+
+    public static class StatisticsModel extends RepresentationModel<StatisticsModel> {
     }
 }

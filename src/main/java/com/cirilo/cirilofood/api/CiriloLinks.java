@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.cirilo.cirilofood.api.controller.PermissionController;
+import com.cirilo.cirilofood.api.controller.StatisticsController;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
@@ -310,5 +311,22 @@ public class CiriloLinks {
     public Link linkToUserGroupDesassociation(Long userId, Long groupId, String rel) {
         return linkTo(methodOn(UserGroupController.class)
                 .disassociate(userId, groupId)).withRel(rel);
+    }
+
+    public Link linkToStatistics(String rel) {
+        return linkTo(StatisticsController.class).withRel(rel);
+    }
+
+    public Link linkToStatisticsDailySales(String rel) {
+        TemplateVariables filtroVariables = new TemplateVariables(
+                new TemplateVariable("restaurantId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("initialCreatedDate", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("finalCreatedDate", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("timeOffset", TemplateVariable.VariableType.REQUEST_PARAM));
+
+        String pedidosUrl = linkTo(methodOn(StatisticsController.class)
+                .findDailySales(null, null)).toUri().toString();
+
+        return new Link(UriTemplate.of(pedidosUrl, filtroVariables), rel);
     }
 }
