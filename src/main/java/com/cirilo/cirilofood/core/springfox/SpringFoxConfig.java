@@ -11,9 +11,13 @@ import java.util.List;
 import com.cirilo.cirilofood.api.model.GroupModel;
 import com.cirilo.cirilofood.api.model.PermissionModel;
 import com.cirilo.cirilofood.api.model.ProductModel;
+import com.cirilo.cirilofood.api.model.RestaurantBasicModel;
+import com.cirilo.cirilofood.api.model.UserModel;
 import com.cirilo.cirilofood.api.openapi.model.GroupsModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.PermissionsModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.ProductsModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.RestaurantsBasicModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.UsersModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -112,6 +116,12 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, ProductModel.class),
                         ProductsModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, RestaurantBasicModel.class),
+                        RestaurantsBasicModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, UserModel.class),
+                        UsersModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),

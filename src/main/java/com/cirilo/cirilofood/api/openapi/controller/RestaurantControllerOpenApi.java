@@ -10,7 +10,6 @@ import com.cirilo.cirilofood.api.model.RestaurantBasicModel;
 import com.cirilo.cirilofood.api.model.RestaurantModel;
 import com.cirilo.cirilofood.api.model.RestaurantOnlyNameModel;
 import com.cirilo.cirilofood.api.model.input.RestaurantInput;
-import com.cirilo.cirilofood.api.openapi.model.RestaurantBasicModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,7 +22,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Restaurants")
 public interface RestaurantControllerOpenApi {
 
-    @ApiOperation(value = "List restaurants", response = RestaurantBasicModelOpenApi.class)
+    @ApiOperation(value = "List restaurants")
     @ApiImplicitParams({
         @ApiImplicitParam(value = "Name of projection orders", allowableValues = "only-name",
                 name = "projection", paramType = "query", type = "string")
