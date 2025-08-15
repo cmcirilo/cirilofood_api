@@ -10,8 +10,10 @@ import java.util.List;
 
 import com.cirilo.cirilofood.api.model.GroupModel;
 import com.cirilo.cirilofood.api.model.PermissionModel;
+import com.cirilo.cirilofood.api.model.ProductModel;
 import com.cirilo.cirilofood.api.openapi.model.GroupsModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.PermissionsModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.ProductsModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -37,7 +39,7 @@ import com.cirilo.cirilofood.api.openapi.model.CitiesModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.CuisinesModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.FormsPaymentModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.LinksModelOpenApi;
-import com.cirilo.cirilofood.api.openapi.model.OrderResumeModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.OrdersResumeModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.PageableModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.StatesModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
@@ -90,8 +92,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, CuisineModel.class), CuisinesModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(Page.class, OrderResumeModel.class),
-                        OrderResumeModelOpenApi.class))
+                        typeResolver.resolve(PagedModel.class, OrderResumeModel.class),
+                        OrdersResumeModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CityModel.class),
                         CitiesModelOpenApi.class))
@@ -107,6 +109,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, PermissionModel.class),
                         PermissionsModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, ProductModel.class),
+                        ProductsModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),
