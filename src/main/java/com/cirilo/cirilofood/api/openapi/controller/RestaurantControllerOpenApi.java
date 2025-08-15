@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Restaurants")
 public interface RestaurantControllerOpenApi {
@@ -30,9 +31,11 @@ public interface RestaurantControllerOpenApi {
     // @JsonView(RestaurantView.Resume.class)
     CollectionModel<RestaurantBasicModel> list();
 
+    @ApiIgnore
     @ApiOperation(value = "List restaurants", hidden = true)
     CollectionModel<RestaurantModel> listComplete();
 
+    @ApiIgnore
     @ApiOperation(value = "List restaurants", hidden = true)
     // @JsonView(RestaurantView.OnlyName.class)
     CollectionModel<RestaurantOnlyNameModel> listOnlyName();
