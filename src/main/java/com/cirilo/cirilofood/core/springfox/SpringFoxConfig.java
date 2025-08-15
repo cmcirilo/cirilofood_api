@@ -8,9 +8,6 @@ import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
 
-import com.cirilo.cirilofood.api.model.CityModel;
-import com.cirilo.cirilofood.api.openapi.model.CitiesModelOpenApi;
-import com.cirilo.cirilofood.api.openapi.model.LinksModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,11 +24,16 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.cirilo.cirilofood.api.exceptionhandler.Problem;
+import com.cirilo.cirilofood.api.model.CityModel;
 import com.cirilo.cirilofood.api.model.CuisineModel;
 import com.cirilo.cirilofood.api.model.OrderResumeModel;
+import com.cirilo.cirilofood.api.model.StateModel;
+import com.cirilo.cirilofood.api.openapi.model.CitiesModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.CuisinesModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.LinksModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.OrderResumeModelOpenApi;
 import com.cirilo.cirilofood.api.openapi.model.PageableModelOpenApi;
+import com.cirilo.cirilofood.api.openapi.model.StatesModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -87,6 +89,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CityModel.class),
                         CitiesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, StateModel.class),
+                        StatesModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),
@@ -98,8 +103,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         new Tag("Products", "Manage the restaurant's products"),
                         new Tag("Users", "Manage the users"),
                         new Tag("Statistic", "Statistics"),
-                        new Tag("Permissions", "Permissions")
-                        );
+                        new Tag("Permissions", "Permissions"));
 
     }
 
