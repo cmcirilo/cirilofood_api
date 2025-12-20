@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.cirilo.cirilofood.api.model.AddressModel;
-import com.cirilo.cirilofood.api.model.input.OrderItemInput;
+import com.cirilo.cirilofood.api.v1.model.AddressModel;
+import com.cirilo.cirilofood.api.v1.model.input.OrderItemInput;
 import com.cirilo.cirilofood.domain.model.Address;
 import com.cirilo.cirilofood.domain.model.OrderItem;
 

@@ -2,11 +2,10 @@ package com.cirilo.cirilofood.core.jackson;
 
 import org.springframework.stereotype.Component;
 
-import com.cirilo.cirilofood.api.model.mixin.CityMixin;
-import com.cirilo.cirilofood.api.model.mixin.CuisineMixin;
+import com.cirilo.cirilofood.api.v1.model.mixin.CityMixin;
+import com.cirilo.cirilofood.api.v1.model.mixin.CuisineMixin;
 import com.cirilo.cirilofood.domain.model.City;
 import com.cirilo.cirilofood.domain.model.Cuisine;
-import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 @Component
