@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,6 @@ import com.cirilo.cirilofood.api.v2.assembler.CityInputDisassemblerV2;
 import com.cirilo.cirilofood.api.v2.assembler.CityModelAssemblerV2;
 import com.cirilo.cirilofood.api.v2.model.CityModelV2;
 import com.cirilo.cirilofood.api.v2.model.input.CityInputV2;
-import com.cirilo.cirilofood.core.web.CiriloMediaTypes;
 import com.cirilo.cirilofood.domain.exception.BusinessException;
 import com.cirilo.cirilofood.domain.exception.EntityNotFoundException;
 import com.cirilo.cirilofood.domain.model.City;
@@ -30,7 +29,8 @@ import com.cirilo.cirilofood.domain.repository.CityRepository;
 import com.cirilo.cirilofood.domain.service.CityService;
 
 @RestController
-@RequestMapping(path = "/cities", produces = CiriloMediaTypes.V2_APPLICATION_JSON_VALUE)
+// @RequestMapping(path = "/cities", produces = CiriloMediaTypes.V2_APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v2/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CityControllerV2 {
 
     @Autowired
@@ -88,11 +88,11 @@ public class CityControllerV2 {
         }
     }
 
-//    Não pode ser mapeado na mesma URL em um MediaType diferente, já que não aceita entrada e retorna void.
-//    @DeleteMapping("/{cityId}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void delete(@PathVariable Long cityId) {
-//        cityService.delete(cityId);
-//    }
+    // Não pode ser mapeado na mesma URL em um MediaType diferente, já que não aceita entrada e retorna void.
+    // @DeleteMapping("/{cityId}")
+    // @ResponseStatus(HttpStatus.NO_CONTENT)
+    // public void delete(@PathVariable Long cityId) {
+    // cityService.delete(cityId);
+    // }
 
 }

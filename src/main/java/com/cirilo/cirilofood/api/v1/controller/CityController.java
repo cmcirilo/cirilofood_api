@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.core.web.CiriloMediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,8 @@ import com.cirilo.cirilofood.domain.repository.CityRepository;
 import com.cirilo.cirilofood.domain.service.CityService;
 
 @RestController
-@RequestMapping(path = "/cities", produces = CiriloMediaTypes.V1_APPLICATION_JSON_VALUE)
+// @RequestMapping(path = "/cities", produces = CiriloMediaTypes.V1_APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CityController implements CityControllerOpenApi {
 
     @Autowired
