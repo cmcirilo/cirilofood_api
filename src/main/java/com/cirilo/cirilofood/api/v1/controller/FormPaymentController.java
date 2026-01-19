@@ -34,7 +34,7 @@ import com.cirilo.cirilofood.domain.repository.FormPaymentRepository;
 import com.cirilo.cirilofood.domain.service.FormPaymentService;
 
 @RestController
-@RequestMapping(path = "/forms-payment", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/forms-payment", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FormPaymentController implements FormPaymentControllerOpenApi {
 
     @Autowired

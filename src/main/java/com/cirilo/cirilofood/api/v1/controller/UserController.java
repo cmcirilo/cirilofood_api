@@ -29,7 +29,7 @@ import com.cirilo.cirilofood.domain.repository.UserRepository;
 import com.cirilo.cirilofood.domain.service.UserService;
 
 @RestController
-@RequestMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController implements UserControllerOpenApi {
 
     @Autowired

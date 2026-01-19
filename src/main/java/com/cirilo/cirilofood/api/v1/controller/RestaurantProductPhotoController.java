@@ -36,7 +36,7 @@ import com.cirilo.cirilofood.domain.service.ProductPhotoService;
 import com.cirilo.cirilofood.domain.service.ProductService;
 
 @RestController
-@RequestMapping(path = "/restaurants/{restaurantId}/products/{productId}/photo", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurants/{restaurantId}/products/{productId}/photo", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductPhotoController implements RestaurantProductPhotoControllerOpenApi {
 
     @Autowired

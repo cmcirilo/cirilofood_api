@@ -28,7 +28,7 @@ import com.cirilo.cirilofood.domain.repository.StateRepository;
 import com.cirilo.cirilofood.domain.service.StateService;
 
 @RestController
-@RequestMapping(path = "/states", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/states", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StateController implements StateControllerOpenApi {
 
     @Autowired

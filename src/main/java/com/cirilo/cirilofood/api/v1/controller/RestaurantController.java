@@ -37,7 +37,7 @@ import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping(path = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController implements RestaurantControllerOpenApi {
 
     @Autowired

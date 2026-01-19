@@ -21,7 +21,7 @@ import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping(path = "/restaurants/{restaurantId}/forms-payment", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurants/{restaurantId}/forms-payment", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantFormPaymentController implements RestaurantFormPaymentControllerOpenApi {
 
     @Autowired

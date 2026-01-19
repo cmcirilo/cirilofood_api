@@ -23,7 +23,7 @@ import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping(path = "/restaurants/{restaurantId}/owners", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurants/{restaurantId}/owners", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantOwnerController implements RestaurantOwnerControllerOpenApi {
 
     @Autowired

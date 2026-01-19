@@ -20,7 +20,7 @@ import com.cirilo.cirilofood.domain.service.SaleQueryService;
 import com.cirilo.cirilofood.domain.service.SaleReportService;
 
 @RestController
-@RequestMapping(path = "/statistics")
+@RequestMapping(path = "/v1/statistics")
 public class StatisticsController implements StatisticsControllerOpenApi {
 
     @Autowired

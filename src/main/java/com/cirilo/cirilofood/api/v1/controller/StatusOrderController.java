@@ -14,7 +14,7 @@ import com.cirilo.cirilofood.api.v1.openapi.controller.StatusOrderOpenApi;
 import com.cirilo.cirilofood.domain.service.StatusOrderService;
 
 @RestController
-@RequestMapping(path = "/orders/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/orders/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StatusOrderController implements StatusOrderOpenApi {
 
     @Autowired

@@ -38,7 +38,7 @@ import com.cirilo.cirilofood.infrastructure.repository.specification.OrderSpecif
 import com.google.common.collect.ImmutableMap;
 
 @RestController
-@RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderControllerOpenApi {
 
     @Autowired

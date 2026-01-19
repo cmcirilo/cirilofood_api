@@ -28,7 +28,7 @@ import com.cirilo.cirilofood.domain.repository.CuisineRepository;
 import com.cirilo.cirilofood.domain.service.CuisineService;
 
 @RestController
-@RequestMapping(value = "/cuisines")
+@RequestMapping(value = "/v1/cuisines")
 public class CuisineController implements CuisineControllerOpenApi {
 
     @Autowired

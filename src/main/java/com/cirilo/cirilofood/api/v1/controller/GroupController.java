@@ -28,7 +28,7 @@ import com.cirilo.cirilofood.domain.repository.GroupRepository;
 import com.cirilo.cirilofood.domain.service.GroupService;
 
 @RestController
-@RequestMapping(path = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/groups", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GroupController implements GroupControllerOpenApi {
 
     @Autowired
