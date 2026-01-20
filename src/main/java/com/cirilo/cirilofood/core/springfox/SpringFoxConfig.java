@@ -45,6 +45,10 @@ import com.cirilo.cirilofood.api.v1.openapi.model.ProductsModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.RestaurantsBasicModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.StatesModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.UsersModelOpenApi;
+import com.cirilo.cirilofood.api.v2.model.CityModelV2;
+import com.cirilo.cirilofood.api.v2.model.CuisineModelV2;
+import com.cirilo.cirilofood.api.v2.openapi.model.CitiesModelV2OpenApi;
+import com.cirilo.cirilofood.api.v2.openapi.model.CuisinesModelV2OpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -164,7 +168,16 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         Resource.class, File.class, InputStream.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
-                .apiInfo(apiInfoV2());
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CuisineModelV2.class),
+                        CuisinesModelV2OpenApi.class))
+
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CityModelV2.class),
+                        CitiesModelV2OpenApi.class))
+                .apiInfo(apiInfoV2())
+                .tags(new Tag("Cities", "Manage the cities"),
+                        new Tag("Cuisines", "Manage the cuisines"));
 
     }
 

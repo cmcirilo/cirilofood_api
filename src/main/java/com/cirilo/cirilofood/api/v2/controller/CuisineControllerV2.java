@@ -2,10 +2,6 @@ package com.cirilo.cirilofood.api.v2.controller;
 
 import javax.validation.Valid;
 
-import com.cirilo.cirilofood.api.v2.assembler.CuisineInputDisassemblerV2;
-import com.cirilo.cirilofood.api.v2.assembler.CuisineModelAssemblerV2;
-import com.cirilo.cirilofood.api.v2.model.CuisineModelV2;
-import com.cirilo.cirilofood.api.v2.model.input.CuisineInputV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +19,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.v2.assembler.CuisineInputDisassemblerV2;
+import com.cirilo.cirilofood.api.v2.assembler.CuisineModelAssemblerV2;
+import com.cirilo.cirilofood.api.v2.model.CuisineModelV2;
+import com.cirilo.cirilofood.api.v2.model.input.CuisineInputV2;
+import com.cirilo.cirilofood.api.v2.openapi.controller.CuisineControllerV2OpenApi;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.repository.CuisineRepository;
 import com.cirilo.cirilofood.domain.service.CuisineService;
 
 @RestController
 @RequestMapping(value = "/v2/cuisines", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CuisineControllerV2 {
+public class CuisineControllerV2 implements CuisineControllerV2OpenApi {
 
     @Autowired
     private CuisineRepository cuisineRepository;
