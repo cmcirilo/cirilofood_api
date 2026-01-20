@@ -47,18 +47,21 @@ public class CityController implements CityControllerOpenApi {
     @Autowired
     private CityInputDisassembler cityInputDisassembler;
 
+    @Deprecated
     @GetMapping
     public CollectionModel<CityModel> list() {
         List<City> cities = cityRepository.findAll();
         return cityModelAssembler.toCollectionModel(cities);
     }
 
+    @Deprecated
     @GetMapping("/{cityId}")
     public CityModel find(@PathVariable Long cityId) {
         City city = cityService.find(cityId);
         return cityModelAssembler.toModel(city);
     }
 
+    @Deprecated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CityModel create(@RequestBody @Valid CityInput cityInput) {
@@ -76,6 +79,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
+    @Deprecated
     @PutMapping("/{cityId}")
     public CityModel update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
 
@@ -90,6 +94,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
+    @Deprecated
     @DeleteMapping("/{cityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long cityId) {

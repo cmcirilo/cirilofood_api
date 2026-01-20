@@ -234,8 +234,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 
     public ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
-                .title("CiriloFood API")
-                .description("API to clients and restaurants")
+                .title("CiriloFood API (Deprecated)")
+                .description("API to clients and restaurants<br> " +
+                        "<strong>This version is deprecated. " +
+                        "Use version 2</strong>")
                 .version("1")
                 .contact(new Contact("CiriloFood", "https://www.cirilofood.com", "cirilofood@cirilofood.com"))
                 .build();
