@@ -8,16 +8,6 @@ import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
 
-import com.cirilo.cirilofood.api.v1.model.GroupModel;
-import com.cirilo.cirilofood.api.v1.model.PermissionModel;
-import com.cirilo.cirilofood.api.v1.model.ProductModel;
-import com.cirilo.cirilofood.api.v1.model.RestaurantBasicModel;
-import com.cirilo.cirilofood.api.v1.model.UserModel;
-import com.cirilo.cirilofood.api.v1.openapi.model.GroupsModelOpenApi;
-import com.cirilo.cirilofood.api.v1.openapi.model.PermissionsModelOpenApi;
-import com.cirilo.cirilofood.api.v1.openapi.model.ProductsModelOpenApi;
-import com.cirilo.cirilofood.api.v1.openapi.model.RestaurantsBasicModelOpenApi;
-import com.cirilo.cirilofood.api.v1.openapi.model.UsersModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,15 +26,25 @@ import com.cirilo.cirilofood.api.exceptionhandler.Problem;
 import com.cirilo.cirilofood.api.v1.model.CityModel;
 import com.cirilo.cirilofood.api.v1.model.CuisineModel;
 import com.cirilo.cirilofood.api.v1.model.FormPaymentModel;
+import com.cirilo.cirilofood.api.v1.model.GroupModel;
 import com.cirilo.cirilofood.api.v1.model.OrderResumeModel;
+import com.cirilo.cirilofood.api.v1.model.PermissionModel;
+import com.cirilo.cirilofood.api.v1.model.ProductModel;
+import com.cirilo.cirilofood.api.v1.model.RestaurantBasicModel;
 import com.cirilo.cirilofood.api.v1.model.StateModel;
+import com.cirilo.cirilofood.api.v1.model.UserModel;
 import com.cirilo.cirilofood.api.v1.openapi.model.CitiesModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.CuisinesModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.FormsPaymentModelOpenApi;
+import com.cirilo.cirilofood.api.v1.openapi.model.GroupsModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.LinksModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.OrdersResumeModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.PageableModelOpenApi;
+import com.cirilo.cirilofood.api.v1.openapi.model.PermissionsModelOpenApi;
+import com.cirilo.cirilofood.api.v1.openapi.model.ProductsModelOpenApi;
+import com.cirilo.cirilofood.api.v1.openapi.model.RestaurantsBasicModelOpenApi;
 import com.cirilo.cirilofood.api.v1.openapi.model.StatesModelOpenApi;
+import com.cirilo.cirilofood.api.v1.openapi.model.UsersModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -68,13 +68,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SpringFoxConfig implements WebMvcConfigurer {
 
     @Bean
-    public Docket apiDocket() {
+    public Docket apiDocketV1() {
         TypeResolver typeResolver = new TypeResolver();
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V1")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.cirilo.cirilofood.api"))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.ant("/v1/**"))
                 .build()
                 .useDefaultResponseMessages(false)
                 // .ignoredParameterTypes(CityModel.class, CuisineModel.class) // if i want ignore some classes
@@ -121,7 +122,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, UserModel.class),
                         UsersModelOpenApi.class))
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .tags(new Tag("Cities", "Manage the cities"),
                         new Tag("Groups", "Manage the groups"),
                         new Tag("Cuisines", "Manage the cuisines"),
@@ -131,8 +132,39 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         new Tag("States", "Manage the states"),
                         new Tag("Products", "Manage the restaurant's products"),
                         new Tag("Users", "Manage the users"),
-                        new Tag("Statistic", "Statistics"),
+                        new Tag("Statistics", "Statistics"),
                         new Tag("Permissions", "Permissions"));
+
+    }
+
+    @Bean
+    public Docket apiDocketV2() {
+        TypeResolver typeResolver = new TypeResolver();
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.cirilo.cirilofood.api"))
+                .paths(PathSelectors.ant("/v2/**"))
+                .build()
+                .useDefaultResponseMessages(false)
+                // .ignoredParameterTypes(CityModel.class, CuisineModel.class) // if i want ignore some classes
+                .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
+                .globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
+                .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages())
+                .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
+                // .globalOperationParameters(Collections.singletonList(new ParameterBuilder()
+                // .name("fields")
+                // .description("Properties names to filter response separated by comma")
+                // .parameterType("query")
+                // .modelRef(new ModelRef("string"))
+                // .build()))
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
+                        Resource.class, File.class, InputStream.class)
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .apiInfo(apiInfoV2());
 
     }
 
@@ -187,11 +219,20 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         .build());
     }
 
-    public ApiInfo apiInfo() {
+    public ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("CiriloFood API")
                 .description("API to clients and restaurants")
                 .version("1")
+                .contact(new Contact("CiriloFood", "https://www.cirilofood.com", "cirilofood@cirilofood.com"))
+                .build();
+    }
+
+    public ApiInfo apiInfoV2() {
+        return new ApiInfoBuilder()
+                .title("CiriloFood API")
+                .description("API to clients and restaurants")
+                .version("2")
                 .contact(new Contact("CiriloFood", "https://www.cirilofood.com", "cirilofood@cirilofood.com"))
                 .build();
     }
