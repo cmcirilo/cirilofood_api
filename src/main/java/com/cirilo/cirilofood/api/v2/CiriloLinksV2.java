@@ -7,6 +7,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
 import com.cirilo.cirilofood.api.v2.controller.CityControllerV2;
+import com.cirilo.cirilofood.api.v2.controller.CuisineControllerV2;
 
 @Component
 public class CiriloLinksV2 {
@@ -17,6 +18,14 @@ public class CiriloLinksV2 {
 
     public Link linkToCities() {
         return linkToCities(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToCuisines(String rel) {
+        return linkTo(CuisineControllerV2.class).withRel(rel);
+    }
+
+    public Link linkToCuisines() {
+        return linkToCuisines(IanaLinkRelations.SELF.value());
     }
 
 }
