@@ -2,6 +2,9 @@ package com.cirilo.cirilofood.api.v1.controller;
 
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +30,12 @@ import com.cirilo.cirilofood.domain.model.Cuisine;
 import com.cirilo.cirilofood.domain.repository.CuisineRepository;
 import com.cirilo.cirilofood.domain.service.CuisineService;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/v1/cuisines")
 public class CuisineController implements CuisineControllerOpenApi {
+
+//    private static final Logger logger = LoggerFactory.getLogger(CuisineController.class);
 
     @Autowired
     private CuisineRepository cuisineRepository;
@@ -48,6 +54,9 @@ public class CuisineController implements CuisineControllerOpenApi {
 
     @GetMapping
     public PagedModel<CuisineModel> list(Pageable pageable) {
+//        logger.info("List Cuisines with pages of {} records", pageable.getPageSize());
+        log.info("List Cuisines with pages of {} records", pageable.getPageSize());
+
         Page<Cuisine> cuisinesPage = cuisineRepository.findAll(pageable);
         return pagedResourcesAssembler.toModel(cuisinesPage, cuisineModelAssembler);
     }
