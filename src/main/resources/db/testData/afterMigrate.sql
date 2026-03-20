@@ -63,10 +63,10 @@ insert into `group` (id, name) values (1,'Manager'),(2,'Salesman'), (3,'Secretar
 insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
 
 insert into `user` (id, name, email, password, created_date) values
-(1, 'Carlos Cirilo', 'carlos.cirilo@cirilofood.com', '123', utc_timestamp),
-(2, 'Kathia Cirilo', 'kathia.cirilo@cirilofood.com', '123', utc_timestamp),
-(3, 'Bernardo Cirilo', 'bernardo.cirilo@cirilofood.com', '123', utc_timestamp),
-(4, 'Cirila Cirilo', 'cmcirilo@gmail.com', '123', utc_timestamp);
+(1, 'Carlos Cirilo', 'carlos.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(2, 'Kathia Cirilo', 'kathia.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(3, 'Bernardo Cirilo', 'bernardo.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(4, 'Aline Cirilo', 'aline.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
 
