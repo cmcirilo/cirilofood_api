@@ -50,14 +50,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<Group> groups = new HashSet<>();
 
-    public boolean passwordMatchsWith(String password) {
-        return getPassword().equals(password);
-    }
-
-    public boolean passwordDoesNotMatchsWith(String password) {
-        return !passwordMatchsWith(password);
-    }
-
     public static boolean isUsuarioDifferent(User user, User userInput) {
         return !user.equals(userInput);
     }
@@ -68,5 +60,9 @@ public class User {
 
     public boolean associateGroup(Group group) {
         return getGroups().add(group);
+    }
+
+    public boolean isNew() {
+        return getId() == null;
     }
 }

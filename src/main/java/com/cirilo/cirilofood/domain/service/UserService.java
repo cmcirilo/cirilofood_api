@@ -5,6 +5,7 @@ import static com.cirilo.cirilofood.domain.model.User.isUsuarioDifferent;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,9 @@ public class UserService {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public User save(User user) {
 
@@ -34,6 +38,10 @@ public class UserService {
                     String.format("There is already a registered user with this email %s", user.getEmail()));
         }
 
+        if (user.isNew()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
         return userRepository.save(user);
     }
 
@@ -41,7 +49,7 @@ public class UserService {
     public void updatePassword(Long userId, String currentPassword, String newPassword) {
         User user = find(userId);
 
-        if (user.passwordDoesNotMatchsWith(currentPassword)) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             throw new BusinessException("Current Password does not match with actual password.");
         }
 
