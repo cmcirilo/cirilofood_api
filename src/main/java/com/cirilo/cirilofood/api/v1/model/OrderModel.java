@@ -15,7 +15,6 @@ import org.springframework.hateoas.server.core.Relation;
 @Getter
 public class OrderModel extends RepresentationModel<OrderModel> {
 
-    private RestaurantOnlyNameModel restaurantOnlyNameModelt;
 
     @ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
     private String code;
@@ -43,6 +42,8 @@ public class OrderModel extends RepresentationModel<OrderModel> {
 
     @ApiModelProperty(example = "2019-12-01T20:35:00Z")
     private OffsetDateTime cancelDate;
+
+    private RestaurantOnlyNameModel restaurantOnlyNameModel;
 
     private RestaurantResumeModel restaurant;
 

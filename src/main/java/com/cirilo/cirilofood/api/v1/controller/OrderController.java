@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.api.v1.controller;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +60,9 @@ public class OrderController implements OrderControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     // @GetMapping
     // public MappingJacksonValue list(@RequestParam(required = false) String fields) {
     // List<Order> allOrders = orderRepository.findAll();
@@ -112,7 +116,7 @@ public class OrderController implements OrderControllerOpenApi {
             Order newOrder = orderInputDisassembler.toDomainObject(orderInput);
 
             newOrder.setClient(new User());
-            newOrder.getClient().setId(1L);
+            newOrder.getClient().setId(ciriloSecurity.getUserId());
 
             newOrder = orderService.create(newOrder);
 
