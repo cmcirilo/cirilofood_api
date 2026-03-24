@@ -98,7 +98,7 @@ insert into `user` (id, name, email, password, created_date) values
 (3, 'Bernardo Cirilo', 'bernardo.cirilo_assistant@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
 (4, 'Aline Cirilo', 'aline.cirilo_dataentry@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp);
 
-insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
+insert into user_group (user_id, group_id) values (1, 1), (1, 2),(2, 2), (3, 3), (4, 4);
 
 delete from restaurant_owner;
 
