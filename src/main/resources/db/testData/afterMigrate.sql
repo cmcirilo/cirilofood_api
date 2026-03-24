@@ -51,6 +51,21 @@ insert into form_payment (id, description, updated_date) values (3, 'Cash', utc_
 
 insert into permission (id, name, description) values (1, 'LIST_CUISINES', 'Allow list cuisines');
 insert into permission (id, name, description) values (2, 'UPDATE_CUISINES', 'Allow update cuisines');
+insert into permission (id, name, description) values (3, 'LIST_FORMS_PAYMENT', 'Allow list forms payment');
+insert into permission (id, name, description) values (4, 'UPDATE_FORMS_PAYMENT', 'Allow create or update forms payment');
+insert into permission (id, name, description) values (5, 'LIST_CITIES', 'Allow list cities');
+insert into permission (id, name, description) values (6, 'UPDATE_CITIES', 'Allow create or update cities');
+insert into permission (id, name, description) values (7, 'LIST_STATES', 'Allow list states');
+insert into permission (id, name, description) values (8, 'UPDATE_STATES', 'Allow create or update states');
+insert into permission (id, name, description) values (9, 'LIST_USERS', 'Allow list users');
+insert into permission (id, name, description) values (10, 'UPDATE_USERS', 'Allow create or update users');
+insert into permission (id, name, description) values (11, 'LIST_RESTAURANTS', 'Allow list restaurants');
+insert into permission (id, name, description) values (12, 'UPDATE_RESTAURANTS', 'Allow create, update or manage restaurants');
+insert into permission (id, name, description) values (13, 'LIST_PRODUCTS', 'Allow list products');
+insert into permission (id, name, description) values (14, 'UPDATE_PRODUCTS', 'Allow create or update products');
+insert into permission (id, name, description) values (15, 'LIST_ORDERS', 'Allow list orders');
+insert into permission (id, name, description) values (16, 'MANAGE_ORDERS', 'Allow manage orders');
+insert into permission (id, name, description) values (17, 'GENERATE_REPORTS', 'Allow generate reports');
 
 insert into restaurant_form_payment (restaurant_id, form_payment_id) values (1,1),(1,2),(1,3),(2,3),(3,2),(3,3);
 
@@ -58,15 +73,30 @@ insert into product (id, name, description, price, active , restaurant_id) value
 insert into product (id, name, description, price, active , restaurant_id) values (2, "Bean","Bean description", 15.0, false, 1);
 insert into product (id, name, description, price, active , restaurant_id) values (3, "Meat","Meat description", 20.0, true,2);
 
-insert into `group` (id, name) values (1,'Manager'),(2,'Salesman'), (3,'Secretary'), (4,'Delivery Man');
+insert into `group` (id, name) values (1,'Manager'),(2,'Salesman'), (3,'Assistant'), (4,'Data Entry');
 
-insert into group_permission (group_id, permission_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+# Add all permissions in Manager Group
+insert into group_permission (group_id, permission_id)
+select 1, id from permission;
+
+# Add permissions in Salesman Group
+insert into group_permission (group_id, permission_id)
+select 2, id from permission where name like 'LIST_%';
+insert into group_permission (group_id, permission_id) values (2, 14);
+
+# Add permissions in Assistant Group
+insert into group_permission (group_id, permission_id)
+select 3, id from permission where name like 'LIST_%';
+
+# Add permissions in Data Entry Group
+insert into group_permission (group_id, permission_id)
+select 4, id from permission where name like '%_RESTAURANTS' or name like '%_PRODUCTS';
 
 insert into `user` (id, name, email, password, created_date) values
-(1, 'Carlos Cirilo', 'carlos.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
-(2, 'Kathia Cirilo', 'kathia.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
-(3, 'Bernardo Cirilo', 'bernardo.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
-(4, 'Aline Cirilo', 'aline.cirilo@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp);
+(1, 'Carlos Cirilo', 'carlos.cirilo_manager@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(2, 'Kathia Cirilo', 'kathia.cirilo_salesman@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(3, 'Bernardo Cirilo', 'bernardo.cirilo_assistant@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(4, 'Aline Cirilo', 'aline.cirilo_dataentry@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2), (2, 2);
 
