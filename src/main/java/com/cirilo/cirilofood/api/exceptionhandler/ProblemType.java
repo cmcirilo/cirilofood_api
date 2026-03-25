@@ -11,7 +11,8 @@ public enum ProblemType {
     ENTITY_IN_USE("/entity-in-use", "Entity In Use"),
     BUSINESS_ERROR("/business-error", "Violation Rule"),
     SYSTEM_ERROR("/system-error", "System Error"),
-    INVALID_DATA("/invalid-data", "Invalid Data");
+    INVALID_DATA("/invalid-data", "Invalid Data"),
+    ACCESS_DENIED("/access-denied", "Access Denied");
 
     private String title;
 
