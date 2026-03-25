@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.core.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,17 +18,19 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")
-                    .antMatchers(HttpMethod.PUT, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")
-                    .antMatchers(HttpMethod.GET, "/v1/cuisines/**").authenticated()
-                    .anyRequest().denyAll()
-                .and()
+//                .authorizeRequests()
+//                    .antMatchers(HttpMethod.POST, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")
+//                    .antMatchers(HttpMethod.PUT, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")
+//                    .antMatchers(HttpMethod.GET, "/v1/cuisines/**").authenticated()
+//                    .anyRequest().denyAll()
+//                .and()
+                .csrf().disable()
                 .cors().and()
                 .oauth2ResourceServer()
 //                .opaqueToken();

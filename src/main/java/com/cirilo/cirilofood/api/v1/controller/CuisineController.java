@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,6 +53,7 @@ public class CuisineController implements CuisineControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cuisine> pagedResourcesAssembler;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public PagedModel<CuisineModel> list(Pageable pageable) {
 //        logger.info("List Cuisines with pages of {} records", pageable.getPageSize());
@@ -61,12 +63,14 @@ public class CuisineController implements CuisineControllerOpenApi {
         return pagedResourcesAssembler.toModel(cuisinesPage, cuisineModelAssembler);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{cuisineId}")
     public CuisineModel find(@PathVariable Long cuisineId) {
         Cuisine cuisine = cuisineService.find(cuisineId);
         return cuisineModelAssembler.toModel(cuisine);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_CUISINES')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CuisineModel create(@RequestBody @Valid CuisineInput cuisineInput) {
@@ -76,6 +80,7 @@ public class CuisineController implements CuisineControllerOpenApi {
         return cuisineModelAssembler.toModel(cuisine);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_CUISINES')")
     @PutMapping("/{cuisineId}")
     public CuisineModel atualizar(@PathVariable Long cuisineId, @RequestBody @Valid CuisineInput cuisineInput) {
 
@@ -86,6 +91,7 @@ public class CuisineController implements CuisineControllerOpenApi {
         return cuisineModelAssembler.toModel(curenteCuisine);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_CUISINES')")
     @DeleteMapping("/{cuisineid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cuisineid) {
