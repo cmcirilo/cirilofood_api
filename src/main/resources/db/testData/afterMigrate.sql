@@ -49,23 +49,16 @@ insert into form_payment (id, description, updated_date) values (1, 'Credit', ut
 insert into form_payment (id, description, updated_date) values (2, 'Debit', utc_timestamp);
 insert into form_payment (id, description, updated_date) values (3, 'Cash', utc_timestamp);
 
-insert into permission (id, name, description) values (1, 'LIST_CUISINES', 'Allow list cuisines');
-insert into permission (id, name, description) values (2, 'UPDATE_CUISINES', 'Allow update cuisines');
-insert into permission (id, name, description) values (3, 'LIST_FORMS_PAYMENT', 'Allow list forms payment');
-insert into permission (id, name, description) values (4, 'UPDATE_FORMS_PAYMENT', 'Allow create or update forms payment');
-insert into permission (id, name, description) values (5, 'LIST_CITIES', 'Allow list cities');
-insert into permission (id, name, description) values (6, 'UPDATE_CITIES', 'Allow create or update cities');
-insert into permission (id, name, description) values (7, 'LIST_STATES', 'Allow list states');
-insert into permission (id, name, description) values (8, 'UPDATE_STATES', 'Allow create or update states');
-insert into permission (id, name, description) values (9, 'LIST_USERS', 'Allow list users');
-insert into permission (id, name, description) values (10, 'UPDATE_USERS', 'Allow create or update users');
-insert into permission (id, name, description) values (11, 'LIST_RESTAURANTS', 'Allow list restaurants');
-insert into permission (id, name, description) values (12, 'UPDATE_RESTAURANTS', 'Allow create, update or manage restaurants');
-insert into permission (id, name, description) values (13, 'LIST_PRODUCTS', 'Allow list products');
-insert into permission (id, name, description) values (14, 'UPDATE_PRODUCTS', 'Allow create or update products');
-insert into permission (id, name, description) values (15, 'LIST_ORDERS', 'Allow list orders');
-insert into permission (id, name, description) values (16, 'MANAGE_ORDERS', 'Allow manage orders');
-insert into permission (id, name, description) values (17, 'GENERATE_REPORTS', 'Allow generate reports');
+insert into permission (id, name, description) values (1, 'UPDATE_CUISINES', 'Allow update cuisines');
+insert into permission (id, name, description) values (2, 'UPDATE_FORMS_PAYMENT', 'Allow create or update forms payment');
+insert into permission (id, name, description) values (3, 'UPDATE_CITIES', 'Allow create or update cities');
+insert into permission (id, name, description) values (4, 'UPDATE_STATES', 'Allow create or update states');
+insert into permission (id, name, description) values (5, 'LIST_USERS', 'Allow list users');
+insert into permission (id, name, description) values (6, 'UPDATE_USERS', 'Allow create or update users');
+insert into permission (id, name, description) values (7, 'UPDATE_RESTAURANTS', 'Allow create, update or manage restaurants');
+insert into permission (id, name, description) values (8, 'LIST_ORDERS', 'Allow list orders');
+insert into permission (id, name, description) values (9, 'MANAGE_ORDERS', 'Allow manage orders');
+insert into permission (id, name, description) values (10, 'GENERATE_REPORTS', 'Allow generate reports');
 
 insert into restaurant_form_payment (restaurant_id, form_payment_id) values (1,1),(1,2),(1,3),(2,3),(3,2),(3,3);
 
@@ -82,7 +75,7 @@ select 1, id from permission;
 # Add permissions in Salesman Group
 insert into group_permission (group_id, permission_id)
 select 2, id from permission where name like 'LIST_%';
-insert into group_permission (group_id, permission_id) values (2, 14);
+insert into group_permission (group_id, permission_id) values (2, 10);
 
 # Add permissions in Assistant Group
 insert into group_permission (group_id, permission_id)

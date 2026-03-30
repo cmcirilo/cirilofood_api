@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @CheckSecurity.Restaurants.AllowList
     @Override
     @GetMapping
     public CollectionModel<ProductModel> list(@PathVariable Long restaurantId, @RequestParam(required = false) Boolean includeInactives) {
@@ -68,6 +70,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
                 .add(ciriloLinks.linkToProducts(restaurantId));
     }
 
+    @CheckSecurity.Restaurants.AllowList
     @Override
     @GetMapping("/{productId}")
     public ProductModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
@@ -76,6 +79,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -91,6 +95,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @Override
     @PutMapping("/{productId}")
     public ProductModel update(@PathVariable Long restaurantId, @PathVariable Long productId,

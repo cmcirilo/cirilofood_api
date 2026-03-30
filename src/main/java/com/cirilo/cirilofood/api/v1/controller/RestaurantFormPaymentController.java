@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.api.v1.controller;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping
     public CollectionModel<FormPaymentModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
@@ -49,6 +51,7 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
         return formsPaymentModel;
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {
@@ -57,6 +60,7 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {

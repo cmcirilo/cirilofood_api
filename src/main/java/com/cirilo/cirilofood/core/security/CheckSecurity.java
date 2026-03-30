@@ -7,19 +7,35 @@ import java.lang.annotation.Target;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 public @interface CheckSecurity {
 
     public @interface Cuisines {
 
-        @PreAuthorize("isAuthenticated()")
-        @Retention(RetentionPolicy.RUNTIME)
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RUNTIME)
         @Target(ElementType.METHOD)
         @interface AllowList {}
 
-        @PreAuthorize("hasAuthority('UPDATE_CUISINES')")
-        @Retention(RetentionPolicy.RUNTIME)
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_CUISINES')")
+        @Retention(RUNTIME)
         @Target(ElementType.METHOD)
         @interface AllowUpdate {}
+
+    }
+
+    public @interface Restaurants {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_RESTAURANTS')")
+        @Retention(RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface AllowUpdate { }
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface AllowList { }
 
     }
 

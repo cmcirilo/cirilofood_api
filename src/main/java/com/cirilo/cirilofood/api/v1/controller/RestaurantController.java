@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -77,30 +78,35 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     // }
 
     // @JsonView(RestaurantView.Resume.class)
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping()
     public CollectionModel<RestaurantBasicModel> list() {
         return restaurantBasicModelAssembler
                 .toCollectionModel(restaurantRepository.findAll());
     }
 
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping(params = "projection=complete")
     public CollectionModel<RestaurantModel> listComplete() {
         return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
     }
 
     // @JsonView(RestaurantView.OnlyName.class)
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping(params = "projection=only-name")
     public CollectionModel<RestaurantOnlyNameModel> listOnlyName() {
         return restaurantOnlyNameModelAssembler
                 .toCollectionModel(restaurantRepository.findAll());
     }
 
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping("/{restaurantId}")
     public RestaurantModel find(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
         return restaurantModelAssembler.toModel(restaurant);
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantModel create(@RequestBody @Valid RestaurantInput restaurantInput) {
@@ -112,6 +118,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{restaurantId}")
     public RestaurantModel update(@PathVariable Long restaurantId,
             @RequestBody @Valid RestaurantInput restaurantInput) {
@@ -131,6 +138,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{restaurantId}/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> activate(@PathVariable Long restaurantId) {
@@ -139,6 +147,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping("/{restaurantId}/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> desactivate(@PathVariable Long restaurantId) {
@@ -147,6 +156,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{restaurantId}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> open(@PathVariable Long restaurantId) {
@@ -155,6 +165,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{restaurantId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> close(@PathVariable Long restaurantId) {
@@ -163,6 +174,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/activations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activations(@RequestBody List<Long> restaurantIds) {
@@ -173,6 +185,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping("/activations")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desactivations(@RequestBody List<Long> restaurantIds) {

@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api.v1.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
@@ -54,6 +56,7 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
 
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
@@ -62,6 +65,7 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {

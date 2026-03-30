@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -68,6 +69,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
     //
     // }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId,
             @Valid ProductPhotoInput productPhotoInput, @RequestPart(required = true) MultipartFile file)
@@ -89,6 +91,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
         return productPhotoModelAssembler.toModel(productPhotoSaved);
     }
 
+    @CheckSecurity.Restaurants.AllowList
     @GetMapping
     public ProductPhotoModel find(@PathVariable Long restaurantId, @PathVariable Long productId) {
         ProductPhoto productPhoto = productPhotoService.find(restaurantId, productId);
@@ -126,6 +129,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
         }
     }
 
+    @CheckSecurity.Restaurants.AllowUpdate
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long restaurantId,
