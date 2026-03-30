@@ -37,13 +37,13 @@ public interface CuisineControllerOpenApi {
         @ApiResponse(code = 200, message = "Cuisine Updated"),
         @ApiResponse(code = 404, message = "Cuisine not found", response = Problem.class)
     })
-    CuisineModel atualizar(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineId,
-            @ApiParam(name = "body", value = "Representation of new cuisine with with new data", required = true) CuisineInput cuisineInput);
+    CuisineModel update(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineId,
+                        @ApiParam(name = "body", value = "Representation of new cuisine with with new data", required = true) CuisineInput cuisineInput);
 
     @ApiOperation("Remove cuisine by Id")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Cuisine removed"),
         @ApiResponse(code = 404, message = "Cuisine not found", response = Problem.class)
     })
-    void remover(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineid);
+    void remove(@ApiParam(value = "Cuisine Id", example = "1", required = true) Long cuisineid);
 }
