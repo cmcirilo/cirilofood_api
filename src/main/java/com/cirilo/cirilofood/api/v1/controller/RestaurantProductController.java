@@ -79,7 +79,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageOperation
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -95,7 +95,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productModelAssembler.toModel(product);
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageOperation
     @Override
     @PutMapping("/{productId}")
     public ProductModel update(@PathVariable Long restaurantId, @PathVariable Long productId,

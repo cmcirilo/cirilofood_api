@@ -2,7 +2,6 @@ package com.cirilo.cirilofood.core.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +29,14 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_RESTAURANTS')")
         @Retention(RUNTIME)
         @Target(ElementType.METHOD)
-        public @interface AllowUpdate { }
+        public @interface AllowManageRegistration { }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
+                "(hasAuthority('UPDATE_RESTAURANTS') or " +
+                "@ciriloSecurity.manageRestaurant(#restaurantId))")
+        @Retention(RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface AllowManageOperation { }
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @Retention(RUNTIME)

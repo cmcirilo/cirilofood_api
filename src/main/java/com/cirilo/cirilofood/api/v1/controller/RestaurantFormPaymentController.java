@@ -51,7 +51,7 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
         return formsPaymentModel;
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageOperation
     @DeleteMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {
@@ -60,7 +60,7 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
         return ResponseEntity.noContent().build();
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageOperation
     @PutMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associateFormPayment(@PathVariable Long restaurantId, @PathVariable Long formPaymentId) {

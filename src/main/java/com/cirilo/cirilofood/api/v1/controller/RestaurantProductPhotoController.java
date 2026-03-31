@@ -69,7 +69,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
     //
     // }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageOperation
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoModel updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId,
             @Valid ProductPhotoInput productPhotoInput, @RequestPart(required = true) MultipartFile file)
@@ -129,7 +129,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
         }
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageOperation
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long restaurantId,

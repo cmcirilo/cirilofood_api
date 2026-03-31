@@ -56,7 +56,7 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
 
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageRegistration
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> disassociate(@PathVariable Long restaurantId, @PathVariable Long userId) {
@@ -65,7 +65,7 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
         return ResponseEntity.noContent().build();
     }
 
-    @CheckSecurity.Restaurants.AllowUpdate
+    @CheckSecurity.Restaurants.AllowManageRegistration
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associate(@PathVariable Long restaurantId, @PathVariable Long userId) {
