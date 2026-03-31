@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -42,6 +43,18 @@ public @interface CheckSecurity {
         @Retention(RUNTIME)
         @Target(ElementType.METHOD)
         public @interface AllowList { }
+
+    }
+
+    public @interface Orders {
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PostAuthorize("hasAuthority('LIST_ORDERS') or " +
+                "@ciriloSecurity.getUserId() == returnObject.client.id or " +
+                "@ciriloSecurity.manageRestaurant(returnObject.restaurant.id)")
+        @Retention(RUNTIME)
+        @Target(ElementType.METHOD)
+        public @interface AllowSearch { }
 
     }
 

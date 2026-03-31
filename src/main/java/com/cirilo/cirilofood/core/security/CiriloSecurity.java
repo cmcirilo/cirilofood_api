@@ -26,4 +26,5 @@ public class CiriloSecurity {
     public boolean manageRestaurant(Long restaurantId){
         return restaurantRepository.existsByOwner(restaurantId, getUserId());
     }
+
 }

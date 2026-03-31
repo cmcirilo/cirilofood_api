@@ -90,7 +90,9 @@ insert into `user` (id, name, email, password, created_date) values
 (2, 'Kathia Cirilo', 'kathia.cirilo_salesman@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
 (3, 'Bernardo Cirilo', 'bernardo.cirilo_assistant@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
 (4, 'Aline Cirilo', 'aline.cirilo_dataentry@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
-(5, 'Catarina Cirilo', 'catarina.cirilo_restaurantowner@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp);
+(5, 'Catarina Cirilo', 'catarina.cirilo_restaurantowner@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(6, 'Judith Cirilo', 'judith.cirilo_user@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp),
+(7, 'Prieta Cirilo', 'prieta.cirilo_user@cirilofood.com', '$2a$12$RU/u46gY7sinlcbOuncTGekBt.BHLLvfl1//6DdzgXVPqf186vym2', utc_timestamp);
 
 insert into user_group (user_id, group_id) values (1, 1), (1, 2),(2, 2), (3, 3), (4, 4);
 

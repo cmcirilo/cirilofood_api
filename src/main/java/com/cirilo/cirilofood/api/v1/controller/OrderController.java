@@ -2,6 +2,7 @@ package com.cirilo.cirilofood.api.v1.controller;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -101,6 +102,7 @@ public class OrderController implements OrderControllerOpenApi {
         return pagedResourcesAssembler.toModel(ordersPage, orderResumeModelAssembler);
     }
 
+    @CheckSecurity.Orders.AllowSearch
     @GetMapping("/{code}")
     public OrderModel search(@PathVariable String code) {
         Order order = orderService.find(code);
