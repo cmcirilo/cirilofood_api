@@ -91,4 +91,32 @@ public @interface CheckSecurity {
 
     }
 
+    public @interface Cities {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_CITIES')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowUpdate { }
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowList { }
+
+    }
+
+    public @interface States {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_STATES')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowUpdate { }
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowList { }
+
+    }
+
 }

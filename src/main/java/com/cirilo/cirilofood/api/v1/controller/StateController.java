@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -43,18 +44,21 @@ public class StateController implements StateControllerOpenApi {
     @Autowired
     private StateInputDisassembler stateInputDisassembler;
 
+    @CheckSecurity.States.AllowList
     @GetMapping
     public CollectionModel<StateModel> list() {
         List<State> states = stateRepository.findAll();
         return stateModelAssembler.toCollectionModel(states);
     }
 
+    @CheckSecurity.States.AllowList
     @GetMapping("/{stateId}")
     public StateModel find(@PathVariable Long stateId) {
         State state = stateService.find(stateId);
         return stateModelAssembler.toModel(state);
     }
 
+    @CheckSecurity.States.AllowUpdate
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public StateModel create(@RequestBody @Valid StateInput stateInput) {
@@ -64,6 +68,7 @@ public class StateController implements StateControllerOpenApi {
         return stateModelAssembler.toModel(state);
     }
 
+    @CheckSecurity.States.AllowUpdate
     @PutMapping("/{stateId}")
     public StateModel update(@PathVariable Long stateId,
             @RequestBody @Valid StateInput stateInput) {
@@ -75,6 +80,7 @@ public class StateController implements StateControllerOpenApi {
         return stateModelAssembler.toModel(currenteState);
     }
 
+    @CheckSecurity.States.AllowUpdate
     @DeleteMapping("/{stateId}")
     public void delete(@PathVariable Long stateId) {
         stateService.delete(stateId);

@@ -53,8 +53,8 @@ insert into permission (id, name, description) values (1, 'UPDATE_CUISINES', 'Al
 insert into permission (id, name, description) values (2, 'UPDATE_FORMS_PAYMENT', 'Allow create or update forms payment');
 insert into permission (id, name, description) values (3, 'UPDATE_CITIES', 'Allow create or update cities');
 insert into permission (id, name, description) values (4, 'UPDATE_STATES', 'Allow create or update states');
-insert into permission (id, name, description) values (5, 'LIST_USERS', 'Allow list users');
-insert into permission (id, name, description) values (6, 'UPDATE_USERS', 'Allow create or update users');
+insert into permission (id, name, description) values (5, 'LIST_USERS_GROUPS_PERMISSIONS', 'Allow list users, groups and permissions');
+insert into permission (id, name, description) values (6, 'UPDATE_USERS_GROUPS_PERMISSIONS', 'Allow create or update users, groups and permissions');
 insert into permission (id, name, description) values (7, 'UPDATE_RESTAURANTS', 'Allow create, update or manage restaurants');
 insert into permission (id, name, description) values (8, 'LIST_ORDERS', 'Allow list orders');
 insert into permission (id, name, description) values (9, 'MANAGE_ORDERS', 'Allow manage orders');

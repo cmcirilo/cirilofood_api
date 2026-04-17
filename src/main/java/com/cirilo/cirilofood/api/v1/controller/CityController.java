@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,7 @@ public class CityController implements CityControllerOpenApi {
     @Autowired
     private CityInputDisassembler cityInputDisassembler;
 
+    @CheckSecurity.Cities.AllowList
     @Deprecated
     @GetMapping
     public CollectionModel<CityModel> list() {
@@ -54,6 +56,7 @@ public class CityController implements CityControllerOpenApi {
         return cityModelAssembler.toCollectionModel(cities);
     }
 
+    @CheckSecurity.Cities.AllowList
     @Deprecated
     @GetMapping("/{cityId}")
     public CityModel find(@PathVariable Long cityId) {
@@ -61,6 +64,7 @@ public class CityController implements CityControllerOpenApi {
         return cityModelAssembler.toModel(city);
     }
 
+    @CheckSecurity.Cities.AllowUpdate
     @Deprecated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -79,6 +83,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Cities.AllowUpdate
     @Deprecated
     @PutMapping("/{cityId}")
     public CityModel update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
@@ -94,6 +99,7 @@ public class CityController implements CityControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Cities.AllowUpdate
     @Deprecated
     @DeleteMapping("/{cityId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
