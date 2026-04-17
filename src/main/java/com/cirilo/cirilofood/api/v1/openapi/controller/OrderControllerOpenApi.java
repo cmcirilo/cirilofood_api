@@ -26,18 +26,18 @@ public interface OrderControllerOpenApi {
                 name = "fields", paramType = "qyery", type = "string")
     })
     @ApiOperation("Searh orders")
-    PagedModel<OrderResumeModel> find(OrderFilter orderFilter,
-                                      @PageableDefault(size = 10) Pageable pageable);
+    PagedModel<OrderResumeModel> search(OrderFilter orderFilter,
+                                        @PageableDefault(size = 10) Pageable pageable);
 
     @ApiImplicitParams({
         @ApiImplicitParam(value = "Properties names to filter response separated by comma",
                 name = "fields", paramType = "query", type = "string")
     })
-    @ApiOperation("Searh orders by Id")
+    @ApiOperation("Find orders by Id")
     @ApiResponses({
         @ApiResponse(code = 404, message = "Order not found", response = Problem.class)
     })
-    OrderModel search(@ApiParam(value = "Order Id", example = "1", required = true) String code);
+    OrderModel find(@ApiParam(value = "Order Id", example = "1", required = true) String code);
 
     @ApiOperation("Create order")
     @ApiResponses({

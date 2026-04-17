@@ -89,9 +89,10 @@ public class OrderController implements OrderControllerOpenApi {
     // return orderResumeModelAssembler.toCollectionModel(allOrders);
     // }
 
+    @CheckSecurity.Orders.AllowSearch
     @GetMapping
-    public PagedModel<OrderResumeModel> find(OrderFilter orderFilter,
-            @PageableDefault(size = 10) Pageable pageable) {
+    public PagedModel<OrderResumeModel> search(OrderFilter orderFilter,
+                                               @PageableDefault(size = 10) Pageable pageable) {
         Pageable pageableTranslated = translatePageable(pageable);
 
         Page<Order> ordersPage = orderRepository.findAll(
@@ -102,9 +103,9 @@ public class OrderController implements OrderControllerOpenApi {
         return pagedResourcesAssembler.toModel(ordersPage, orderResumeModelAssembler);
     }
 
-    @CheckSecurity.Orders.AllowSearch
+    @CheckSecurity.Orders.AllowFind
     @GetMapping("/{code}")
-    public OrderModel search(@PathVariable String code) {
+    public OrderModel find(@PathVariable String code) {
         Order order = orderService.find(code);
 
         return orderModelAssembler.toModel(order);
