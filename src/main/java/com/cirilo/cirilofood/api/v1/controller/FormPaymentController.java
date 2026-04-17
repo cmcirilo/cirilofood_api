@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
@@ -49,6 +50,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
     @Autowired
     private FormPaymentInputDisassembler formPaymentInputDisassembler;
 
+    @CheckSecurity.FormsPayments.AllowList
     @GetMapping
     public ResponseEntity<CollectionModel<FormPaymentModel>> list(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -79,6 +81,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
                 .body(formsPaymentModel);
     }
 
+    @CheckSecurity.FormsPayments.AllowList
     @GetMapping("/{formPaymentId}")
     public ResponseEntity<FormPaymentModel> find(@PathVariable Long formPaymentId, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -104,6 +107,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
                 .body(formPaymentModel);
     }
 
+    @CheckSecurity.FormsPayments.AllowUpdate
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FormPaymentModel create(@RequestBody @Valid FormPaymentInput formPaymentInput) {
@@ -114,6 +118,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
         return formPaymentModelAssembler.toModel(formPayment);
     }
 
+    @CheckSecurity.FormsPayments.AllowUpdate
     @PutMapping("/{formPaymentId}")
     public FormPaymentModel udpate(@PathVariable Long formPaymentId,
             @RequestBody @Valid FormPaymentInput formPaymentInput) {
@@ -126,6 +131,7 @@ public class FormPaymentController implements FormPaymentControllerOpenApi {
         return formPaymentModelAssembler.toModel(currentFormPayment);
     }
 
+    @CheckSecurity.FormsPayments.AllowUpdate
     @DeleteMapping("/{formPaymentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long formPaymentId) {

@@ -77,4 +77,18 @@ public @interface CheckSecurity {
 
     }
 
+    public @interface FormsPayments {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_FORMS_PAYMENT')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowUpdate { }
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowList { }
+
+    }
+
 }
