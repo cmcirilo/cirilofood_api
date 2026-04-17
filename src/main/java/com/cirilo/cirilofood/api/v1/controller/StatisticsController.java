@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.openapi.controller.StatisticsControllerOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
@@ -32,12 +33,14 @@ public class StatisticsController implements StatisticsControllerOpenApi {
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @CheckSecurity.Statistics.AllowList
     @GetMapping(path = "/daily-sales", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<DailySale> findDailySales(DailySaleFilter dailySaleFilter,
             @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
         return saleQueryService.findDailySales(dailySaleFilter, timeOffSet);
     }
 
+    @CheckSecurity.Statistics.AllowList
     @GetMapping(path = "/daily-sales", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> findDailySalesPdf(DailySaleFilter dailySaleFilter,
             @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
@@ -52,6 +55,7 @@ public class StatisticsController implements StatisticsControllerOpenApi {
                 .body(bytes);
     }
 
+    @CheckSecurity.Statistics.AllowList
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public StatisticsModel statistics() {
