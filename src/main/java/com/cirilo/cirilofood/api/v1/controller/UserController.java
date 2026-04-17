@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,7 @@ public class UserController implements UserControllerOpenApi {
     @Autowired
     private UserInputDisassembler userInputDisassembler;
 
+    @CheckSecurity.UsersGroupsPermissions.AllowList
     @GetMapping
     public CollectionModel<UserModel> list() {
         List<User> allUsers = userRepository.findAll();
@@ -51,6 +53,7 @@ public class UserController implements UserControllerOpenApi {
         return userModelAssembler.toCollectionModel(allUsers);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowList
     @GetMapping("/{userId}")
     public UserModel find(@PathVariable Long userId) {
         User user = userService.find(userId);
@@ -58,6 +61,7 @@ public class UserController implements UserControllerOpenApi {
         return userModelAssembler.toModel(user);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdate
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserModel create(@RequestBody @Valid UserWithPasswordInput userWithPasswordInput) {
@@ -67,6 +71,7 @@ public class UserController implements UserControllerOpenApi {
         return userModelAssembler.toModel(user);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdateUser
     @PutMapping("/{userId}")
     public UserModel update(@PathVariable Long userId,
             @RequestBody @Valid UserInput userInput) {
@@ -77,6 +82,7 @@ public class UserController implements UserControllerOpenApi {
         return userModelAssembler.toModel(currentUser);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdatePassword
     @PutMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword(@PathVariable Long userId, @RequestBody @Valid PasswordInput password) {

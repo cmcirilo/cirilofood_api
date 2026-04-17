@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class GroupController implements GroupControllerOpenApi {
     @Autowired
     private GroupInputDisassembler groupInputDisassembler;
 
+    @CheckSecurity.UsersGroupsPermissions.AllowList
     @Override
     @GetMapping
     public CollectionModel<GroupModel> list() {
@@ -50,12 +52,14 @@ public class GroupController implements GroupControllerOpenApi {
         return groupModelAssembler.toCollectioModel(groups);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowList
     @GetMapping("/{groupId}")
     public GroupModel find(@PathVariable Long groupId) {
         Group group = groupService.find(groupId);
         return groupModelAssembler.toModel(group);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdate
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GroupModel create(@RequestBody @Valid GroupInput groupInput) {
@@ -66,6 +70,7 @@ public class GroupController implements GroupControllerOpenApi {
         return groupModelAssembler.toModel(group);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdate
     @PutMapping("/{groupId}")
     public GroupModel udpate(@PathVariable Long groupId,
             @RequestBody @Valid GroupInput groupInput) {
@@ -78,6 +83,7 @@ public class GroupController implements GroupControllerOpenApi {
         return groupModelAssembler.toModel(currentGroup);
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdate
     @DeleteMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long groupId) {

@@ -119,4 +119,31 @@ public @interface CheckSecurity {
 
     }
 
+    public @interface UsersGroupsPermissions {
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and "
+                + "@ciriloSecurity.getUserId() == #userId")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowUpdatePassword { }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS') or "
+                + "@ciriloSecurity.getUserId() == #userId)")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowUpdateUser { }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowUpdate { }
+
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('LIST_USERS_GROUPS_PERMISSIONS')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowList { }
+
+    }
+
 }

@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api.v1.controller;
 import com.cirilo.cirilofood.api.v1.assembler.PermissionModelAssembler;
 import com.cirilo.cirilofood.api.v1.model.PermissionModel;
 import com.cirilo.cirilofood.api.v1.openapi.controller.PermissionControllerOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import com.cirilo.cirilofood.domain.model.Permission;
 import com.cirilo.cirilofood.domain.repository.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class PermissionController implements PermissionControllerOpenApi {
     @Autowired
     private PermissionModelAssembler permissionModelAssembler;
 
+    @CheckSecurity.UsersGroupsPermissions.AllowList
     @Override
     @GetMapping
     public CollectionModel<PermissionModel> list() {

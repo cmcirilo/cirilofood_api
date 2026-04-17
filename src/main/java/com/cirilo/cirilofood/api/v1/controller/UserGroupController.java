@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.api.v1.controller;
 
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @CheckSecurity.UsersGroupsPermissions.AllowList
     @Override
     @GetMapping
     public CollectionModel<GroupModel> list(@PathVariable Long userId) {
@@ -50,6 +52,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         return groups;
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdate
     @Override
     @DeleteMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -58,6 +61,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.UsersGroupsPermissions.AllowUpdate
     @Override
     @PutMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
