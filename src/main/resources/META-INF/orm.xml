@@ -22,4 +22,15 @@
             and resp.id = :userId
         </query>
     </named-query>
+
+    <named-query name="Order.isOrderManagedBy">
+        <query>
+            select case when count(1) > 0 then true else false end
+            from Order ord
+            join ord.restaurant rest
+            join rest.owners resp
+            where ord.code = :code
+            and resp.id = :userId
+        </query>
+    </named-query>
 </entity-mappings>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.v1.openapi.controller.StatusOrderOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
 import com.cirilo.cirilofood.domain.service.StatusOrderService;
 
 @RestController
@@ -20,6 +21,7 @@ public class StatusOrderController implements StatusOrderOpenApi {
     @Autowired
     private StatusOrderService statusOrderService;
 
+    @CheckSecurity.Orders.AllowManageOrder
     @PutMapping("/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> confirm(@PathVariable String code) {
@@ -27,6 +29,7 @@ public class StatusOrderController implements StatusOrderOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Orders.AllowManageOrder
     @PutMapping("/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> cancel(@PathVariable String code) {
@@ -34,6 +37,7 @@ public class StatusOrderController implements StatusOrderOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Orders.AllowManageOrder
     @PutMapping("/delivery")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> delivery(@PathVariable String code) {

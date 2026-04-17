@@ -112,6 +112,7 @@ public class OrderController implements OrderControllerOpenApi {
 
     }
 
+    @CheckSecurity.Orders.AllowCreate
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderModel create(@Valid @RequestBody OrderInput orderInput) {

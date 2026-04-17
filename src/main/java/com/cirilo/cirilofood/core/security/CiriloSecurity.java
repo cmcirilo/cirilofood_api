@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.core.security;
 
+import com.cirilo.cirilofood.domain.repository.OrderRepository;
 import com.cirilo.cirilofood.domain.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,9 @@ public class CiriloSecurity {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     public Authentication getAuthentication(){
         return SecurityContextHolder.getContext().getAuthentication();
@@ -29,6 +33,10 @@ public class CiriloSecurity {
         }
 
         return restaurantRepository.existsByOwner(restaurantId, getUserId());
+    }
+
+    public boolean manageOrderRestaurant(String code) {
+        return orderRepository.isOrderManagedBy(code, getUserId());
     }
 
 }

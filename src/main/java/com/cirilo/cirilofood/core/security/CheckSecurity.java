@@ -63,6 +63,18 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowSearch { }
 
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowCreate { }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('MANAGE_ORDERS') or "
+                + "@ciriloSecurity.manageOrderRestaurant(#code))")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface AllowManageOrder {
+        }
+
     }
 
 }
