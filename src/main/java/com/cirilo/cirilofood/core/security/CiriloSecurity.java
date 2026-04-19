@@ -39,4 +39,8 @@ public class CiriloSecurity {
         return orderRepository.isOrderManagedBy(code, getUserId());
     }
 
+    public boolean userAuthenticatedEquals(Long userId){
+        return getUserId() != null && userId != null
+                && getUserId().equals(userId);
+    }
 }

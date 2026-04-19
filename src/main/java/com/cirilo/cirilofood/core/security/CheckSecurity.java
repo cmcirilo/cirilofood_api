@@ -50,14 +50,14 @@ public @interface CheckSecurity {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @PostAuthorize("hasAuthority('LIST_ORDERS') or " +
-                "@ciriloSecurity.getUserId() == returnObject.client.id or " +
+                "@ciriloSecurity.userAuthenticatedEquals(returnObject.client.id) or " +
                 "@ciriloSecurity.manageRestaurant(returnObject.restaurant.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowFind { }
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('LIST_ORDERS') or "
-                + "@ciriloSecurity.getUserId() == #orderFilter.clientId or"
+                + "@ciriloSecurity.userAuthenticatedEquals(#orderFilter.clientId) or"
                 + "@ciriloSecurity.manageRestaurant(#orderFilter.restaurantId))")
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -122,13 +122,13 @@ public @interface CheckSecurity {
     public @interface UsersGroupsPermissions {
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-                + "@ciriloSecurity.getUserId() == #userId")
+                + "@ciriloSecurity.userAuthenticatedEquals(#userId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowUpdatePassword { }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS') or "
-                + "@ciriloSecurity.getUserId() == #userId)")
+                + "@ciriloSecurity.userAuthenticatedEquals(#userId))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowUpdateUser { }
