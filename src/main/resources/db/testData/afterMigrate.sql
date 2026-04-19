@@ -13,6 +13,8 @@ DELETE FROM restaurant_form_payment;
 DELETE FROM `user`;
 DELETE FROM user_group;
 DELETE FROM product_photo;
+DELETE FROM oauth_client_details;
+
 
 set foreign_key_checks=1;
 
@@ -123,3 +125,36 @@ insert into order_item (id, order_id, product_id, quantity, unit_price, total_pr
 alter table `order` auto_increment = 1;
 alter table order_item auto_increment = 1;
 
+
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'cirilofood-web', null, '$2a$12$uCaaV8RYMRxALrqSJAwdmO6oDAHejGBImbPH3nDdKIDV8qU03Q7Vu',
+           'READ,WRITE', 'password', null, null,
+           60 * 60 * 6, 60 * 24 * 60 * 60, null
+       );
+
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'cirilo-analytics', null, '$2a$12$PNRiRDDMw703f7ENxqaco.tIRw8fGuHuwDqRIqnpE7aTMhiqNMYvK',
+           'READ,WRITE', 'authorization_code', 'http://www.ciriloanalytics.local:8082', null,
+           null, null, null
+       );
+
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'cirilologistic-other-backend', null, '$2a$12$xIvhiQavKYKdexOMK3UfLuu79j59Xrj0TC.EQ8Ul8cuCuvvxo1mN6',
+           'READ,WRITE', 'client_credentials', null, 'UPDATE_ORDERS,MANAGE_REPORTS',
+           null, null, null
+       );
