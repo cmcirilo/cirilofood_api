@@ -122,6 +122,12 @@ insert into order_item (id, order_id, product_id, quantity, unit_price, total_pr
 insert into `order` (id, code, restaurant_id, user_client_id, form_payment_id, address_city_id, address_zipcode, address_street, address_number, address_complement, address_district, status, created_date, subtotal, shipping_fee, total_value) values (5, '8d774bcf-b238-42f3-aef1-5fb388754d63', 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins','DELIVERED', '2019-11-03 02:00:30', 87.2, 10, 97.2);
 insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (6, 5, 3, 1, 87.2, 87.2, null);
 
+insert into `order` (id, code, restaurant_id, user_client_id, form_payment_id, address_city_id, address_zipcode, address_street, address_number, address_complement, address_district, status, created_date, subtotal, shipping_fee, total_value) values (6, 'd8762db8-2c75-4fb0-9183-2813f73e8ee4', 1, 6, 2, 1, '38400-200', 'Rua 20', '130', 'Casa 201', 'Jose','DELIVERED', '2019-11-03 02:00:30', 27.2, 10, 37.2);
+insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (7, 6, 2, 1, 27.2, 37.2, null);
+
+insert into `order` (id, code, restaurant_id, user_client_id, form_payment_id, address_city_id, address_zipcode, address_street, address_number, address_complement, address_district, status, created_date, subtotal, shipping_fee, total_value) values (7, '2255d59f-7f86-4899-a738-cb847d3141c7', 1, 7, 2, 1, '38400-200', 'Rua 30', '230', 'Casa 202', 'Joao','DELIVERED', '2019-11-03 02:00:30', 17.2, 10, 27.2);
+insert into order_item (id, order_id, product_id, quantity, unit_price, total_price, observation) values (8, 7, 3, 1, 17.2, 27.2, null);
+
 alter table `order` auto_increment = 1;
 alter table order_item auto_increment = 1;
 

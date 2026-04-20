@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.api.v1.assembler;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -22,6 +23,9 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public OrderModelAssembler() {
         super(OrderController.class, OrderModel.class);
     }
@@ -33,16 +37,18 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
 
         orderModel.add(ciriloLinks.linkToOrders("orders"));
 
-        if (order.canItBeConfirmed()) {
-            orderModel.add(ciriloLinks.linkToStatusConfirmationOrder(order.getCode(), "confirmation"));
-        }
+        if (ciriloSecurity.allowManageOrders(order.getCode())) {
+            if (order.canItBeConfirmed()) {
+                orderModel.add(ciriloLinks.linkToStatusConfirmationOrder(order.getCode(), "confirmation"));
+            }
 
-        if (order.canItBeDelivered()) {
-            orderModel.add(ciriloLinks.linkToStatusDeliveryOrder(order.getCode(), "delivery"));
-        }
+            if (order.canItBeDelivered()) {
+                orderModel.add(ciriloLinks.linkToStatusDeliveryOrder(order.getCode(), "delivery"));
+            }
 
-        if (order.canItBeCanceled()) {
-            orderModel.add(ciriloLinks.linkToStatusCancelattionOrder(order.getCode(), "cancelattion"));
+            if (order.canItBeCanceled()) {
+                orderModel.add(ciriloLinks.linkToStatusCancelattionOrder(order.getCode(), "cancelattion"));
+            }
         }
 
         orderModel.getRestaurant().add(

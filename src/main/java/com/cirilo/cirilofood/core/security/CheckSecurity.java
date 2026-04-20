@@ -68,8 +68,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowCreate { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('MANAGE_ORDERS') or "
-                + "@ciriloSecurity.manageOrderRestaurant(#code))")
+        @PreAuthorize("@ciriloSecurity.allowManageOrders(#code)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowManageOrder {
