@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.FormPaymentController;
 import com.cirilo.cirilofood.api.v1.model.FormPaymentModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.FormPayment;
 
 @Component
@@ -21,6 +22,9 @@ public class FormPaymentModelAssembler
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public FormPaymentModelAssembler() {
         super(FormPaymentController.class, FormPaymentModel.class);
     }
@@ -32,14 +36,21 @@ public class FormPaymentModelAssembler
 
         modelMapper.map(formPayment, formPaymentModel);
 
-        formPaymentModel.add(ciriloLinks.linkToFormsPayment("formsPayment"));
+        if (ciriloSecurity.allowListFormsPayment()) {
+            formPaymentModel.add(ciriloLinks.linkToFormsPayment("formsPayment"));
+        }
 
         return formPaymentModel;
     }
 
     @Override
     public CollectionModel<FormPaymentModel> toCollectionModel(Iterable<? extends FormPayment> entities) {
-        return super.toCollectionModel(entities)
-                .add(ciriloLinks.linkToFormsPayment());
+        CollectionModel<FormPaymentModel> collectionModel = super.toCollectionModel(entities);
+
+        if (ciriloSecurity.allowListFormsPayment()) {
+            collectionModel.add(ciriloLinks.linkToFormsPayment());
+        }
+
+        return collectionModel;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.RestaurantController;
 import com.cirilo.cirilofood.api.v1.model.RestaurantOnlyNameModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 
 @Component
@@ -19,6 +20,9 @@ public class RestaurantOnlyNameModelAssembler extends RepresentationModelAssembl
 
     @Autowired
     private CiriloLinks ciriloLinks;
+
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
 
     public RestaurantOnlyNameModelAssembler() {
         super(RestaurantController.class, RestaurantOnlyNameModel.class);
@@ -31,15 +35,22 @@ public class RestaurantOnlyNameModelAssembler extends RepresentationModelAssembl
 
         modelMapper.map(restaurant, restaurantOnlyNameModel);
 
-        restaurantOnlyNameModel.add(ciriloLinks.linkToRestaurants("restaurants"));
+        if (ciriloSecurity.allowListRestaurants()) {
+            restaurantOnlyNameModel.add(ciriloLinks.linkToRestaurants("restaurants"));
+        }
 
         return restaurantOnlyNameModel;
     }
 
     @Override
     public CollectionModel<RestaurantOnlyNameModel> toCollectionModel(Iterable<? extends Restaurant> entities) {
-        return super.toCollectionModel(entities)
-                .add(ciriloLinks.linkToRestaurants());
+        CollectionModel<RestaurantOnlyNameModel> collectionModel = super.toCollectionModel(entities);
+
+        if (ciriloSecurity.allowListRestaurants()) {
+            collectionModel.add(ciriloLinks.linkToRestaurants());
+        }
+
+        return collectionModel;
     }
 
 }

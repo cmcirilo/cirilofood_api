@@ -1,6 +1,5 @@
 package com.cirilo.cirilofood.api.v1.controller;
 
-import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,8 @@ import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.assembler.FormPaymentModelAssembler;
 import com.cirilo.cirilofood.api.v1.model.FormPaymentModel;
 import com.cirilo.cirilofood.api.v1.openapi.controller.RestaurantFormPaymentControllerOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 
@@ -34,19 +35,26 @@ public class RestaurantFormPaymentController implements RestaurantFormPaymentCon
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     @CheckSecurity.Restaurants.AllowList
     @GetMapping
     public CollectionModel<FormPaymentModel> list(@PathVariable Long restaurantId) {
         Restaurant restaurant = restaurantService.find(restaurantId);
 
         CollectionModel<FormPaymentModel> formsPaymentModel = formPaymentModelAssembler.toCollectionModel(restaurant.getFormsPayment())
-                .removeLinks()
-                .add(ciriloLinks.linkToRestaurantFormsPayment(restaurantId))
-                .add(ciriloLinks.linkToRestaurantFormPaymentAssociate(restaurantId, "associate"));
+                .removeLinks();
 
-        formsPaymentModel.getContent().forEach(formPaymentModel -> {
-            formPaymentModel.add(ciriloLinks.linkToRestaurantFormPaymentDisassociate(restaurantId, formPaymentModel.getId(), "disassociate"));
-        });
+        formsPaymentModel.add(ciriloLinks.linkToRestaurantFormsPayment(restaurantId));
+
+        if (ciriloSecurity.allowManageOperationRestaurant(restaurantId)) {
+            formsPaymentModel.add(ciriloLinks.linkToRestaurantFormPaymentAssociate(restaurantId, "associate"));
+
+            formsPaymentModel.getContent().forEach(formPaymentModel -> {
+                formPaymentModel.add(ciriloLinks.linkToRestaurantFormPaymentDisassociate(restaurantId, formPaymentModel.getId(), "disassociate"));
+            });
+        }
 
         return formsPaymentModel;
     }

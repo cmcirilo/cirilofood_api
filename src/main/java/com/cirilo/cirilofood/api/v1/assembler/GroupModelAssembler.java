@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.GroupController;
 import com.cirilo.cirilofood.api.v1.model.GroupModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Group;
 
 @Component
@@ -20,6 +21,9 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public GroupModelAssembler() {
         super(GroupController.class, GroupModel.class);
     }
@@ -29,17 +33,23 @@ public class GroupModelAssembler extends RepresentationModelAssemblerSupport<Gro
         GroupModel groupModel = createModelWithId(group.getId(), group);
         modelMapper.map(group, groupModel);
 
-        groupModel.add(ciriloLinks.linkToGroups("groups"));
-
-        groupModel.add(ciriloLinks.linkToGroupPermissions(group.getId(), "permissions"));
+        if (ciriloSecurity.allowListUsersGroupsPermissions()) {
+            groupModel.add(ciriloLinks.linkToGroups("groups"));
+            groupModel.add(ciriloLinks.linkToGroupPermissions(group.getId(), "permissions"));
+        }
 
         return groupModel;
     }
 
     // @Override
     public CollectionModel<GroupModel> toCollectioModel(Iterable<? extends Group> entities) {
-        return super.toCollectionModel(entities)
-                .add(ciriloLinks.linkToGroups());
+        CollectionModel<GroupModel> collectionModel = super.toCollectionModel(entities);
+
+        if (ciriloSecurity.allowListUsersGroupsPermissions()) {
+            collectionModel.add(ciriloLinks.linkToGroups());
+        }
+
+        return collectionModel;
     }
 
 }

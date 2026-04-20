@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.model.PermissionModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Permission;
 
 @Component
@@ -19,6 +20,9 @@ public class PermissionModelAssembler implements RepresentationModelAssembler<Pe
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     @Override
     public PermissionModel toModel(Permission permission) {
         return modelMapper.map(permission, PermissionModel.class);
@@ -26,7 +30,12 @@ public class PermissionModelAssembler implements RepresentationModelAssembler<Pe
 
     @Override
     public CollectionModel<PermissionModel> toCollectionModel(Iterable<? extends Permission> entities) {
-        return RepresentationModelAssembler.super.toCollectionModel(entities)
-                .add(ciriloLinks.linkToPermissions());
+        CollectionModel<PermissionModel> collectionModel = RepresentationModelAssembler.super.toCollectionModel(entities);
+
+        if (ciriloSecurity.allowListUsersGroupsPermissions()) {
+            collectionModel.add(ciriloLinks.linkToPermissions());
+        }
+
+        return collectionModel;
     }
 }

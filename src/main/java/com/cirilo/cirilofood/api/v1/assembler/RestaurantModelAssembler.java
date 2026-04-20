@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.RestaurantController;
 import com.cirilo.cirilofood.api.v1.model.RestaurantModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 
 @Component
@@ -20,6 +21,9 @@ public class RestaurantModelAssembler extends RepresentationModelAssemblerSuppor
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public RestaurantModelAssembler() {
         super(RestaurantController.class, RestaurantModel.class);
     }
@@ -30,51 +34,72 @@ public class RestaurantModelAssembler extends RepresentationModelAssemblerSuppor
         RestaurantModel restaurantModel = createModelWithId(restaurant.getId(), restaurant);
         modelMapper.map(restaurant, restaurantModel);
 
-        restaurantModel.add(ciriloLinks.linkToRestaurants("restaurants"));
-
-        if (restaurant.activateAllowed()) {
-            restaurantModel.add(
-                    ciriloLinks.linkToRestaurantActivate(restaurant.getId(), "activate"));
+        if (ciriloSecurity.allowListRestaurants()) {
+            restaurantModel.add(ciriloLinks.linkToRestaurants("restaurants"));
         }
 
-        if (restaurant.desactivateAllowed()) {
-            restaurantModel.add(
-                    ciriloLinks.linkToRestaurantDesactivate(restaurant.getId(), "desactivate"));
+        if (ciriloSecurity.allowManageRegistrationRestaurant()) {
+            if (restaurant.activateAllowed()) {
+                restaurantModel.add(
+                        ciriloLinks.linkToRestaurantActivate(restaurant.getId(), "activate"));
+            }
+
+            if (restaurant.desactivateAllowed()) {
+                restaurantModel.add(
+                        ciriloLinks.linkToRestaurantDesactivate(restaurant.getId(), "desactivate"));
+            }
         }
 
-        if (restaurant.openAllowed()) {
-            restaurantModel.add(
-                    ciriloLinks.linkToRestaurantOpen(restaurant.getId(), "open"));
+        if (ciriloSecurity.allowManageOperationRestaurant(restaurant.getId())) {
+            if (restaurant.openAllowed()) {
+                restaurantModel.add(
+                        ciriloLinks.linkToRestaurantOpen(restaurant.getId(), "open"));
+            }
+
+            if (restaurant.closeAllowed()) {
+                restaurantModel.add(
+                        ciriloLinks.linkToRestaurantClose(restaurant.getId(), "close"));
+            }
         }
 
-        if (restaurant.closeAllowed()) {
-            restaurantModel.add(
-                    ciriloLinks.linkToRestaurantClose(restaurant.getId(), "close"));
+        if (ciriloSecurity.allowListRestaurants()) {
+            restaurantModel.add(ciriloLinks.linkToProducts(restaurant.getId(), "products"));
         }
 
-        restaurantModel.add(ciriloLinks.linkToProducts(restaurant.getId(), "products"));
-
-        restaurantModel.getCuisine().add(
-                ciriloLinks.linkToCuisine(restaurant.getCuisine().getId()));
-
-        if (restaurantModel.getAddress() != null
-                && restaurantModel.getAddress().getCity() != null) {
-            restaurantModel.getAddress().getCity().add(
-                    ciriloLinks.linkToCity(restaurant.getAddress().getCity().getId()));
+        if (ciriloSecurity.allowListCuisines()) {
+            restaurantModel.getCuisine().add(
+                    ciriloLinks.linkToCuisine(restaurant.getCuisine().getId()));
         }
 
-        restaurantModel.add(ciriloLinks.linkToRestaurantFormsPayment(restaurant.getId(),
-                "forms-payment"));
+        if (ciriloSecurity.allowListCities()) {
+            if (restaurantModel.getAddress() != null
+                    && restaurantModel.getAddress().getCity() != null) {
+                restaurantModel.getAddress().getCity().add(
+                        ciriloLinks.linkToCity(restaurant.getAddress().getCity().getId()));
+            }
+        }
 
-        restaurantModel.add(ciriloLinks.linkToOwnersRestaurant(restaurant.getId(),
-                "owners"));
+        if (ciriloSecurity.allowListRestaurants()) {
+            restaurantModel.add(ciriloLinks.linkToRestaurantFormsPayment(restaurant.getId(),
+                    "forms-payment"));
+        }
+
+        if (ciriloSecurity.allowManageRegistrationRestaurant()) {
+            restaurantModel.add(ciriloLinks.linkToOwnersRestaurant(restaurant.getId(),
+                    "owners"));
+        }
 
         return restaurantModel;
     }
 
     @Override
     public CollectionModel<RestaurantModel> toCollectionModel(Iterable<? extends Restaurant> entities) {
-        return super.toCollectionModel(entities)
-                .add(ciriloLinks.linkToRestaurants());
+        CollectionModel<RestaurantModel> collectionModel = super.toCollectionModel(entities);
+
+        if (ciriloSecurity.allowListRestaurants()) {
+            collectionModel.add(ciriloLinks.linkToRestaurants());
+        }
+
+        return collectionModel;
     }
 }

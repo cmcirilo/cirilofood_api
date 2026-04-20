@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.CuisineController;
 import com.cirilo.cirilofood.api.v1.model.CuisineModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Cuisine;
 
 @Component
@@ -22,6 +23,9 @@ public class CuisineModelAssembler extends RepresentationModelAssemblerSupport<C
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public CuisineModelAssembler() {
         super(CuisineController.class, CuisineModel.class);
     }
@@ -31,7 +35,9 @@ public class CuisineModelAssembler extends RepresentationModelAssemblerSupport<C
         CuisineModel cuisineModel = createModelWithId(cuisine.getId(), cuisine);
         modelMapper.map(cuisine, cuisineModel);
 
-        cuisineModel.add(ciriloLinks.linkToCuisines("cuisines"));
+        if (ciriloSecurity.allowListCuisines()) {
+            cuisineModel.add(ciriloLinks.linkToCuisines("cuisines"));
+        }
 
         return cuisineModel;
     }

@@ -3,7 +3,6 @@ package com.cirilo.cirilofood.api.v1.assembler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.OrderController;
 import com.cirilo.cirilofood.api.v1.model.OrderModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Order;
 
 @Component
@@ -35,7 +35,9 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
         OrderModel orderModel = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderModel);
 
-        orderModel.add(ciriloLinks.linkToOrders("orders"));
+        if (ciriloSecurity.allowListOrders()) {
+            orderModel.add(ciriloLinks.linkToOrders("orders"));
+        }
 
         if (ciriloSecurity.allowManageOrders(order.getCode())) {
             if (order.canItBeConfirmed()) {
@@ -51,22 +53,32 @@ public class OrderModelAssembler extends RepresentationModelAssemblerSupport<Ord
             }
         }
 
-        orderModel.getRestaurant().add(
-                ciriloLinks.linkToRestaurant(order.getRestaurant().getId()));
+        if (ciriloSecurity.allowListRestaurants()) {
+            orderModel.getRestaurant().add(
+                    ciriloLinks.linkToRestaurant(order.getRestaurant().getId()));
+        }
 
-        orderModel.getClient().add(
-                ciriloLinks.linkToUser(order.getClient().getId()));
+        if (ciriloSecurity.allowListUsersGroupsPermissions()) {
+            orderModel.getClient().add(
+                    ciriloLinks.linkToUser(order.getClient().getId()));
+        }
 
-        orderModel.getFormPayment().add(
-                ciriloLinks.linkToFormPayment(order.getFormPayment().getId()));
+        if (ciriloSecurity.allowListFormsPayment()) {
+            orderModel.getFormPayment().add(
+                    ciriloLinks.linkToFormPayment(order.getFormPayment().getId()));
+        }
 
-        orderModel.getDeliveryAddress().getCity().add(
-                ciriloLinks.linkToCity(order.getDeliveryAddress().getCity().getId()));
+        if (ciriloSecurity.allowListCities()) {
+            orderModel.getDeliveryAddress().getCity().add(
+                    ciriloLinks.linkToCity(order.getDeliveryAddress().getCity().getId()));
+        }
 
-        orderModel.getItens().forEach(item -> {
-            item.add(ciriloLinks.linkToProduct(
-                    orderModel.getRestaurant().getId(), item.getProductId(), "product"));
-        });
+        if (ciriloSecurity.allowListRestaurants()) {
+            orderModel.getItens().forEach(item -> {
+                item.add(ciriloLinks.linkToProduct(
+                        orderModel.getRestaurant().getId(), item.getProductId(), "product"));
+            });
+        }
 
         return orderModel;
     }

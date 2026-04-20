@@ -1,6 +1,5 @@
 package com.cirilo.cirilofood.api.v1.controller;
 
-import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,8 @@ import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.assembler.GroupModelAssembler;
 import com.cirilo.cirilofood.api.v1.model.GroupModel;
 import com.cirilo.cirilofood.api.v1.openapi.controller.UserGroupControllerOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.User;
 import com.cirilo.cirilofood.domain.service.UserService;
 
@@ -34,6 +35,9 @@ public class UserGroupController implements UserGroupControllerOpenApi {
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     @CheckSecurity.UsersGroupsPermissions.AllowList
     @Override
     @GetMapping
@@ -41,13 +45,16 @@ public class UserGroupController implements UserGroupControllerOpenApi {
         User user = userService.find(userId);
 
         CollectionModel<GroupModel> groups = groupModelAssembler.toCollectionModel(user.getGroups())
-                .removeLinks()
-                .add(ciriloLinks.linkToUserGroupAssociation(userId, "associate"));
+                .removeLinks();
 
-        groups.getContent().forEach(groupModel -> {
-            groupModel.add(ciriloLinks.linkToUserGroupDesassociation(
-                    userId, groupModel.getId(), "desassociate"));
-        });
+        if (ciriloSecurity.allowListUsersGroupsPermissions()) {
+            groups.add(ciriloLinks.linkToUserGroupAssociation(userId, "associate"));
+
+            groups.getContent().forEach(groupModel -> {
+                groupModel.add(ciriloLinks.linkToUserGroupDesassociation(
+                        userId, groupModel.getId(), "desassociate"));
+            });
+        }
 
         return groups;
     }

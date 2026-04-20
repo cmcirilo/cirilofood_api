@@ -1,6 +1,5 @@
 package com.cirilo.cirilofood.api.v1.controller;
 
-import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,8 @@ import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.assembler.PermissionModelAssembler;
 import com.cirilo.cirilofood.api.v1.model.PermissionModel;
 import com.cirilo.cirilofood.api.v1.openapi.controller.GroupPermissionControllerOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Group;
 import com.cirilo.cirilofood.domain.service.GroupService;
 
@@ -34,6 +35,9 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     @CheckSecurity.UsersGroupsPermissions.AllowList
     @Override
     @GetMapping
@@ -41,14 +45,18 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
         Group group = groupService.find(groupId);
 
         CollectionModel<PermissionModel> permissions = permissionModelAssembler.toCollectionModel(group.getPermissions())
-                .removeLinks()
-                .add(ciriloLinks.linkToGroupPermissions(groupId))
-                .add(ciriloLinks.linkToGroupPermissionsAssociation(groupId, "associate"));
+                .removeLinks();
 
-        permissions.getContent().forEach(permissaoModel -> {
-            permissaoModel.add(ciriloLinks.linkToGroupPermissionsDesassociation(
-                    groupId, permissaoModel.getId(), "desassociate"));
-        });
+        permissions.add(ciriloLinks.linkToGroupPermissions(groupId));
+
+        if (ciriloSecurity.allowUpdateUsersGroupsPermissions()) {
+            permissions.add(ciriloLinks.linkToGroupPermissionsAssociation(groupId, "associate"));
+
+            permissions.getContent().forEach(permissaoModel -> {
+                permissaoModel.add(ciriloLinks.linkToGroupPermissionsDesassociation(
+                        groupId, permissaoModel.getId(), "desassociate"));
+            });
+        }
 
         return permissions;
     }

@@ -13,7 +13,7 @@ public @interface CheckSecurity {
 
     public @interface Cuisines {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@ciriloSecurity.allowListCuisines()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface AllowList {}
@@ -27,19 +27,17 @@ public @interface CheckSecurity {
 
     public @interface Restaurants {
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_RESTAURANTS')")
+        @PreAuthorize("@ciriloSecurity.allowManageRegistrationRestaurant()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowManageRegistration { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
-                "(hasAuthority('UPDATE_RESTAURANTS') or " +
-                "@ciriloSecurity.manageRestaurant(#restaurantId))")
+        @PreAuthorize("@ciriloSecurity.allowManageOperationRestaurant(#restaurantId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowManageOperation { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@ciriloSecurity.allowListRestaurants()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowList { }
@@ -56,9 +54,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowFind { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('LIST_ORDERS') or "
-                + "@ciriloSecurity.userAuthenticatedEquals(#orderFilter.clientId) or"
-                + "@ciriloSecurity.manageRestaurant(#orderFilter.restaurantId))")
+        @PreAuthorize("@ciriloSecurity.allowListOrders(#orderFilter.clientId, #orderFilter.restaurantId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowSearch { }
@@ -83,7 +79,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowUpdate { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@ciriloSecurity.allowListFormsPayment()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowList { }
@@ -97,7 +93,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowUpdate { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@ciriloSecurity.allowListCities()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowList { }
@@ -111,7 +107,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowUpdate { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@ciriloSecurity.allowListStates()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowList { }
@@ -132,13 +128,13 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface AllowUpdateUser { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('UPDATE_USERS_GROUPS_PERMISSIONS')")
+        @PreAuthorize("@ciriloSecurity.allowUpdateUsersGroupsPermissions()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowUpdate { }
 
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('LIST_USERS_GROUPS_PERMISSIONS')")
+        @PreAuthorize("@ciriloSecurity.allowListUsersGroupsPermissions()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowList { }
@@ -147,8 +143,7 @@ public @interface CheckSecurity {
 
     public @interface Statistics {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and "
-                + "hasAuthority('GENERATE_REPORTS')")
+        @PreAuthorize("@ciriloSecurity.allowListStatistics()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowList { }

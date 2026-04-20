@@ -1,9 +1,5 @@
 package com.cirilo.cirilofood.api.v1.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
-import com.cirilo.cirilofood.api.v1.CiriloLinks;
-import com.cirilo.cirilofood.core.security.CheckSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -17,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.assembler.UserModelAssembler;
 import com.cirilo.cirilofood.api.v1.model.UserModel;
 import com.cirilo.cirilofood.api.v1.openapi.controller.RestaurantOwnerControllerOpenApi;
+import com.cirilo.cirilofood.core.security.CheckSecurity;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 import com.cirilo.cirilofood.domain.service.RestaurantService;
 
@@ -36,6 +35,9 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     @CheckSecurity.Restaurants.AllowList
     @GetMapping
     public CollectionModel<UserModel> list(@PathVariable Long restaurantId) {
@@ -43,14 +45,18 @@ public class RestaurantOwnerController implements RestaurantOwnerControllerOpenA
 
         CollectionModel<UserModel> usersModel = userModelAssembler
                 .toCollectionModel(restaurant.getOwners())
-                .removeLinks()
-                .add(ciriloLinks.linkToOwnersRestaurant(restaurantId))
-                .add(ciriloLinks.linkToRestaurantOwnerAssociate(restaurantId, "associate"));
+                .removeLinks();
 
-        usersModel.getContent().stream().forEach(userModel -> {
-            userModel.add(ciriloLinks.linkToRestaurantOwnerDisassociate(
-                    restaurantId, userModel.getId(), "disassociate"));
-        });
+        usersModel.add(ciriloLinks.linkToOwnersRestaurant(restaurantId));
+
+        if (ciriloSecurity.allowManageRegistrationRestaurant()) {
+            usersModel.add(ciriloLinks.linkToRestaurantOwnerAssociate(restaurantId, "associate"));
+
+            usersModel.getContent().stream().forEach(userModel -> {
+                userModel.add(ciriloLinks.linkToRestaurantOwnerDisassociate(
+                        restaurantId, userModel.getId(), "disassociate"));
+            });
+        }
 
         return usersModel;
 

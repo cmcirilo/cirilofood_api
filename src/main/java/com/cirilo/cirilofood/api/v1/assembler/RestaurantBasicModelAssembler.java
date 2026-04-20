@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.RestaurantController;
 import com.cirilo.cirilofood.api.v1.model.RestaurantBasicModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.Restaurant;
 
 @Component
@@ -19,6 +20,9 @@ public class RestaurantBasicModelAssembler extends RepresentationModelAssemblerS
 
     @Autowired
     private CiriloLinks ciriloLinks;
+
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
 
     public RestaurantBasicModelAssembler() {
         super(RestaurantController.class, RestaurantBasicModel.class);
@@ -31,18 +35,27 @@ public class RestaurantBasicModelAssembler extends RepresentationModelAssemblerS
 
         modelMapper.map(restaurant, restaurantBasicModel);
 
-        restaurantBasicModel.add(ciriloLinks.linkToRestaurants("restaurants"));
+        if (ciriloSecurity.allowListRestaurants()) {
+            restaurantBasicModel.add(ciriloLinks.linkToRestaurants("restaurants"));
+        }
 
-        restaurantBasicModel.getCuisine().add(
-                ciriloLinks.linkToCuisine(restaurant.getCuisine().getId()));
+        if (ciriloSecurity.allowListCuisines()) {
+            restaurantBasicModel.getCuisine().add(
+                    ciriloLinks.linkToCuisine(restaurant.getCuisine().getId()));
+        }
 
         return restaurantBasicModel;
     }
 
     @Override
     public CollectionModel<RestaurantBasicModel> toCollectionModel(Iterable<? extends Restaurant> entities) {
-        return super.toCollectionModel(entities)
-                .add(ciriloLinks.linkToRestaurants());
+        CollectionModel<RestaurantBasicModel> collectionModel = super.toCollectionModel(entities);
+
+        if (ciriloSecurity.allowListRestaurants()) {
+            collectionModel.add(ciriloLinks.linkToRestaurants());
+        }
+
+        return collectionModel;
     }
 
 }

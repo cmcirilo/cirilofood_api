@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -19,20 +20,46 @@ public class RootEntryPointController {
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     @GetMapping
     public RootEntryPointModel root() {
         var rootEntryPointModel = new RootEntryPointModel();
 
-        rootEntryPointModel.add(ciriloLinks.linkToCuisines("cuisines"));
-        rootEntryPointModel.add(ciriloLinks.linkToOrders("orders"));
-        rootEntryPointModel.add(ciriloLinks.linkToRestaurants("restaurants"));
-        rootEntryPointModel.add(ciriloLinks.linkToGroups("groups"));
-        rootEntryPointModel.add(ciriloLinks.linkToUsers("users"));
-        rootEntryPointModel.add(ciriloLinks.linkToPermissions("permissions"));
-        rootEntryPointModel.add(ciriloLinks.linkToFormsPayment("forms-payment"));
-        rootEntryPointModel.add(ciriloLinks.linkToStates("states"));
-        rootEntryPointModel.add(ciriloLinks.linkToCities("cities"));
-        rootEntryPointModel.add(ciriloLinks.linkToStatistics("statistics"));
+        if (ciriloSecurity.allowListCuisines()) {
+            rootEntryPointModel.add(ciriloLinks.linkToCuisines("cuisines"));
+        }
+
+        if (ciriloSecurity.allowListOrders()) {
+            rootEntryPointModel.add(ciriloLinks.linkToOrders("orders"));
+        }
+
+        if (ciriloSecurity.allowListRestaurants()) {
+            rootEntryPointModel.add(ciriloLinks.linkToRestaurants("restaurants"));
+        }
+
+        if (ciriloSecurity.allowListUsersGroupsPermissions()) {
+            rootEntryPointModel.add(ciriloLinks.linkToGroups("groups"));
+            rootEntryPointModel.add(ciriloLinks.linkToUsers("users"));
+            rootEntryPointModel.add(ciriloLinks.linkToPermissions("permissions"));
+        }
+
+        if (ciriloSecurity.allowListFormsPayment()) {
+            rootEntryPointModel.add(ciriloLinks.linkToFormsPayment("forms-payment"));
+        }
+
+        if (ciriloSecurity.allowListCities()) {
+            rootEntryPointModel.add(ciriloLinks.linkToStates("states"));
+        }
+
+        if (ciriloSecurity.allowListStates()) {
+            rootEntryPointModel.add(ciriloLinks.linkToCities("cities"));
+        }
+
+        if (ciriloSecurity.allowListStatistics()) {
+            rootEntryPointModel.add(ciriloLinks.linkToStatistics("statistics"));
+        }
 
         return rootEntryPointModel;
     }

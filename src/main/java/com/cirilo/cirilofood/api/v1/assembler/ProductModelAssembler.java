@@ -1,5 +1,6 @@
 package com.cirilo.cirilofood.api.v1.assembler;
 
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -19,6 +20,9 @@ public class ProductModelAssembler extends RepresentationModelAssemblerSupport<P
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public ProductModelAssembler() {
         super(RestaurantProductController.class, ProductModel.class);
     }
@@ -30,10 +34,12 @@ public class ProductModelAssembler extends RepresentationModelAssemblerSupport<P
 
         modelMapper.map(product, productModel);
 
-        productModel.add(ciriloLinks.linkToProducts(product.getRestaurant().getId(), "products"));
+        if (ciriloSecurity.allowListRestaurants()) {
+            productModel.add(ciriloLinks.linkToProducts(product.getRestaurant().getId(), "products"));
 
-        productModel.add(ciriloLinks.linkToProductPhoto(
-                product.getRestaurant().getId(), product.getId(), "photo"));
+            productModel.add(ciriloLinks.linkToProductPhoto(
+                    product.getRestaurant().getId(), product.getId(), "photo"));
+        }
 
         return productModel;
     }

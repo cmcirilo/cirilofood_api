@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.cirilo.cirilofood.api.v1.CiriloLinks;
 import com.cirilo.cirilofood.api.v1.controller.RestaurantProductPhotoController;
 import com.cirilo.cirilofood.api.v1.model.ProductPhotoModel;
+import com.cirilo.cirilofood.core.security.CiriloSecurity;
 import com.cirilo.cirilofood.domain.model.ProductPhoto;
 
 @Component
@@ -19,6 +20,9 @@ public class ProductPhotoModelAssembler extends RepresentationModelAssemblerSupp
     @Autowired
     private CiriloLinks ciriloLinks;
 
+    @Autowired
+    private CiriloSecurity ciriloSecurity;
+
     public ProductPhotoModelAssembler() {
         super(RestaurantProductPhotoController.class, ProductPhotoModel.class);
     }
@@ -27,11 +31,13 @@ public class ProductPhotoModelAssembler extends RepresentationModelAssemblerSupp
     public ProductPhotoModel toModel(ProductPhoto productPhoto) {
         ProductPhotoModel productPhotoModel = modelMapper.map(productPhoto, ProductPhotoModel.class);
 
-        productPhotoModel.add(ciriloLinks.linkToProductPhoto(
-                productPhoto.getRestaurantId(), productPhoto.getProduct().getId()));
+        if (ciriloSecurity.allowListRestaurants()) {
+            productPhotoModel.add(ciriloLinks.linkToProductPhoto(
+                    productPhoto.getRestaurantId(), productPhoto.getProduct().getId()));
 
-        productPhotoModel.add(ciriloLinks.linkToProduct(
-                productPhoto.getRestaurantId(), productPhoto.getProduct().getId(), "product"));
+            productPhotoModel.add(ciriloLinks.linkToProduct(
+                    productPhoto.getRestaurantId(), productPhoto.getProduct().getId(), "product"));
+        }
 
         return productPhotoModel;
     }
