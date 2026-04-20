@@ -3,6 +3,7 @@ package com.cirilo.cirilofood.core.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,12 +28,17 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .formLogin()
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/oauth/**").authenticated()
 //                .authorizeRequests()
 //                    .antMatchers(HttpMethod.POST, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")
 //                    .antMatchers(HttpMethod.PUT, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")
 //                    .antMatchers(HttpMethod.GET, "/v1/cuisines/**").authenticated()
 //                    .anyRequest().denyAll()
 //                .and()
+                .and()
                 .csrf().disable()
                 .cors().and()
                 .oauth2ResourceServer()
@@ -67,6 +73,12 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
         });
 
         return jwtAuthenticationConverter;
+    }
+
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
 }
