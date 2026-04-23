@@ -26,7 +26,7 @@ public class NotificationClientConfirmedOrderListener {
         var message = MailService.Message.builder()
                 .subject(order.getRestaurant().getName() + " - Order confirmed")
                 .variable("order", order)
-                .body("confirmed-order.html")
+                .body("emails/confirmed-order.html")
                 .recipient(order.getClient().getEmail())
                 .build();
 

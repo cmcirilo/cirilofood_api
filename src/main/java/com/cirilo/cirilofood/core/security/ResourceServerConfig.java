@@ -28,9 +28,10 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .formLogin()
+                .formLogin().loginPage("/login")
                 .and()
                 .authorizeRequests()
+                    .antMatchers("/login").permitAll()
                     .antMatchers("/oauth/**").authenticated()
 //                .authorizeRequests()
 //                    .antMatchers(HttpMethod.POST, "/v1/cuisines/**").hasAuthority("UPDATE_CUISINES")

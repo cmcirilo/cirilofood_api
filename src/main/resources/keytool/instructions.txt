@@ -1,0 +1,15 @@
+//generate private key
+keytool -genkeypair -alias cirilofood -keyalg RSA -keypass 123456 -keystore cirilofood.jks -storepass 123456
+
+//list key
+keytool -list -keystore cirilofood.jks
+
+//export public key using PEM
+keytool -export -rfc -alias cirilofood -keystore cirilofood.jks -file cirilofood-cert.pem
+
+1)
+openssl x509 -pubkey -noout -in cirilofood-cert.pem > cirilofood-pkey.pem
+
+OR
+
+2)

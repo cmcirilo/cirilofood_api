@@ -1,0 +1,12 @@
+python -m http.server 8082
+
+Code Verifier: teste123
+Code Challenge: teste123
+
+http://api.cirilofood.local:8080/oauth/authorize?response_type=code&client_id=cirilo-analytics&redirect_uri=http://www.ciriloanalytics.local:8082&code_challenge=teste123&code_challenge_method=plain
+
+Code Verifier: US8TN6GUhnuNgKrnXNqJhunzBGZwAhgVzQac2vJwOEU
+Code Challenge: base64url(sha256("US8TN6GUhnuNgKrnXNqJhunzBGZwAhgVzQac2vJwOEU"))
+                qPwpPrAP-3kjCydKiRR5ze-_7BTcuRf_0CJTql2TAQo
+
+http://api.cirilofood.local:8080/oauth/authorize?response_type=code&client_id=cirilo-analytics&redirect_uri=http://www.ciriloanalytics.local:8082&code_challenge=qPwpPrAP-3kjCydKiRR5ze-_7BTcuRf_0CJTql2TAQo&code_challenge_method=s256
