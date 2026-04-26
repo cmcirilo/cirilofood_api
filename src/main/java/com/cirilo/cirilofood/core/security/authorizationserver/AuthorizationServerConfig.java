@@ -1,5 +1,7 @@
 package com.cirilo.cirilofood.core.security.authorizationserver;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 
 import javax.sql.DataSource;
@@ -22,6 +24,11 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 
 @Configuration
 @EnableAuthorizationServer
@@ -108,20 +115,40 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     // }
 
     @Bean
+    public JWKSet jwtSet() {
+        RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic())
+                .keyUse(KeyUse.SIGNATURE)
+                .algorithm(JWSAlgorithm.RS256)
+                .keyID("cirilofood-key-id");
+
+        return new JWKSet(builder.build());
+    }
+
+    @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         var jwtAccessTokenConverter = new JwtAccessTokenConverter();
         // jwtAccessTokenConverter.setSigningKey("89a7sd89f7as98f7dsa98fds7fd89sasd9898asdf98s"); //simetric
 
+        // var keyStorePass = jwtKeyStoreProperties.getPassword();
+        // var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
+        //
+        // var keyStoreKeyFactory = new KeyStoreKeyFactory(
+        // jwtKeyStoreProperties.getJksLocation(), keyStorePass.toCharArray());
+        // var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
+
+        jwtAccessTokenConverter.setKeyPair(keyPair());
+
+        return jwtAccessTokenConverter;
+    }
+
+    private KeyPair keyPair() {
         var keyStorePass = jwtKeyStoreProperties.getPassword();
         var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
 
         var keyStoreKeyFactory = new KeyStoreKeyFactory(
                 jwtKeyStoreProperties.getJksLocation(), keyStorePass.toCharArray());
-        var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
 
-        jwtAccessTokenConverter.setKeyPair(keyPair);
-
-        return jwtAccessTokenConverter;
+        return keyStoreKeyFactory.getKeyPair(keyPairAlias);
     }
 
     @Override
