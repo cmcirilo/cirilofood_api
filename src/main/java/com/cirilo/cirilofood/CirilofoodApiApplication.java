@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.cirilo.cirilofood.core.io.Base64ProtocolResolver;
 import com.cirilo.cirilofood.infrastructure.repository.CustomJpaRepositoryImpl;
 
 @SpringBootApplication
