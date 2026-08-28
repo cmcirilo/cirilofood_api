@@ -1,0 +1,34 @@
+version: "3.9"
+
+networks:
+  cirilofood-network:
+    driver: bridge
+
+services:
+  cirilofood-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345678"
+    ports:
+      - "3306:3306"
+    networks:
+      - cirilofood-network
+
+  cirilofood-api:
+    #build: . //uses Dockerfile to build
+    #image: cmcirilo/cirilofood-api
+    image: cirilofood-api
+    environment:
+      DB_HOST: cirilofood-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - cirilofood-network
+    depends_on:
+      - cirilofood-mysql
+
+#starts
+#docker-compose up
+
+#stops
+#docker-compose down --volumes
