@@ -18,6 +18,7 @@ services:
     #build: . //uses Dockerfile to build
     #image: cmcirilo/cirilofood-api
     image: cirilofood-api
+    command: ["/wait-for-it.sh", "cirilofood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: cirilofood-mysql
     ports:
