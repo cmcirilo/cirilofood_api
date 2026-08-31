@@ -1,5 +1,10 @@
 set foreign_key_checks=0;
 
+lock tables city write, cuisine write, state write, form_payment write, `group` write,
+     group_permission write, permission write, product write, restaurant write, restaurant_form_payment write,
+     restaurant_owner write, `user` write, user_group write, product_photo write, `order` write, order_item write,
+     oauth_client_details write;
+
 DELETE FROM city;
 DELETE FROM cuisine;
 DELETE FROM state;
@@ -10,6 +15,7 @@ DELETE FROM permission;
 DELETE FROM product;
 DELETE FROM restaurant;
 DELETE FROM restaurant_form_payment;
+DELETE FROM restaurant_owner;
 DELETE FROM `user`;
 DELETE FROM user_group;
 DELETE FROM product_photo;
@@ -164,3 +170,5 @@ values (
            'READ,WRITE', 'client_credentials', null, 'UPDATE_ORDERS,MANAGE_REPORTS',
            null, null, null
        );
+
+unlock tables;

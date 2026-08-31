@@ -21,15 +21,20 @@ services:
     command: ["/wait-for-it.sh", "cirilofood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: cirilofood-mysql
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
     networks:
       - cirilofood-network
     depends_on:
       - cirilofood-mysql
+#    deploy:
+#      replicas: 2
 
 #starts
 #docker-compose up
+
+#starts with multiple containers
+#docker-compose up --scale cirilofood-api=2
 
 #stops
 #docker-compose down --volumes
