@@ -30,6 +30,16 @@ services:
 #    deploy:
 #      replicas: 2
 
+  cirilofood-proxy:
+    build: ./nginx
+    image: cirilofood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - cirilofood-network
+    depends_on:
+      - cirilofood-api
+
 #starts
 #docker-compose up
 
