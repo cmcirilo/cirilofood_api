@@ -24,6 +24,7 @@ CMD ["java","-jar","api.jar"]
 #docker container run --rm -p 8080:8080 -e DB_HOST=cirilofood-mysql --network cirilofood-network --name cirilofood-api cmcirilo/cirilofood-api
 #docker container run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=12345678 --network cirilofood-network --name cirilofood-mysql mysql:8.0
 #docker container run --rm -it --network cirilofood_api_cirilofood-network alpine sh
+#docker container run --rm -it --network cirilofood_api_cirilofood-network redis:6.2.1-alpine sh
 
 #create network
 #docker network create --driver bridge cirilofood-networka
